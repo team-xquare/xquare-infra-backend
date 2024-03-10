@@ -1,0 +1,51 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: ture
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        legacy_limit_handler: true
+    open-in-view: false
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/xquareinfra}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+redis:
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+
+logging:
+  level:
+    root: info
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY:asdjfklasdjkflasjdklf}
+  access-expired-exp: ${JWT_ACCESS_EXP:7200000}
+  refresh-expired-exp: ${JWT_REFRESH_EXP:604800000}
+  header: ${JWT_HEADER:Authorization}
+  prefix: ${JWT_PREFIX:Bearer }
+
+server:
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+    max-connections: 8192
+    accept-count: 100
+    connection-timeout: 20000
+  domain:
+    front-domain: ${FRONT_LOCAL:http://localhost:3000}
+    back-domain: ${BACK_LOCAL:http://localhost:8080}
+  port: ${SERVER_PORT:8080}
