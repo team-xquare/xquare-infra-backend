@@ -12,6 +12,7 @@ class RequestPermitConfig : SecurityConfigurerAdapter<DefaultSecurityFilterChain
     override fun configure(builder: HttpSecurity) {
         builder.authorizeRequests().run {
             requestMatchers(CorsUtils::isCorsRequest).permitAll()
+                .antMatchers("/team").permitAll()
             anyRequest().authenticated()
         }
     }

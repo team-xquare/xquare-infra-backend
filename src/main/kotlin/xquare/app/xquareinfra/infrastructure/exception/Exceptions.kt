@@ -34,6 +34,7 @@ class BusinessLogicException(
 
     companion object {
         val USER_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.USER)
+        val ALREADY_EXISTS_TEAM = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.TEAM)
     }
 }
 
