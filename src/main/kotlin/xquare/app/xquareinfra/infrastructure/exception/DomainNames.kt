@@ -6,5 +6,6 @@ enum class DomainNames(
 ) {
     USER("User", "user"),
     TEAM("Team", "team"),
-    USER_TEAM("User_Team", "user_team")
+    USER_TEAM("User_Team", "user_team"),
+    DEPLOY("Deploy", "deploy")
 }

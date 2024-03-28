@@ -16,7 +16,8 @@ class User(
     grade: Int,
     classNum: Int,
     number: Int,
-    roles: MutableList<Role>
+    roles: MutableList<Role>,
+    email: String
 ) : BaseUUIDEntity(id) {
     @Column(name = "name", nullable = false)
     var name: String = name
@@ -45,6 +46,10 @@ class User(
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
     val teams: MutableSet<UserTeam> = HashSet()
+
+    @Column(name = "email", nullable = false)
+    var email: String = email
+        protected set
 
     fun addTeam(team: Team, teamMemberRole: TeamMemberRole) {
         val userTeam = UserTeam(user = this, team = team, teamMemberRole = teamMemberRole)

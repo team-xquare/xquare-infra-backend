@@ -10,6 +10,7 @@ import xquare.app.xquareinfra.domain.user.application.port.out.FindUserPort
 import xquare.app.xquareinfra.domain.user.application.port.out.SaveUserPort
 import xquare.app.xquareinfra.domain.user.domain.Role
 import xquare.app.xquareinfra.domain.user.domain.User
+import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.feign.client.dsm.DsmLoginClient
 
 @Transactional
@@ -17,28 +18,14 @@ import xquare.app.xquareinfra.infrastructure.feign.client.dsm.DsmLoginClient
 class LoginService(
     private val dsmLoginClient: DsmLoginClient,
     private val findUserPort: FindUserPort,
-    private val saveUserPort: SaveUserPort,
     private val generateJwtPort: GenerateJwtPort
 ): LoginUseCase {
     override fun login(loginRequest: LoginRequest): TokenResponse {
-        val userInfo = dsmLoginClient.getUserInfo(
+        val user = findUserPort.findByAccountId(loginRequest.accountId) ?: throw BusinessLogicException.USER_NOT_FOUND
+        dsmLoginClient.getUserInfo(
             accountId = loginRequest.accountId,
             password = loginRequest.password
         )
-        val user = findUserPort.findByAccountId(userInfo.accountId)
-            ?: userInfo.run {
-                saveUserPort.saveUser(
-                    User(
-                        id = null,
-                        name = name,
-                        accountId = accountId,
-                        grade = grade,
-                        classNum = classNum,
-                        number = num,
-                        roles = mutableListOf(Role.USER)
-                    )
-                )
-            }
         val tokenPair = generateJwtPort.generateTokens(user.id.toString())
         return TokenResponse(
             accessToken = tokenPair.first,

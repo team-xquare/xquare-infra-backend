@@ -1,0 +1,34 @@
+name: gradle-example
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup jdk
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: chmod
+        run: chmod +x gradlew
+
+      - name: Build gradle
+        run: ./gradlew build -x test
+
+      - name: Deploy to xquare
+        uses: team-xquare/xquare-deployment-action@master
+        with:
+          environment: prod
+          access_key: ${{ secrets.ACCESS_KEY }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
