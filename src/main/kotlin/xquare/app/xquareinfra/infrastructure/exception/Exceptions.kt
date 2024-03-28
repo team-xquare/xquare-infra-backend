@@ -35,6 +35,11 @@ class BusinessLogicException(
     companion object {
         val USER_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.USER)
         val ALREADY_EXISTS_TEAM = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.TEAM)
+        val ALREADY_EXISTS_USER_TEAM_ = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.USER_TEAM)
+        val TEAM_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.TEAM)
+        val ADD_TEAM_PERMISSION_DENIED = BusinessLogicException(ErrorCodePrefixSuffix.XXX_PERMISSION_DENIED, DomainNames.TEAM)
+        val USER_TEAM_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.USER_TEAM)
+        val USER_TEAM_BAD_REQUEST = BusinessLogicException(ErrorCodePrefixSuffix.XXX_BAD_REQUEST, DomainNames.USER_TEAM)
     }
 }
 
@@ -68,6 +73,7 @@ enum class ErrorCodePrefixSuffix(
 ) {
     XXX_NOT_FOUND(404, " Not Found", false),
     XXX_PERMISSION_DENIED(403, " Permission Denied", false),
+    XXX_BAD_REQUEST(400, " Bad Request", false),
     ALREADY_EXISTS_XXX(409, "Already Exists ", true)
 }
 
