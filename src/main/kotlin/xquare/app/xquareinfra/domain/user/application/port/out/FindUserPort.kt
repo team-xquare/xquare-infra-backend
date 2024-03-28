@@ -5,4 +5,5 @@ import java.util.*
 
 interface FindUserPort {
     fun findById(userId: UUID): User?
+    fun findByAccountId(accountId: String): User?
 }
