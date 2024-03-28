@@ -5,5 +5,6 @@ enum class DomainNames(
     val lowCaseValue: String
 ) {
     USER("User", "user"),
-    TEAM("Team", "team")
+    TEAM("Team", "team"),
+    USER_TEAM("User_Team", "user_team")
 }
