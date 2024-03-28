@@ -1,15 +1,16 @@
 package xquare.app.xquareinfra.domain.user.domain
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
+import xquare.app.xquareinfra.domain.team.domain.Team
+import xquare.app.xquareinfra.domain.team.domain.UserTeam
+import xquare.app.xquareinfra.domain.team.domain.role.TeamMemberRole
 import xquare.app.xquareinfra.domain.user.domain.converter.RoleConverter
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Convert
-import javax.persistence.Entity
+import javax.persistence.*
 
 @Entity(name = "tbl_user")
 class User(
-    id: UUID,
+    id: UUID?,
     name: String,
     accountId: String,
     grade: Int,
@@ -41,4 +42,17 @@ class User(
     @Column(name = "roles", length = 15, nullable = false)
     var roles: MutableList<Role> = roles
         protected set
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
+    val teams: MutableSet<UserTeam> = HashSet()
+
+    fun addTeam(team: Team, teamMemberRole: TeamMemberRole) {
+        val userTeam = UserTeam(user = this, team = team, teamMemberRole = teamMemberRole)
+        teams.add(userTeam)
+        team.members.add(userTeam)
+    }
+
+    fun deleteTeam(userTeam: UserTeam) {
+        teams.remove(userTeam)
+    }
 }
