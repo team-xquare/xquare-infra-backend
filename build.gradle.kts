@@ -9,21 +9,12 @@ plugins {
 group = "xquare.app"
 version = "0.0.1-SNAPSHOT"
 
-apply {
-    plugin("org.jetbrains.kotlin.kapt")
-    version = PluginVersions.KAPT_VERSION
-}
-
 java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
     mavenCentral()
-}
-
-kotlin.sourceSets.main {
-    setBuildDir("$buildDir/generated/source/kapt/main")
 }
 
 dependencies {
@@ -76,6 +67,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks.jar {
+    enabled = false
 }
