@@ -14,6 +14,7 @@ class RequestPermitConfig : SecurityConfigurerAdapter<DefaultSecurityFilterChain
             requestMatchers(CorsUtils::isCorsRequest).permitAll()
                 .antMatchers("/team").permitAll()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/deploy/**/approve").permitAll()
             anyRequest().authenticated()
         }
     }
