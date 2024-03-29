@@ -56,3 +56,6 @@ server:
 
 url:
   deploy: ${DEPLOY_URL}
+
+secret:
+  xquareAccessKey: ${XQUARE_ACCESS_KEY}

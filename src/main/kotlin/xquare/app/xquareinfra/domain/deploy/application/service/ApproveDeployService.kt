@@ -12,7 +12,7 @@ import xquare.app.xquareinfra.infrastructure.exception.XquareException
 @Transactional
 @Service
 class ApproveDeployService(
-    @Value("\${secret.accessKey}")
+    @Value("\${secret.xquareAccessKey}")
     private val accessKey: String,
     private val findDeployPort: FindDeployPort
 ): ApproveDeployUseCase {
