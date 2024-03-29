@@ -23,7 +23,7 @@ class DeployWebAdapter(
         createDeployUseCase.createDeploy(teamId, createDeployRequest)
     }
 
-    @PostMapping("{deployNameEn}/approve")
+    @PostMapping("/{deployNameEn}/approve")
     fun approveDeploy(
         @PathVariable("deployNameEn")
         deployNameEn: String,
