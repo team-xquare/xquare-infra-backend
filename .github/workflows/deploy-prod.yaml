@@ -1,4 +1,4 @@
-name: gradle-example
+name: deploy-xquare
 
 on:
   push:
