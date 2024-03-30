@@ -20,7 +20,6 @@ import xquare.app.xquareinfra.infrastructure.feign.client.dsm.dto.GetDsmUserInfo
 @Service
 class LoginService(
     private val dsmLoginClient: DsmLoginClient,
-    private val findUserPort: FindUserPort,
     private val generateJwtPort: GenerateJwtPort
 ): LoginUseCase {
     override fun login(loginRequest: LoginRequest): TokenResponse {

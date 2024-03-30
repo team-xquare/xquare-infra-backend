@@ -1,5 +1,6 @@
 package xquare.app.xquareinfra.domain.deploy.application.port.out.persistence
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.domain.deploy.application.port.out.CreateDeployPort
 import xquare.app.xquareinfra.domain.deploy.application.port.out.ExistDeployPort
@@ -7,6 +8,7 @@ import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.application.port.out.persistence.repository.DeployRepository
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.team.domain.Team
+import java.util.*
 
 @Component
 class DeployPersistenceAdapter(
@@ -16,4 +18,5 @@ class DeployPersistenceAdapter(
     override fun existByDeployName(deployName: String): Boolean = deployRepository.existsByDeployName(deployName)
     override fun findByDeployName(deployName: String): Deploy? = deployRepository.findByDeployName(deployName)
     override fun findAllByTeam(team: Team): List<Deploy> = deployRepository.findAllByTeam(team)
+    override fun findById(deployId: UUID): Deploy? = deployRepository.findByIdOrNull(deployId)
 }
