@@ -23,7 +23,7 @@ class User(
     var name: String = name
         protected set
 
-    @Column(name = "account_id", nullable = false)
+    @Column(name = "account_id", nullable = false, unique = true)
     var accountId: String = accountId
         protected set
 

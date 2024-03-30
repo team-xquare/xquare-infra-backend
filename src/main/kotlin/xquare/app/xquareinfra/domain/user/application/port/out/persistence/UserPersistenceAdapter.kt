@@ -15,7 +15,7 @@ class UserPersistenceAdapter(
 ): FindUserPort, ExistsUserPort, SaveUserPort {
     override fun findById(userId: UUID): User? = userRepository.findByIdOrNull(userId)
     override fun findByAccountId(accountId: String): User? = userRepository.findByAccountId(accountId)
-
     override fun existsById(userId: UUID): Boolean = userRepository.existsById(userId)
+    override fun existsByAccountId(accountId: String): Boolean = userRepository.existsByAccountId(accountId)
     override fun saveUser(user: User): User = userRepository.save(user)
 }

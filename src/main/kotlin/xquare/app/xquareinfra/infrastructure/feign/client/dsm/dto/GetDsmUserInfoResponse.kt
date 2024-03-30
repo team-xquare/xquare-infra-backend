@@ -1,5 +1,8 @@
 package xquare.app.xquareinfra.infrastructure.feign.client.dsm.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class GetDsmUserInfoResponse(
     val id: String,
     val accountId: String,

@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.spring") version PluginVersions.SPRING_PLUGIN_VERSION
     kotlin("plugin.jpa") version PluginVersions.JPA_PLUGIN_VERSION
     kotlin("jvm") version PluginVersions.JVM_VERSION
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 group = "xquare.app"
@@ -52,6 +53,8 @@ dependencies {
     // redis
     implementation(Dependencies.REDIS)
     implementation(Dependencies.ANNOTATION_PROCESSOR)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 dependencyManagement {

@@ -8,5 +8,5 @@ import xquare.app.xquareinfra.infrastructure.feign.client.dsm.dto.GetDsmUserInfo
 @FeignClient(name = "dsm-login", url = "https://prod-server.xquare.app/dsm-login")
 interface DsmLoginClient {
     @GetMapping("/user/user-data")
-    fun getUserInfo(@RequestParam("account_id") accountId: String, @RequestParam("password") password: String): GetDsmUserInfoResponse
+    fun getUserInfo(@RequestParam("account_id") accountId: String, @RequestParam("password") password: String): feign.Response
 }
