@@ -15,6 +15,7 @@ class RequestPermitConfig : SecurityConfigurerAdapter<DefaultSecurityFilterChain
                 .antMatchers("/team").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/deploy/**/approve").permitAll()
+                .antMatchers(("/container/sync")).permitAll()
             anyRequest().authenticated()
         }
     }
