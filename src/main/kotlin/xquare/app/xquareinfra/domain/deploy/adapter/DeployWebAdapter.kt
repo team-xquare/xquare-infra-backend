@@ -5,10 +5,7 @@ import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.ApproveDeployReq
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.CreateDeployRequest
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.DeployDetailsResponse
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.SimpleDeployListResponse
-import xquare.app.xquareinfra.domain.deploy.application.port.`in`.ApproveDeployUseCase
-import xquare.app.xquareinfra.domain.deploy.application.port.`in`.CreateDeployUseCase
-import xquare.app.xquareinfra.domain.deploy.application.port.`in`.GetAllDeployInTeamUseCase
-import xquare.app.xquareinfra.domain.deploy.application.port.`in`.GetDeployDetailsUseCase
+import xquare.app.xquareinfra.domain.deploy.application.port.`in`.*
 import java.util.*
 
 @RequestMapping("/deploy")
@@ -17,7 +14,8 @@ class DeployWebAdapter(
     private val createDeployUseCase: CreateDeployUseCase,
     private val approveDeployUseCase: ApproveDeployUseCase,
     private val getAllDeployInTeamUseCase: GetAllDeployInTeamUseCase,
-    private val getDeployDetailsUseCase: GetDeployDetailsUseCase
+    private val getDeployDetailsUseCase: GetDeployDetailsUseCase,
+    private val migrationDeployUseCase: MigrationDeployUseCase
 ) {
     @PostMapping
     fun createDeploy(
@@ -50,4 +48,7 @@ class DeployWebAdapter(
         @PathVariable("deployId", required = true)
         deployId: UUID
     ): DeployDetailsResponse = getDeployDetailsUseCase.getDeployDetails(deployId)
+
+    @PostMapping("/migration")
+    fun migrationDeploy() = migrationDeployUseCase.migrationDeploy()
 }
