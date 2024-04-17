@@ -1,10 +1,12 @@
 package xquare.app.xquareinfra.infrastructure.feign.client.deploy
 
-import xquare.app.xquareinfra.infrastructure.feign.client.deploy.dto.FeignCreateDeployRequest
+import xquare.app.xquareinfra.infrastructure.feign.client.deploy.dto.request.FeignCreateDeployRequest
 import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
+import xquare.app.xquareinfra.infrastructure.feign.client.deploy.dto.response.DeployResponse
 import xquare.app.xquareinfra.infrastructure.feign.config.FeignConfig
 
 @FeignClient(
@@ -15,4 +17,7 @@ import xquare.app.xquareinfra.infrastructure.feign.config.FeignConfig
 interface DeployClient {
     @PostMapping("/project")
     fun createDeploy(@RequestBody feignCreateDeployRequest: FeignCreateDeployRequest): feign.Response
+
+    @GetMapping("/project/all")
+    fun getAllDeploy(@RequestParam("email") email: String): List<DeployResponse>
 }

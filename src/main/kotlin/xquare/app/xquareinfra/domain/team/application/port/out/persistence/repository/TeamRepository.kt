@@ -6,4 +6,5 @@ import java.util.UUID
 
 interface TeamRepository : JpaRepository<Team, UUID> {
     fun existsByTeamNameEn(teamNameEn: String): Boolean
+    fun findByTeamNameEn(teamNameEn: String): Team?
 }

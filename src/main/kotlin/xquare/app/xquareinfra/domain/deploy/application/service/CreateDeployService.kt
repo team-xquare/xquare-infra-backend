@@ -5,21 +5,21 @@ import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.CreateDeployRequest
 import xquare.app.xquareinfra.domain.deploy.application.port.`in`.CreateDeployUseCase
-import xquare.app.xquareinfra.domain.deploy.application.port.out.CreateDeployPort
+import xquare.app.xquareinfra.domain.deploy.application.port.out.saveDeployPort
 import xquare.app.xquareinfra.domain.deploy.application.port.out.ExistDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.deploy.domain.DeployStatus
 import xquare.app.xquareinfra.domain.team.application.port.out.FindTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.feign.client.deploy.DeployClient
-import xquare.app.xquareinfra.infrastructure.feign.client.deploy.dto.FeignCreateDeployRequest
+import xquare.app.xquareinfra.infrastructure.feign.client.deploy.dto.request.FeignCreateDeployRequest
 import java.util.*
 
 @Transactional
 @Service
 class CreateDeployService(
     private val findTeamPort: FindTeamPort,
-    private val createDeployPort: CreateDeployPort,
+    private val saveDeployPort: saveDeployPort,
     private val existDeployPort: ExistDeployPort,
     private val deployClient: DeployClient,
     private val readCurrentUserPort: ReadCurrentUserPort
@@ -51,7 +51,7 @@ class CreateDeployService(
         }
 
         req.run {
-            createDeployPort.createDeploy(
+            saveDeployPort.saveDeploy(
                 Deploy(
                     id = null,
                     deployName = deployName,

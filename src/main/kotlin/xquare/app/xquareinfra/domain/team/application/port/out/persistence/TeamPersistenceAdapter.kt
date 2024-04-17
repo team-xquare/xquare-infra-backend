@@ -16,4 +16,5 @@ class TeamPersistenceAdapter(
     override fun save(team: Team): Team = teamRepository.save(team)
     override fun existsByTeamNameEn(teamNameEn: String): Boolean = teamRepository.existsByTeamNameEn(teamNameEn)
     override fun findById(teamId: UUID): Team? = teamRepository.findByIdOrNull(teamId)
+    override fun findByName(teamName: String): Team? = teamRepository.findByTeamNameEn(teamName)
 }

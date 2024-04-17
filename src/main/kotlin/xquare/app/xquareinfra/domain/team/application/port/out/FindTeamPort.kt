@@ -5,4 +5,5 @@ import java.util.UUID
 
 interface FindTeamPort {
     fun findById(teamId: UUID): Team?
+    fun findByName(teamName: String): Team?
 }
