@@ -59,3 +59,14 @@ url:
 
 secret:
   xquareAccessKey: ${XQUARE_ACCESS_KEY}
+
+vault:
+  address: ${VAULT_URL}
+  vaultToken: ${VAULT_TOKEN}
+
+xquare:
+  accessKey: ${XQUARE_ACCESS}
+  secretKey: ${XQUARE_SECRET}
+
+kubernetes:
+  kubeConfig: ${KUBE_CONFIG}

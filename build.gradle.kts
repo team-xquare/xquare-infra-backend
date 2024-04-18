@@ -55,6 +55,13 @@ dependencies {
     implementation(Dependencies.ANNOTATION_PROCESSOR)
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    // vault
+    implementation("com.bettercloud:vault-java-driver:5.1.0")
+
+    // kubernetes
+    implementation("io.kubernetes:client-java:15.0.1")
+    implementation("software.amazon.awssdk:sts:2.17.64")
 }
 
 dependencyManagement {
