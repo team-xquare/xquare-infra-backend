@@ -1,5 +1,5 @@
 config:
-  name: xquare-infra-backend
+  name: xquare-infra
   service_type: be
   port: 8080
   prefix: /xquare-infra
