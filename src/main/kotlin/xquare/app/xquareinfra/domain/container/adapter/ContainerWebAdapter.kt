@@ -1,20 +1,24 @@
 package xquare.app.xquareinfra.domain.container.adapter
 
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.domain.container.application.port.`in`.GetEnvironmentVariableUseCase
 import xquare.app.xquareinfra.domain.container.application.port.`in`.SyncContainerUseCase
+import xquare.app.xquareinfra.domain.container.application.port.`in`.UpdateEnvironmentVariableUseCase
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 
 @RequestMapping("/container")
 @RestController
 class ContainerWebAdapter(
     private val syncContainerUseCase: SyncContainerUseCase,
-    private val getEnvironmentVariableUseCase: GetEnvironmentVariableUseCase
+    private val getEnvironmentVariableUseCase: GetEnvironmentVariableUseCase,
+    private val updateEnvironmentVariableUseCase: UpdateEnvironmentVariableUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -34,5 +38,17 @@ class ContainerWebAdapter(
         environment: ContainerEnvironment
     ): Map<String, String> {
         return getEnvironmentVariableUseCase.getEnvironmentVariable(deployName, environment)
+    }
+
+    @PatchMapping("/environment-variable")
+    fun updateEnvironmentVariable(
+        @RequestParam("deploy_name", required = true)
+        deployName: String,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment,
+        @RequestBody
+        environmentVariable: Map<String, String>
+    ) {
+        updateEnvironmentVariableUseCase.updateEnvironmentVariable(deployName, environment, environmentVariable)
     }
 }

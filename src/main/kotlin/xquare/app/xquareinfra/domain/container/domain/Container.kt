@@ -38,4 +38,8 @@ class Container(
     @Column(name = "environment_variable", columnDefinition = "TEXT")
     var environmentVariable: Map<String, String> = environmentVariable
         protected set
+
+    fun updateEnvironmentVariable(environmentVariable: Map<String, String>) {
+        this.environmentVariable = environmentVariable
+    }
 }
