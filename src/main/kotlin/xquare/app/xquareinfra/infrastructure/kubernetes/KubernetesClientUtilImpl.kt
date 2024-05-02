@@ -5,7 +5,6 @@ import io.kubernetes.client.openapi.apis.CoreV1Api
 import io.kubernetes.client.openapi.apis.CustomObjectsApi
 import io.kubernetes.client.openapi.models.V1DeleteOptions
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.CriticalException
 
 @Service

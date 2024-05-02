@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.infrastructure.kubernetes.config
 
-import com.example.mergebackend.global.env.kubernetes.KubernetesProperty
-import com.example.mergebackend.global.env.kubernetes.XquareAwsProperty
+import xquare.app.xquareinfra.infrastructure.kubernetes.env.KubernetesProperty
+import xquare.app.xquareinfra.infrastructure.kubernetes.env.XquareAwsProperty
 import io.kubernetes.client.openapi.Configuration
 import io.kubernetes.client.openapi.apis.CoreV1Api
 import io.kubernetes.client.openapi.apis.CustomObjectsApi

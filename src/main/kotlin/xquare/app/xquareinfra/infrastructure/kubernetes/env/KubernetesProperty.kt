@@ -1,4 +1,4 @@
-package com.example.mergebackend.global.env.kubernetes
+package xquare.app.xquareinfra.infrastructure.kubernetes.env
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
