@@ -31,7 +31,7 @@ class AddUserTeamService(
         req.members.map {
             val addMember = findUserPort.findById(it) ?: throw BusinessLogicException.USER_NOT_FOUND
             if(existsUserTeamPort.existsByTeamAndUser(team, addMember)) {
-                throw BusinessLogicException.ALREADY_EXISTS_USER_TEAM_
+                throw BusinessLogicException.ALREADY_EXISTS_USER_TEAM
             }
             addMember.addTeam(team, TeamMemberRole.MEMBER)
         }

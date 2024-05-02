@@ -35,7 +35,8 @@ class SyncContainerService(
                     deploy = deploy,
                     containerEnvironment = containerEnvironment,
                     lastDeploy = LocalDateTime.now(),
-                    subDomain = syncContainerRequest.subDomain
+                    subDomain = syncContainerRequest.subDomain,
+                    environmentVariable = container?.environmentVariable ?: mapOf()
                 )
             }
         )
