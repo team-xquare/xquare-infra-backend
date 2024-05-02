@@ -33,7 +33,7 @@ class AddUserTeamService(
             if(existsUserTeamPort.existsByTeamAndUser(team, addMember)) {
                 throw BusinessLogicException.ALREADY_EXISTS_USER_TEAM_
             }
-            user.addTeam(team, TeamMemberRole.MEMBER)
+            addMember.addTeam(team, TeamMemberRole.MEMBER)
         }
     }
 }
