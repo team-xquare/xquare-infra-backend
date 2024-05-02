@@ -12,7 +12,8 @@ class Container(
     deploy: Deploy,
     containerEnvironment: ContainerEnvironment,
     lastDeploy: LocalDateTime,
-    subDomain: String?
+    subDomain: String?,
+    environmentVariable: Map<String, String>
 ) : BaseUUIDEntity(id) {
     @OneToOne
     @JoinColumn(name = "deploy_id")
@@ -30,5 +31,11 @@ class Container(
 
     @Column(name = "sub_domain", nullable = true)
     var subDomain: String? = subDomain
+        protected set
+
+    @ElementCollection
+    @MapKeyColumn(name="variable_key", length=100)
+    @Column(name = "environment_variable", columnDefinition = "TEXT")
+    var environmentVariable: Map<String, String> = environmentVariable
         protected set
 }

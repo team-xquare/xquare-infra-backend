@@ -35,7 +35,7 @@ class BusinessLogicException(
     companion object {
         val USER_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.USER)
         val ALREADY_EXISTS_TEAM = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.TEAM)
-        val ALREADY_EXISTS_USER_TEAM_ = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.USER_TEAM)
+        val ALREADY_EXISTS_USER_TEAM = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.USER_TEAM)
         val TEAM_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.TEAM)
         val ADD_TEAM_PERMISSION_DENIED = BusinessLogicException(ErrorCodePrefixSuffix.XXX_PERMISSION_DENIED, DomainNames.TEAM)
         val USER_TEAM_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.USER_TEAM)
