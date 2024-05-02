@@ -3,10 +3,8 @@ package xquare.app.xquareinfra.infrastructure.feign.client.dsm.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import kotlinx.serialization.Serializable
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-@Serializable
 data class GetDsmUserInfoResponse(
     val id: String,
     val accountId: String,

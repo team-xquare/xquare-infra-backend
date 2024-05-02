@@ -1,4 +1,4 @@
-package com.example.mergebackend.global.config.kubernetes.dto
+package xquare.app.xquareinfra.infrastructure.kubernetes.config.dto
 
 import kotlinx.serialization.Serializable
 
