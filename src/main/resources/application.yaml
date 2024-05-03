@@ -58,7 +58,7 @@ url:
   deploy: ${DEPLOY_URL}
 
 secret:
-  xquareAccessKey: ${XQUARE_ACCESS_KEY}
+  projectSecret: ${PROJECT_SECRET}
 
 vault:
   address: ${VAULT_URL}
