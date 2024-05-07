@@ -15,6 +15,7 @@ class ContainerPersistenceAdapter(
     override fun findByDeployAndEnvironment(deploy: Deploy, containerEnvironment: ContainerEnvironment): Container? =
         containerRepository.findByContainerEnvironmentAndDeploy(containerEnvironment, deploy)
 
+    override fun findAllByDeploy(deploy: Deploy): List<Container> = containerRepository.findAllByDeploy(deploy)
 
     override fun save(container: Container): Container = containerRepository.save(container)
 }

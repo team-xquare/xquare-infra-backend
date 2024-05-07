@@ -24,7 +24,7 @@ class CreateDeployService(
     private val deployClient: DeployClient,
     private val readCurrentUserPort: ReadCurrentUserPort
 ): CreateDeployUseCase {
-    override fun createDeploy(teamId: UUID, req: CreateDeployRequest) {
+    override fun createDeploy(teamId: UUID, req: CreateDeployRequest): UUID {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val user = readCurrentUserPort.readCurrentUser()
 
@@ -50,7 +50,7 @@ class CreateDeployService(
             throw BusinessLogicException.CREATE_DEPLOY_BAD_REQUEST
         }
 
-        req.run {
+        val deploy = req.run {
             saveDeployPort.saveDeploy(
                 Deploy(
                     id = null,
@@ -68,5 +68,6 @@ class CreateDeployService(
                 )
             )
         }
+        return deploy.id!!
     }
 }

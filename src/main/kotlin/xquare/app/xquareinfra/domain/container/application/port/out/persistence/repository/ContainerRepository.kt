@@ -8,4 +8,6 @@ import java.util.UUID
 
 interface ContainerRepository : JpaRepository<Container, UUID> {
     fun findByContainerEnvironmentAndDeploy(containerEnvironment: ContainerEnvironment, deploy: Deploy): Container?
+
+    fun findAllByDeploy(deploy: Deploy): List<Container>
 }
