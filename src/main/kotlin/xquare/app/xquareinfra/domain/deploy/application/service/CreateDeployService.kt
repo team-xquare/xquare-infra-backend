@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.CreateDeployRequest
+import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.CreateDeployResponse
 import xquare.app.xquareinfra.domain.deploy.application.port.`in`.CreateDeployUseCase
 import xquare.app.xquareinfra.domain.deploy.application.port.out.saveDeployPort
 import xquare.app.xquareinfra.domain.deploy.application.port.out.ExistDeployPort
@@ -24,7 +25,7 @@ class CreateDeployService(
     private val deployClient: DeployClient,
     private val readCurrentUserPort: ReadCurrentUserPort
 ): CreateDeployUseCase {
-    override fun createDeploy(teamId: UUID, req: CreateDeployRequest): UUID {
+    override fun createDeploy(teamId: UUID, req: CreateDeployRequest): CreateDeployResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val user = readCurrentUserPort.readCurrentUser()
 
@@ -68,6 +69,6 @@ class CreateDeployService(
                 )
             )
         }
-        return deploy.id!!
+        return CreateDeployResponse(deployId = deploy.id!!, teamId = team.id!!)
     }
 }
