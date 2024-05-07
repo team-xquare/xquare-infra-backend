@@ -45,7 +45,7 @@ class GetContainerService(
                     queryType = "range",
                     intervalMs = 2000,
                     maxDataPoints = 630,
-                    maxLines = 10000,
+                    maxLines = 3000,
                     legendFormat = "",
                     datasourceId = 3
                 )
