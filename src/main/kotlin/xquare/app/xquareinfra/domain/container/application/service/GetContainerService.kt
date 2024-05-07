@@ -28,7 +28,7 @@ class GetContainerService(
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         val currentTimeMillis = Instant.now().toEpochMilli()
-        val twentyFourHoursAgoMillis = currentTimeMillis - (24 * 60 * 60 * 1000)
+        val twentyFourHoursAgoMillis = currentTimeMillis - (60 * 60 * 1000)
 
         val request = GetLogRequest(
             queries = listOf(
@@ -45,7 +45,7 @@ class GetContainerService(
                     queryType = "range",
                     intervalMs = 2000,
                     maxDataPoints = 630,
-                    maxLines = 1000,
+                    maxLines = 10000,
                     legendFormat = "",
                     datasourceId = 3
                 )
