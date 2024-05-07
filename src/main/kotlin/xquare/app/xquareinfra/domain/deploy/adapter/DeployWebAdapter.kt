@@ -23,8 +23,8 @@ class DeployWebAdapter(
         teamId: UUID,
         @RequestBody
         createDeployRequest: CreateDeployRequest
-    ) {
-        createDeployUseCase.createDeploy(teamId, createDeployRequest)
+    ): UUID {
+        return createDeployUseCase.createDeploy(teamId, createDeployRequest)
     }
 
     @PostMapping("/{deployNameEn}/approve")
