@@ -23,7 +23,8 @@ class GetDeployDetailsService(
             oneLineDescription = deploy.oneLineDescription,
             repository = deploy.repository,
             projectRootDir = deploy.projectRootDir,
-            deployStatus = deploy.deployStatus
+            deployStatus = deploy.deployStatus,
+            deployName = deploy.deployName
         )
     }
 }
