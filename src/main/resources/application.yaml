@@ -45,7 +45,7 @@ server:
       max: 200
       min-spare: 10
     max-connections: 8192
-    accept-count: 100
+    accept-count: 10000
     connection-timeout: 20000
   domain:
     front-domain: ${FRONT_LOCAL:http://localhost:3000}
@@ -53,6 +53,11 @@ server:
   port: ${SERVER_PORT:8080}
   servlet:
     context-path: /xquare-infra
+
+feign:
+  compression:
+    response:
+      enabled: false
 
 url:
   deploy: ${DEPLOY_URL}

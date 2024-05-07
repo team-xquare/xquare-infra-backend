@@ -1,5 +1,6 @@
 package xquare.app.xquareinfra.domain.container.application.service
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerLogResponse
@@ -29,25 +30,32 @@ class GetContainerService(
         val currentTimeMillis = Instant.now().toEpochMilli()
         val twentyFourHoursAgoMillis = currentTimeMillis - (24 * 60 * 60 * 1000)
 
-        val response = logClient.getLogs(
-            GetLogRequest(
-                queries = listOf(
-                    QueryDto(
-                        expr = LogUtil.makeLogQuery(
-                            team = deploy.team.teamNameEn,
-                            containerName = deployName,
-                            serviceType = deploy.deployType,
-                            envType = environment
-                        ),
-                        refId = "A",
-                        datasource = "loki"
-                    )
-                ),
-                from = twentyFourHoursAgoMillis.toString(),
-                to = currentTimeMillis.toString()
-            )
+        val request = GetLogRequest(
+            queries = listOf(
+                QueryDto(
+                    expr = LogUtil.makeLogQuery(
+                        team = deploy.team.teamNameEn,
+                        containerName = deployName,
+                        serviceType = deploy.deployType,
+                        envType = environment
+                    ),
+                    refId = "A",
+                    datasource = "loki",
+                    hide = false,
+                    queryType = "range",
+                    intervalMs = 2000,
+                    maxDataPoints = 630,
+                    maxLines = 1000,
+                    legendFormat = "",
+                    datasourceId = 3
+                )
+            ),
+            from = twentyFourHoursAgoMillis.toString(),
+            to = currentTimeMillis.toString()
         )
 
+
+        val response = logClient.getLogs(request)
         return GetContainerLogResponse(response.results.a.frames[0].data.values[2])
     }
 }

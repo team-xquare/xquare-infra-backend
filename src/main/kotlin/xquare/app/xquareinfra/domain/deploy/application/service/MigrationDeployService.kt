@@ -28,7 +28,6 @@ class MigrationDeployService(
 
         val deployList = deployClient.getAllDeploy(user.email)
         deployList.map {
-            println(it.team)
             val team = findTeamPort.findByName(it.team) ?: throw BusinessLogicException.TEAM_NOT_FOUND
 
             if(!existsUserTeamPort.existsByTeamAndUser(team, user)) {
