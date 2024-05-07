@@ -23,6 +23,7 @@ class GetAllDeployInTeamService(
         return SimpleDeployListResponse(
             deployList.map {
                 SimpleDeployResponse(
+                    deployId = it.id!!,
                     deployName = it.deployName,
                     repository = it.repository,
                     deployStatus = it.deployStatus
