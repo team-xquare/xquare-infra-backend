@@ -7,6 +7,8 @@ plugins {
     kotlin("plugin.serialization") version "1.9.22"
 }
 
+val snippetsDir by extra { file("build/generated-snippets")}
+
 group = "xquare.app"
 version = "0.0.1-SNAPSHOT"
 
@@ -62,6 +64,8 @@ dependencies {
     // kubernetes
     implementation("io.kubernetes:client-java:15.0.1")
     implementation("software.amazon.awssdk:sts:2.17.64")
+
+    implementation("org.springframework.boot:spring-boot-starter-websocket:2.7.18")
 }
 
 dependencyManagement {
