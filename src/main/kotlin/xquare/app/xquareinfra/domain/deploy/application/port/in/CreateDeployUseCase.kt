@@ -4,5 +4,5 @@ import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.CreateDeployRequ
 import java.util.UUID
 
 interface CreateDeployUseCase {
-    fun createDeploy(teamId: UUID, createDeployRequest: CreateDeployRequest)
+    fun createDeploy(teamId: UUID, createDeployRequest: CreateDeployRequest): UUID
 }

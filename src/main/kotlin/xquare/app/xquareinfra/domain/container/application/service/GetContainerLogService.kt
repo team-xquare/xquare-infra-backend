@@ -1,6 +1,5 @@
 package xquare.app.xquareinfra.domain.container.application.service
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerLogResponse
@@ -17,7 +16,7 @@ import java.time.Instant
 
 @Transactional(readOnly = true)
 @Service
-class GetContainerService(
+class GetContainerLogService(
     private val findContainerPort: FindContainerPort,
     private val findDeployPort: FindDeployPort,
     private val logClient: LogClient

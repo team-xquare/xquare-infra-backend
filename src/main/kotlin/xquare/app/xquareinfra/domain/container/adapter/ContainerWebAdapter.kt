@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerLogResponse
-import xquare.app.xquareinfra.domain.container.application.port.`in`.GetContainerLogUseCase
-import xquare.app.xquareinfra.domain.container.application.port.`in`.GetEnvironmentVariableUseCase
-import xquare.app.xquareinfra.domain.container.application.port.`in`.SyncContainerUseCase
-import xquare.app.xquareinfra.domain.container.application.port.`in`.UpdateEnvironmentVariableUseCase
+import xquare.app.xquareinfra.domain.container.adapter.dto.response.SimpleContainerResponse
+import xquare.app.xquareinfra.domain.container.application.port.`in`.*
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import java.util.UUID
 
 @RequestMapping("/container")
 @RestController
@@ -21,7 +20,8 @@ class ContainerWebAdapter(
     private val syncContainerUseCase: SyncContainerUseCase,
     private val getEnvironmentVariableUseCase: GetEnvironmentVariableUseCase,
     private val updateEnvironmentVariableUseCase: UpdateEnvironmentVariableUseCase,
-    private val getContainerLogUseCase: GetContainerLogUseCase
+    private val getContainerLogUseCase: GetContainerLogUseCase,
+    private val getContainerByDeployIdUseCase: GetContainerByDeployIdUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -64,4 +64,10 @@ class ContainerWebAdapter(
     ): GetContainerLogResponse {
         return getContainerLogUseCase.getContainerLog(deployName, environment)
     }
+
+    @GetMapping
+    fun getContainerByDeployId(
+        @RequestParam("deployId")
+        deployId: UUID
+    ): List<SimpleContainerResponse> = getContainerByDeployIdUseCase.getContainerByDeploy(deployId)
 }
