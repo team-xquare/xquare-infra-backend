@@ -3,6 +3,7 @@ package xquare.app.xquareinfra.domain.deploy.adapter
 import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.ApproveDeployRequest
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.CreateDeployRequest
+import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.CreateDeployResponse
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.DeployDetailsResponse
 import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.SimpleDeployListResponse
 import xquare.app.xquareinfra.domain.deploy.application.port.`in`.*
@@ -23,7 +24,7 @@ class DeployWebAdapter(
         teamId: UUID,
         @RequestBody
         createDeployRequest: CreateDeployRequest
-    ): UUID {
+    ): CreateDeployResponse {
         return createDeployUseCase.createDeploy(teamId, createDeployRequest)
     }
 
