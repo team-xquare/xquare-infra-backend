@@ -8,5 +8,6 @@ data class SimpleTeamResponse(
     val teamNameKo: String,
     val teamNameEn: String,
     val administratorName: String,
-    val teamType: TeamType
+    val teamType: TeamType,
+    val deployList: List<String>
 )
