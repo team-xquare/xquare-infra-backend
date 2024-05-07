@@ -44,7 +44,7 @@ class WebSocketLogHandler(
 
     private fun sendInitialLogs(session: WebSocketSession, deployName: String, environment: String) {
         val response = getContainerLog(deployName, environment, 24 * 60 * 60 * 1000)
-        session.sendMessage(TextMessage(response.logs.toString()))
+        session.sendMessage(TextMessage(response.toString()))
     }
 
     private fun schedulePeriodicLogUpdates(session: WebSocketSession, deployName: String, environment: String) {
@@ -52,7 +52,7 @@ class WebSocketLogHandler(
             try {
                 if (session.isOpen) {
                     val response = getContainerLog(deployName, environment, 15 * 1000)
-                    session.sendMessage(TextMessage(response.logs.toString()))
+                    session.sendMessage(TextMessage(response.toString()))
                 } else {
                     sessions.remove(session)
                 }
