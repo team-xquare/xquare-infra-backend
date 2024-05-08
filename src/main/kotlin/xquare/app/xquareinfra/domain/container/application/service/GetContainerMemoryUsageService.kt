@@ -31,7 +31,7 @@ class GetContainerMemoryUsageService(
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
                 val usageInMB = usage.toDouble() / (1024 * 1024)
-                String.format("%.2f MB", usageInMB)
+                String.format("%.2f", usageInMB)
             }
             formattedData[key] = updatedTimeToUsageMap
         }
