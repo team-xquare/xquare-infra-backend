@@ -12,14 +12,15 @@ import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.DataQueryResp
 import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryDto
 import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryRequest
 import java.time.Instant
+import java.util.UUID
 
 @Service
 class GetContainerCpuUsageService(
     private val dataClient: DataClient,
     private val findDeployPort: FindDeployPort
 ): GetContainerCpuUsageUseCase {
-    override fun getContainerCpuUsage(deployName: String, environment: ContainerEnvironment): MutableMap<String, Map<String, String>> {
-        val deploy = findDeployPort.findByDeployName(deployName)
+    override fun getContainerCpuUsage(deployId: UUID, environment: ContainerEnvironment): MutableMap<String, Map<String, String>> {
+        val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val cpuUsageQueryReq = createQueryRequest(deploy, environment)
