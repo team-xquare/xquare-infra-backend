@@ -12,6 +12,7 @@ import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.DataQueryResp
 import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryDto
 import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryRequest
 import java.time.Instant
+import java.util.UUID
 
 @Service
 class GetContainerMemoryUsageService(
@@ -19,18 +20,18 @@ class GetContainerMemoryUsageService(
     private val findDeployPort: FindDeployPort
 ): GetContainerMemoryUsageUseCase {
     override fun getContainerMemoryUsageUseCase(
-        deployName: String,
+        deployId: UUID,
         environment: ContainerEnvironment
     ): MutableMap<String, Map<String, String>> {
-        val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val memoryUsageReq = createQueryRequest(deploy, environment)
         val queryResponse = queryMemoryUsage(memoryUsageReq)
         val formattedData = DataUtil.formatData(queryResponse)
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
-                val usageInMB = usage.toDouble() / (1024 * 1024) // 바이트에서 MB로 변환
-                String.format("%.2f MB", usageInMB) // MB 단위로 포맷팅
+                val usageInMB = usage.toDouble() / (1024 * 1024)
+                String.format("%.2f MB", usageInMB)
             }
             formattedData[key] = updatedTimeToUsageMap
         }

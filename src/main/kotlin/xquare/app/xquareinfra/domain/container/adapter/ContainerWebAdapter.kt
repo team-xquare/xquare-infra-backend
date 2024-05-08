@@ -75,19 +75,19 @@ class ContainerWebAdapter(
 
     @GetMapping("/cpu")
     fun getContainerCpuUsage(
-        @RequestParam("deploy_name", required = true)
-        deployName: String,
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): MutableMap<String, Map<String, String>> =
-        getContainerCpuUsageUseCase.getContainerCpuUsage(deployName, environment)
+        getContainerCpuUsageUseCase.getContainerCpuUsage(deployId, environment)
 
     @GetMapping("/memory")
     fun getContainerMemoryUsage(
-        @RequestParam("deploy_name", required = true)
-        deployName: String,
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): MutableMap<String, Map<String, String>> =
-        getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployName, environment)
+        getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployId, environment)
 }
