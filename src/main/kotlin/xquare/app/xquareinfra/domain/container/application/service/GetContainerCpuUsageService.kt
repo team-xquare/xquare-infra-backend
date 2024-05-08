@@ -28,7 +28,7 @@ class GetContainerCpuUsageService(
         val formattedData = DataUtil.formatData(queryResponse)
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
-                String.format("%.2f%%", usage.toDouble() * 100)
+                String.format("%.2f", usage.toDouble() * 100)
             }
             formattedData[key] = updatedTimeToUsageMap
         }
