@@ -27,7 +27,13 @@ class GetContainerMemoryUsageService(
         val memoryUsageReq = createQueryRequest(deploy, environment)
         val queryResponse = queryMemoryUsage(memoryUsageReq)
         val formattedData = DataUtil.formatData(queryResponse)
-
+        formattedData.forEach { (key, timeToUsageMap) ->
+            val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
+                val usageInMB = usage.toDouble() / (1024 * 1024) // 바이트에서 MB로 변환
+                String.format("%.2f MB", usageInMB) // MB 단위로 포맷팅
+            }
+            formattedData[key] = updatedTimeToUsageMap
+        }
         return formattedData
     }
 
