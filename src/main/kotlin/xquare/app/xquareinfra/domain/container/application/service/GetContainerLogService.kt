@@ -8,10 +8,10 @@ import xquare.app.xquareinfra.domain.container.application.port.out.FindContaine
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.feign.client.log.LogClient
-import xquare.app.xquareinfra.infrastructure.feign.client.log.LogUtil
-import xquare.app.xquareinfra.infrastructure.feign.client.log.dto.GetLogRequest
-import xquare.app.xquareinfra.infrastructure.feign.client.log.dto.QueryDto
+import xquare.app.xquareinfra.infrastructure.feign.client.data.DataClient
+import xquare.app.xquareinfra.infrastructure.feign.client.data.DataUtil
+import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryRequest
+import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryDto
 import java.time.Instant
 
 @Transactional(readOnly = true)
@@ -19,7 +19,7 @@ import java.time.Instant
 class GetContainerLogService(
     private val findContainerPort: FindContainerPort,
     private val findDeployPort: FindDeployPort,
-    private val logClient: LogClient
+    private val dataClient: DataClient
 ): GetContainerLogUseCase {
     override fun getContainerLog(deployName: String, environment: ContainerEnvironment): GetContainerLogResponse {
         val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
@@ -27,12 +27,12 @@ class GetContainerLogService(
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         val currentTimeMillis = Instant.now().toEpochMilli()
-        val twentyFourHoursAgoMillis = currentTimeMillis - (60 * 60 * 1000)
+        val twentyFourHoursAgoMillis = currentTimeMillis - (3 * 60 * 60 * 1000)
 
-        val request = GetLogRequest(
+        val request = QueryRequest(
             queries = listOf(
                 QueryDto(
-                    expr = LogUtil.makeLogQuery(
+                    expr = DataUtil.makeLogQuery(
                         team = deploy.team.teamNameEn,
                         containerName = deployName,
                         serviceType = deploy.deployType,
@@ -54,7 +54,7 @@ class GetContainerLogService(
         )
 
 
-        val response = logClient.getLogs(request)
-        return GetContainerLogResponse(response.results.a.frames[0].data.values[2])
+        val response = dataClient.query(request)
+        return GetContainerLogResponse(response.results.a!!.frames[0].data.values[2])
     }
 }

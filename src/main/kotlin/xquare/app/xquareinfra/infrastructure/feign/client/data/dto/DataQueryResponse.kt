@@ -1,8 +1,8 @@
-package xquare.app.xquareinfra.infrastructure.feign.client.log.dto
+package xquare.app.xquareinfra.infrastructure.feign.client.data.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class LogResponse(
+data class DataQueryResponse(
     val results: Results,
 )
 
