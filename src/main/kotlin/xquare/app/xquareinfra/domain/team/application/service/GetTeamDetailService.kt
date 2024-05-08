@@ -2,6 +2,7 @@ package xquare.app.xquareinfra.domain.team.application.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.team.adapter.dto.response.DetailTeamResponse
 import xquare.app.xquareinfra.domain.team.adapter.dto.response.TeamMemberResponse
 import xquare.app.xquareinfra.domain.team.application.port.`in`.GetTeamDetailUseCase
@@ -15,10 +16,12 @@ import java.util.*
 @Service
 class GetTeamDetailService(
     private val findTeamPort: FindTeamPort,
-    private val findUserPort: FindUserPort
+    private val findUserPort: FindUserPort,
+    private val readCurrentUserPort: ReadCurrentUserPort
 ): GetTeamDetailUseCase {
     override fun getTeamDetail(teamId: UUID): DetailTeamResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+        val user = readCurrentUserPort.readCurrentUser()
         val response = team.run {
             val admin = findUserPort.findById(adminId) ?: throw BusinessLogicException.USER_NOT_FOUND
             DetailTeamResponse(
@@ -27,7 +30,8 @@ class GetTeamDetailService(
                 memberCount = members.size,
                 adminName = admin.name,
                 createdAt = createdAt!!,
-                memberList = getMemberResponse(members)
+                memberList = getMemberResponse(members),
+                isAdmin = team.adminId == user.id!!
             )
         }
         return response

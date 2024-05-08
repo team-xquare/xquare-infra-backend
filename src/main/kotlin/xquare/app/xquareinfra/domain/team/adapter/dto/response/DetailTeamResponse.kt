@@ -8,5 +8,6 @@ data class DetailTeamResponse(
     val memberCount: Int,
     val adminName: String,
     val createdAt: LocalDateTime,
-    val memberList: List<TeamMemberResponse>
+    val memberList: List<TeamMemberResponse>,
+    val isAdmin: Boolean
 )
