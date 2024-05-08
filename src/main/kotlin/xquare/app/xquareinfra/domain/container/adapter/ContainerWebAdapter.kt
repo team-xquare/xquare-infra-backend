@@ -21,7 +21,9 @@ class ContainerWebAdapter(
     private val getEnvironmentVariableUseCase: GetEnvironmentVariableUseCase,
     private val updateEnvironmentVariableUseCase: UpdateEnvironmentVariableUseCase,
     private val getContainerLogUseCase: GetContainerLogUseCase,
-    private val getContainerByDeployIdUseCase: GetContainerByDeployIdUseCase
+    private val getContainerByDeployIdUseCase: GetContainerByDeployIdUseCase,
+    private val getContainerCpuUsageUseCase: GetContainerCpuUsageUseCase,
+    private val getContainerMemoryUsageUseCase: GetContainerMemoryUsageUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -70,4 +72,22 @@ class ContainerWebAdapter(
         @RequestParam("deployId")
         deployId: UUID
     ): List<SimpleContainerResponse> = getContainerByDeployIdUseCase.getContainerByDeploy(deployId)
+
+    @GetMapping("/cpu")
+    fun getContainerCpuUsage(
+        @RequestParam("deploy_name", required = true)
+        deployName: String,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment
+    ): MutableMap<String, Map<String, String>> =
+        getContainerCpuUsageUseCase.getContainerCpuUsage(deployName, environment)
+
+    @GetMapping("/memory")
+    fun getContainerMemoryUsage(
+        @RequestParam("deploy_name", required = true)
+        deployName: String,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment
+    ): MutableMap<String, Map<String, String>> =
+        getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployName, environment)
 }

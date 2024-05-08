@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.feign.client.log.dto
+package xquare.app.xquareinfra.infrastructure.feign.client.data.dto
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
