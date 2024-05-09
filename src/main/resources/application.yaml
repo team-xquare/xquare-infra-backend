@@ -54,11 +54,6 @@ server:
   servlet:
     context-path: /xquare-infra
 
-feign:
-  compression:
-    response:
-      enabled: false
-
 url:
   deploy: ${DEPLOY_URL}
   log: ${LOG_URL}
