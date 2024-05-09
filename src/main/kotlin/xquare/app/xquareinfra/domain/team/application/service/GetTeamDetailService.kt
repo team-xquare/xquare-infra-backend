@@ -6,10 +6,12 @@ import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPo
 import xquare.app.xquareinfra.domain.team.adapter.dto.response.DetailTeamResponse
 import xquare.app.xquareinfra.domain.team.adapter.dto.response.TeamMemberResponse
 import xquare.app.xquareinfra.domain.team.application.port.`in`.GetTeamDetailUseCase
+import xquare.app.xquareinfra.domain.team.application.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.domain.team.application.port.out.FindTeamPort
 import xquare.app.xquareinfra.domain.team.domain.UserTeam
 import xquare.app.xquareinfra.domain.user.application.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
+import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import java.util.*
 
 @Transactional(readOnly = true)
@@ -17,11 +19,17 @@ import java.util.*
 class GetTeamDetailService(
     private val findTeamPort: FindTeamPort,
     private val findUserPort: FindUserPort,
-    private val readCurrentUserPort: ReadCurrentUserPort
+    private val readCurrentUserPort: ReadCurrentUserPort,
+    private val existsUserTeamPort: ExistsUserTeamPort
 ): GetTeamDetailUseCase {
     override fun getTeamDetail(teamId: UUID): DetailTeamResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val user = readCurrentUserPort.readCurrentUser()
+
+        if(!existsUserTeamPort.existsByTeamAndUser(team, user)) {
+            throw XquareException.FORBIDDEN
+        }
+
         val response = team.run {
             val admin = findUserPort.findById(adminId) ?: throw BusinessLogicException.USER_NOT_FOUND
             DetailTeamResponse(
