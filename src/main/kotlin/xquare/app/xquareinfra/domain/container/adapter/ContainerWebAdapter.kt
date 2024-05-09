@@ -59,12 +59,12 @@ class ContainerWebAdapter(
 
     @GetMapping("/logs")
     fun getContainerLog(
-        @RequestParam("deploy_name", required = true)
-        deployName: String,
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment,
     ): GetContainerLogResponse {
-        return getContainerLogUseCase.getContainerLog(deployName, environment)
+        return getContainerLogUseCase.getContainerLog(deployId, environment)
     }
 
     @GetMapping

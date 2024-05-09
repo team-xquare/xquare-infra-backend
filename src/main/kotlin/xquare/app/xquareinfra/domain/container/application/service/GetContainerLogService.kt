@@ -16,6 +16,7 @@ import xquare.app.xquareinfra.infrastructure.feign.client.data.DataUtil
 import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryRequest
 import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryDto
 import java.time.Instant
+import java.util.UUID
 
 @Transactional(readOnly = true)
 @Service
@@ -26,8 +27,8 @@ class GetContainerLogService(
     private val readCurrentUserPort: ReadCurrentUserPort,
     private val existsUserTeamPort: ExistsUserTeamPort
 ): GetContainerLogUseCase {
-    override fun getContainerLog(deployName: String, environment: ContainerEnvironment): GetContainerLogResponse {
-        val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+    override fun getContainerLog(deployId: UUID, environment: ContainerEnvironment): GetContainerLogResponse {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val user = readCurrentUserPort.readCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
@@ -45,7 +46,7 @@ class GetContainerLogService(
                 QueryDto(
                     expr = DataUtil.makeLogQuery(
                         team = deploy.team.teamNameEn,
-                        containerName = deployName,
+                        containerName = deploy.deployName,
                         serviceType = deploy.deployType,
                         envType = environment
                     ),
