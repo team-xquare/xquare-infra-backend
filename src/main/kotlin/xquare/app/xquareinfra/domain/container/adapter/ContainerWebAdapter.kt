@@ -57,16 +57,6 @@ class ContainerWebAdapter(
         updateEnvironmentVariableUseCase.updateEnvironmentVariable(deployName, environment, environmentVariable)
     }
 
-    @GetMapping("/logs")
-    fun getContainerLog(
-        @RequestParam("deployId", required = true)
-        deployId: UUID,
-        @RequestParam("environment", required = true)
-        environment: ContainerEnvironment,
-    ): GetContainerLogResponse {
-        return getContainerLogUseCase.getContainerLog(deployId, environment)
-    }
-
     @GetMapping
     fun getContainerByDeployId(
         @RequestParam("deployId")

@@ -34,24 +34,24 @@ class WebSocketLogHandler(
         val uri = session.uri ?: throw IllegalStateException("Session URI cannot be null")
         val queryParams = parseQueryParams(uri)
 
-        val deployName = queryParams["deploy_name"] ?: throw IllegalArgumentException("Deploy name is required")
+        val deployId = queryParams["deployId"] ?: throw IllegalArgumentException("Deploy name is required")
         val environment = queryParams["environment"] ?: throw IllegalArgumentException("Environment is required")
 
         sessions.add(session)
-        sendInitialLogs(session, deployName, environment)
-        schedulePeriodicLogUpdates(session, deployName, environment)
+        sendInitialLogs(session, UUID.fromString(deployId), environment)
+        schedulePeriodicLogUpdates(session, UUID.fromString(deployId), environment)
     }
 
-    private fun sendInitialLogs(session: WebSocketSession, deployName: String, environment: String) {
-        val response = getContainerLog(deployName, environment, 24 * 60 * 60 * 1000)
+    private fun sendInitialLogs(session: WebSocketSession, deployId: UUID, environment: String) {
+        val response = getContainerLog(deployId, environment, 24 * 60 * 60 * 1000)
         session.sendMessage(TextMessage(response.toString()))
     }
 
-    private fun schedulePeriodicLogUpdates(session: WebSocketSession, deployName: String, environment: String) {
+    private fun schedulePeriodicLogUpdates(session: WebSocketSession, deployId: UUID, environment: String) {
         executor.scheduleAtFixedRate({
             try {
                 if (session.isOpen) {
-                    val response = getContainerLog(deployName, environment, 15 * 1000)
+                    val response = getContainerLog(deployId, environment, 15 * 1000)
                     session.sendMessage(TextMessage(response.toString()))
                 } else {
                     sessions.remove(session)
@@ -62,11 +62,11 @@ class WebSocketLogHandler(
         }, 15, 15, TimeUnit.SECONDS)
     }
 
-    private fun getContainerLog(deployName: String, environment: String, durationMillis: Long): GetContainerLogResponse {
+    private fun getContainerLog(deployId: UUID, environment: String, durationMillis: Long): GetContainerLogResponse {
         val currentTimeMillis = Instant.now().toEpochMilli()
         val fromMillis = currentTimeMillis - durationMillis
 
-        val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val container = findContainerPort.findByDeployAndEnvironment(deploy, if(environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag)
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
@@ -75,7 +75,7 @@ class WebSocketLogHandler(
                 QueryDto(
                     expr = DataUtil.makeLogQuery(
                         team = deploy.team.teamNameEn,
-                        containerName = deployName,
+                        containerName = deploy.deployName,
                         serviceType = deploy.deployType,
                         envType = if(environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag
                     ),
