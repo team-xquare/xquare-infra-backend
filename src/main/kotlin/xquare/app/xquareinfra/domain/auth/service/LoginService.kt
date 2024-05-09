@@ -27,7 +27,8 @@ class LoginService(
         val tokenPair = generateJwtPort.generateTokens(user.id.toString())
         return TokenResponse(
             accessToken = tokenPair.first,
-            refreshToken = tokenPair.second
+            refreshToken = tokenPair.second,
+            email = user.email
         )
     }
 }

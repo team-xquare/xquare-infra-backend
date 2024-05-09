@@ -79,6 +79,20 @@ object DataUtil {
         """.trimIndent()
     }
 
+    fun makeRequestCountPerMinute(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, minute: Int): String {
+        val fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
+        val namespace = "$team-${envType.toString().lowercase()}"
+
+        return """
+            sum(
+                increase(
+                    istio_requests_total{namespace="$namespace", 
+                    destination_app="$fullName"}[${minute}m]
+                )
+            )
+        """.trimIndent()
+    }
+
     fun formatData(queryResponse: DataQueryResponse): MutableMap<String, Map<String, String>> {
         var count = 0
         val response = mutableMapOf<String, Map<String, String>>()
