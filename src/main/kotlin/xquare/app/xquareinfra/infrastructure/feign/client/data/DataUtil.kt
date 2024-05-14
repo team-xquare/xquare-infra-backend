@@ -29,7 +29,9 @@ object DataUtil {
 
     fun makeLogQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment): String {
         val fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
-        return "{job=\"$team-${envType.toString().lowercase()}/$fullName\", container=~\"$fullName\", stream=~\"stdout\"} |~ \"(?i)\" \n"
+        val response = "{job=\"$team-${envType.toString().lowercase()}/$fullName\", container=~\"$fullName\", stream=~\"stdout\"} |~ \"(?i)\" \n"
+        println(response)
+        return response
     }
 
     fun makeCpuUsageQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment): String {
