@@ -22,14 +22,14 @@ class GetContainerDetailsService(
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         return GetContainerDetailsResponse(
-            teamNameEn = deploy.team.teamNameKo,
+            teamNameEn = deploy.team.teamNameEn,
             deployName = deploy.deployName,
             repository = "${deploy.organization}/${deploy.repository}",
             domain = ContainerUtil.generateDomain(container),
             lastDeploy = container.lastDeploy,
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
             teamNameKo = deploy.team.teamNameKo
-
+            
         )
     }
 }
