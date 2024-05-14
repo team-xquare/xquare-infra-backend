@@ -8,6 +8,7 @@ import xquare.app.xquareinfra.domain.container.application.port.out.FindContaine
 import xquare.app.xquareinfra.domain.container.domain.Container
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.domain.ContainerStatus
+import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.team.application.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
@@ -34,22 +35,11 @@ class GetContainerByDeployIdService(
             SimpleContainerResponse(
                 containerName = deploy.deployName,
                 containerEnvironment = it.containerEnvironment,
-                containerStatus = ContainerStatus.RUNNING,
+                containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성
                 repository = "${deploy.organization}/${deploy.repository}",
-                domain = generateDomain(it),
+                domain = ContainerUtil.generateDomain(it),
                 lastDeploy = it.lastDeploy
             )
         }
-    }
-
-    private fun generateDomain(container: Container): String {
-        if(container.subDomain!!.isEmpty()) {
-            val baseDomain = when (container.containerEnvironment) {
-                ContainerEnvironment.prod -> "prod-server.xquare.app"
-                else -> "stag-server.xquare.app"
-            }
-            return "https://$baseDomain/${container.deploy.deployName}"
-        }
-        return container.subDomain!!
     }
 }
