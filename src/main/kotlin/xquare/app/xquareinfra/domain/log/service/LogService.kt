@@ -15,6 +15,9 @@ import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryRequest
 import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryDto
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -26,6 +29,7 @@ class LogService(
     private val findContainerPort: FindContainerPort
 ) {
     private val executor = Executors.newScheduledThreadPool(1)
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
 
     fun sendInitialLogs(session: WebSocketSession, deployId: UUID, environment: String) {
         val response = getContainerLog(deployId, environment, 24 * 60 * 60 * 1000)
@@ -90,7 +94,8 @@ class LogService(
             val timestamps = frame.data.values[1] as List<Long>
             val bodies = frame.data.values[2] as List<String>
             timestamps.zip(bodies) { timestamp, body ->
-                LogEntry(timestamp, body)
+                val kstTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.of("Asia/Seoul"))
+                LogEntry(kstTime.format(formatter), body)
             }
         }
         return GetContainerLogResponse(logs)
