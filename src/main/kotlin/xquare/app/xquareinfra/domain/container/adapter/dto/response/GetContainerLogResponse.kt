@@ -5,3 +5,9 @@ data class GetContainerLogResponse(
 ) {
     override fun toString(): String = logs.joinToString("\n") { it.toString() }
 }
+
+
+data class LogEntry(
+    val timestamp: Long,
+    val body: String
+)
