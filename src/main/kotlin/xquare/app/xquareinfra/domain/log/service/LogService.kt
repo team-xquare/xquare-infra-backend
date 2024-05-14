@@ -5,6 +5,7 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerLogResponse
+import xquare.app.xquareinfra.domain.container.adapter.dto.response.LogEntry
 import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
@@ -28,7 +29,8 @@ class LogService(
 
     fun sendInitialLogs(session: WebSocketSession, deployId: UUID, environment: String) {
         val response = getContainerLog(deployId, environment, 24 * 60 * 60 * 1000)
-        session.sendMessage(TextMessage(response.toString()))
+        val logMessages = response.logs.joinToString("\n") { "${(it as LogEntry).timestamp}: ${(it as LogEntry).body}" }
+        session.sendMessage(TextMessage(logMessages))
     }
 
     fun schedulePeriodicLogUpdates(session: WebSocketSession, deployId: UUID, environment: String) {
@@ -36,7 +38,8 @@ class LogService(
             try {
                 if (session.isOpen) {
                     val response = getContainerLog(deployId, environment, 15 * 1000)
-                    session.sendMessage(TextMessage(response.toString()))
+                    val logMessages = response.logs.joinToString("\n") { "${(it as LogEntry).timestamp}: ${(it as LogEntry).body}" }
+                    session.sendMessage(TextMessage(logMessages))
                 } else {
                     session.close(CloseStatus.SERVER_ERROR)
                 }
@@ -83,6 +86,13 @@ class LogService(
         val response = dataClient.query(request)
 
         val frames = response.results.a.frames
-        return GetContainerLogResponse(frames.last().data.values[2])
+        val logs = frames.flatMap { frame ->
+            val timestamps = frame.data.values[1] as List<Long>
+            val bodies = frame.data.values[2] as List<String>
+            timestamps.zip(bodies) { timestamp, body ->
+                LogEntry(timestamp, body)
+            }
+        }
+        return GetContainerLogResponse(logs)
     }
 }
