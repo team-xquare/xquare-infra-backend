@@ -2,6 +2,7 @@ package xquare.app.xquareinfra.domain.container.adapter
 
 import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.SyncContainerRequest
+import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.SimpleContainerResponse
 import xquare.app.xquareinfra.domain.container.application.port.`in`.*
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
@@ -15,7 +16,8 @@ class ContainerWebAdapter(
     private val updateEnvironmentVariableUseCase: UpdateEnvironmentVariableUseCase,
     private val getContainerByDeployIdUseCase: GetContainerByDeployIdUseCase,
     private val getContainerCpuUsageUseCase: GetContainerCpuUsageUseCase,
-    private val getContainerMemoryUsageUseCase: GetContainerMemoryUsageUseCase
+    private val getContainerMemoryUsageUseCase: GetContainerMemoryUsageUseCase,
+    private val getContainerDetailsUseCase: GetContainerDetailsUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -72,4 +74,12 @@ class ContainerWebAdapter(
         environment: ContainerEnvironment
     ): MutableMap<String, Map<String, String>> =
         getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployId, environment)
+
+    @GetMapping
+    fun getContainerDetails(
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment
+    ): GetContainerDetailsResponse = getContainerDetailsUseCase.getContainerDetails(deployId, environment)
 }
