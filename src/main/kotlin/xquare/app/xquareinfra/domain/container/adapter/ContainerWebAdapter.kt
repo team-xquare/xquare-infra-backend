@@ -75,7 +75,7 @@ class ContainerWebAdapter(
     ): MutableMap<String, Map<String, String>> =
         getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployId, environment)
 
-    @GetMapping
+    @GetMapping("/details")
     fun getContainerDetails(
         @RequestParam("deployId", required = true)
         deployId: UUID,
