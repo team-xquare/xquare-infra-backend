@@ -25,8 +25,6 @@ class WebSocketLogHandler(
     private val findDeployPort: FindDeployPort,
     private val findContainerPort: FindContainerPort
 ) : TextWebSocketHandler() {
-
-
     private val sessions = Collections.newSetFromMap(ConcurrentHashMap<WebSocketSession, Boolean>())
     private val executor = Executors.newScheduledThreadPool(1)
 
@@ -34,7 +32,7 @@ class WebSocketLogHandler(
         val uri = session.uri ?: throw IllegalStateException("Session URI cannot be null")
         val queryParams = parseQueryParams(uri)
 
-        val deployId = queryParams["deployId"] ?: throw IllegalArgumentException("Deploy name is required")
+        val deployId = queryParams["deployId"] ?: throw IllegalArgumentException("Deploy Id is required")
         val environment = queryParams["environment"] ?: throw IllegalArgumentException("Environment is required")
 
         sessions.add(session)
@@ -95,7 +93,9 @@ class WebSocketLogHandler(
         )
 
         val response = dataClient.query(request)
-        return GetContainerLogResponse(response.results.a.frames[0].data.values[2])
+
+        val frames = response.results.a.frames
+        return GetContainerLogResponse(frames.last().data.values[2])
     }
 
     private fun parseQueryParams(uri: URI): Map<String, String> {
