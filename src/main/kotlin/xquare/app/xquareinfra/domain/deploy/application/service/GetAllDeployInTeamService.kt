@@ -21,14 +21,13 @@ class GetAllDeployInTeamService(
         val deployList = findDeployPort.findAllByTeam(team)
 
         return SimpleDeployListResponse(
-            deployList.map {
+            teamNameKo = team.teamNameKo,
+            deployList = deployList.map {
                 SimpleDeployResponse(
                     deployId = it.id!!,
                     deployName = it.deployName,
                     repository = it.repository,
                     deployStatus = it.deployStatus,
-                    teamNameKo = team.teamNameKo,
-                    teamNameEn = team.teamNameEn
                 )
             }
         )
