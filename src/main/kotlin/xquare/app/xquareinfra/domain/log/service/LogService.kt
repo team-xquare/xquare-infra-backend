@@ -92,7 +92,7 @@ class LogService(
         val frames = response.results.a.frames
         val logs = frames.flatMap { frame ->
             val timestamps = frame.data.values[1] as List<Long>
-            val bodies = frame.data.values[2] as List<String>
+            val bodies = (frame.data.values[2] as List<String>).reversed()
             timestamps.zip(bodies) { timestamp, body ->
                 val kstTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.of("Asia/Seoul"))
                 LogEntry(kstTime.format(formatter), body)
