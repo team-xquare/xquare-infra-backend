@@ -26,7 +26,9 @@ class GetAllDeployInTeamService(
                     deployId = it.id!!,
                     deployName = it.deployName,
                     repository = it.repository,
-                    deployStatus = it.deployStatus
+                    deployStatus = it.deployStatus,
+                    teamNameKo = team.teamNameKo,
+                    teamNameEn = team.teamNameEn
                 )
             }
         )

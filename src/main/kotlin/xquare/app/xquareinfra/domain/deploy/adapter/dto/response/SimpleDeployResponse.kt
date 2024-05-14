@@ -7,5 +7,7 @@ data class SimpleDeployResponse(
     val deployId: UUID,
     val deployName: String,
     val repository: String,
-    val deployStatus: DeployStatus
+    val deployStatus: DeployStatus,
+    val teamNameEn: String,
+    val teamNameKo: String
 )
