@@ -32,7 +32,7 @@ class LogService(
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
 
     fun sendInitialLogs(session: WebSocketSession, deployId: UUID, environment: String) {
-        val response = getContainerLog(deployId, environment, 24 * 60 * 60 * 1000)
+        val response = getContainerLog(deployId, environment, 3 * 60 * 60 * 1000)
         val logMessages = response.logs.joinToString("\n") { "${(it as LogEntry).timestamp}: ${(it as LogEntry).body}" }
         session.sendMessage(TextMessage(logMessages))
     }
