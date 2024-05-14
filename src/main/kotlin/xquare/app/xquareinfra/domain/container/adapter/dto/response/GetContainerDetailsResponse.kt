@@ -4,7 +4,8 @@ import xquare.app.xquareinfra.domain.container.domain.ContainerStatus
 import java.time.LocalDateTime
 
 data class GetContainerDetailsResponse(
-    val teamName: String,
+    val teamNameEn: String,
+    val teamNameKo: String,
     val deployName: String,
     val repository: String,
     val domain: String,
