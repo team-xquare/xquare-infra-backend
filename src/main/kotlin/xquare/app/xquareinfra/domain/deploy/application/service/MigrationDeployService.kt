@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.deploy.application.port.`in`.MigrationDeployUseCase
+import xquare.app.xquareinfra.domain.deploy.application.port.out.ExistDeployPort
+import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.application.port.out.saveDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.deploy.domain.DeployStatus
@@ -20,6 +22,7 @@ class MigrationDeployService(
     private val readCurrentUserPort: ReadCurrentUserPort,
     private val findTeamPort: FindTeamPort,
     private val saveDeployPort: saveDeployPort,
+    private val existDeployPort: ExistDeployPort,
     private val deployClient: DeployClient,
     private val existsUserTeamPort: ExistsUserTeamPort
 ): MigrationDeployUseCase {
@@ -32,6 +35,10 @@ class MigrationDeployService(
 
             if(!existsUserTeamPort.existsByTeamAndUser(team, user)) {
                 throw XquareException.FORBIDDEN
+            }
+
+            if(existDeployPort.existByDeployName(it.nameEn)) {
+                return@map
             }
 
             saveDeployPort.saveDeploy(
