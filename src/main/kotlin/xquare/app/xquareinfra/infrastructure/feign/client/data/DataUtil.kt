@@ -29,7 +29,7 @@ object DataUtil {
 
     fun makeLogQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment): String {
         val fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
-        val response = "{job=\"$team-${envType.toString().lowercase()}/$fullName\", container=~\"$fullName\", stream=~\"stdout\"} |~ \"(?i)\" \n"
+        val response = "{job=\"$team-${envType.toString().lowercase()}/$fullName\"} |~ \"(?i)\" \n"
         println(response)
         return response
     }
