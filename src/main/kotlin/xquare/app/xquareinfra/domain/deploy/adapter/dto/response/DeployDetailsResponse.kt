@@ -9,5 +9,6 @@ data class DeployDetailsResponse(
     val oneLineDescription: String,
     val repository: String,
     val projectRootDir: String,
-    val deployStatus: DeployStatus
+    val deployStatus: DeployStatus,
+    val githubFullUrl: String
 )
