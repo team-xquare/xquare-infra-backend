@@ -10,5 +10,6 @@ data class GetContainerDetailsResponse(
     val repository: String,
     val domain: String,
     val lastDeploy: LocalDateTime,
-    val containerStatus: ContainerStatus
+    val containerStatus: ContainerStatus,
+    val containerName: String
 )
