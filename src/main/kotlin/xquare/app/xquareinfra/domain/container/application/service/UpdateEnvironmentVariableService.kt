@@ -40,7 +40,7 @@ class UpdateEnvironmentVariableService(
 
         container.updateEnvironmentVariable(environmentVariable)
 
-        val path = "${deploy.deployName}-${deploy.deployType.name}-${container.containerEnvironment.name}"
+        val path = vaultUtil.getPath(deploy, container)
         vaultUtil.addSecret(environmentVariable, path)
 
         val namespace = "${deploy.team.teamNameEn}-${container.containerEnvironment.name}"
