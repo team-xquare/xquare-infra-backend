@@ -8,9 +8,9 @@ import xquare.app.xquareinfra.domain.container.application.port.`in`.*
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import java.util.*
 
-@RequestMapping("/container")
+@RequestMapping("/v1/container")
 @RestController
-class ContainerWebAdapter(
+class V1ContainerWebAdapter(
     private val syncContainerUseCase: SyncContainerUseCase,
     private val getEnvironmentVariableUseCase: GetEnvironmentVariableUseCase,
     private val updateEnvironmentVariableUseCase: UpdateEnvironmentVariableUseCase,

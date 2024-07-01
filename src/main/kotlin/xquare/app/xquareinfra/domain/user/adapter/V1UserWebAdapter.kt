@@ -7,8 +7,8 @@ import xquare.app.xquareinfra.domain.user.adapter.dto.response.UserSearchRespons
 import xquare.app.xquareinfra.domain.user.application.port.`in`.FindAllSearchUserUseCase
 
 @RestController
-@RequestMapping("/user")
-class UserWebAdapter(
+@RequestMapping("/v1/user")
+class V1UserWebAdapter(
     private val findAllSearchUserUseCase: FindAllSearchUserUseCase
 ) {
     @GetMapping("/all")
