@@ -18,9 +18,9 @@ import xquare.app.xquareinfra.domain.team.adapter.dto.response.SimpleTeamRespons
 import xquare.app.xquareinfra.domain.team.application.port.`in`.*
 import java.util.UUID
 
-@RequestMapping("/team")
+@RequestMapping("/v1/team")
 @RestController
-class TeamWebAdapter(
+class V1TeamWebAdapter(
     private val createTeamUseCase: CreateTeamUseCase,
     private val getMyTeamUseCase: GetMyTeamUseCase,
     private val getTeamDetailUseCase: GetTeamDetailUseCase,
