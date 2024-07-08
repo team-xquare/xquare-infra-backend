@@ -9,9 +9,9 @@ import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.SimpleDeployLis
 import xquare.app.xquareinfra.domain.deploy.application.port.`in`.*
 import java.util.*
 
-@RequestMapping("/deploy")
+@RequestMapping("/v1/deploy")
 @RestController
-class DeployWebAdapter(
+class V1DeployWebAdapter(
     private val createDeployUseCase: CreateDeployUseCase,
     private val approveDeployUseCase: ApproveDeployUseCase,
     private val getAllDeployInTeamUseCase: GetAllDeployInTeamUseCase,
