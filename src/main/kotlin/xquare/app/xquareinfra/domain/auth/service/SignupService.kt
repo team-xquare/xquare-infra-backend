@@ -10,6 +10,7 @@ import xquare.app.xquareinfra.domain.user.domain.Role
 import xquare.app.xquareinfra.domain.user.domain.User
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.feign.client.dsm.DsmLoginClient
+import xquare.app.xquareinfra.infrastructure.feign.client.dsm.DsmLoginRequest
 
 @Transactional
 @Service
@@ -20,8 +21,10 @@ class SignupService(
 ): SignupUseCase {
     override fun signup(signupRequest: SignupRequest) {
         val userInfo = dsmLoginClient.getUserInfo(
-            accountId = signupRequest.accountId,
-            password = signupRequest.password
+            DsmLoginRequest(
+                accountId = signupRequest.accountId,
+                password = signupRequest.password
+            )
         )
 
         if(existsUserPort.existsByAccountId(signupRequest.accountId)) {
