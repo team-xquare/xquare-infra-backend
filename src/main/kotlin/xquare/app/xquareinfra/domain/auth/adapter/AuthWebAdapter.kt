@@ -9,7 +9,7 @@ import xquare.app.xquareinfra.domain.auth.adapter.dto.request.SignupRequest
 import xquare.app.xquareinfra.domain.auth.application.port.`in`.LoginUseCase
 import xquare.app.xquareinfra.domain.auth.application.port.`in`.SignupUseCase
 
-@RequestMapping("/auth")
+@RequestMapping("/v1/auth")
 @RestController
 class AuthWebAdapter(
     private val loginUseCase: LoginUseCase,
