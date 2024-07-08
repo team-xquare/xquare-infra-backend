@@ -13,7 +13,9 @@ class Container(
     containerEnvironment: ContainerEnvironment,
     lastDeploy: LocalDateTime,
     subDomain: String?,
-    environmentVariable: Map<String, String>
+    environmentVariable: Map<String, String>,
+    githubBranch: String? = null,
+    containerPort: Int? = null
 ) : BaseUUIDEntity(id) {
     @OneToOne
     @JoinColumn(name = "deploy_id")
@@ -33,6 +35,12 @@ class Container(
     var subDomain: String? = subDomain
         protected set
 
+    @Column(name = "github_branch", nullable = true)
+    var githubBranch: String? = githubBranch
+
+    @Column(name = "container_port", nullable = true)
+    var containerPort: Int? = containerPort
+
     @ElementCollection
     @MapKeyColumn(name="variable_key", length=100)
     @Column(name = "environment_variable", columnDefinition = "TEXT")
@@ -41,5 +49,13 @@ class Container(
 
     fun updateEnvironmentVariable(environmentVariable: Map<String, String>) {
         this.environmentVariable = environmentVariable
+    }
+
+    fun updateGithubBranch(githubBranch: String) {
+        this.githubBranch = githubBranch
+    }
+
+    fun updateContainerPort(containerPort: Int) {
+        this.containerPort = containerPort
     }
 }

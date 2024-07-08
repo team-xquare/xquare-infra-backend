@@ -28,6 +28,9 @@ redis:
   host: ${REDIS_HOST:localhost}
   port: ${REDIS_PORT:6379}
 
+github:
+  token: ${GITHUB_TOKEN}
+  url: https://api.github.com
 logging:
   level:
     root: info
