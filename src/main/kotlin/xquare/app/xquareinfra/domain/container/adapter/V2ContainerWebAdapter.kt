@@ -1,14 +1,24 @@
 package xquare.app.xquareinfra.domain.container.adapter
 
 import org.springframework.web.bind.annotation.*
+import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateGradleDockerfileRequest
+import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeDockerfileRequest
+import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeWithNginxDockerfileRequest
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.SetContainerConfigRequest
+import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateGradleDockerfileUseCase
+import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateNodeDockerfileUseCase
+import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateNodeWithNginxDockerfileUseCase
 import xquare.app.xquareinfra.domain.container.application.port.`in`.SetContainerConfigUseCase
+import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import java.util.*
 
 @RequestMapping("/v2/container")
 @RestController
 class V2ContainerWebAdapter(
-    private val setContainerConfigUseCase: SetContainerConfigUseCase
+    private val setContainerConfigUseCase: SetContainerConfigUseCase,
+    private val createGradleDockerfileUseCase: CreateGradleDockerfileUseCase,
+    private val createNodeWithNginxDockerfileUseCase: CreateNodeWithNginxDockerfileUseCase,
+    private val createNodeDockerfileUseCase: CreateNodeDockerfileUseCase
 ) {
     @PutMapping("/config")
     fun setContainerConfig(
@@ -17,4 +27,34 @@ class V2ContainerWebAdapter(
         @RequestBody
         setContainerConfigRequest: SetContainerConfigRequest
     ) = setContainerConfigUseCase.setContainerConfig(deployId, setContainerConfigRequest)
+
+    @PostMapping("/gradle")
+    fun createGradleDockerfile(
+        @RequestParam(name = "deployId", required = true)
+        deployId: UUID,
+        @RequestParam(name = "environment", required = true)
+        containerEnvironment: ContainerEnvironment,
+        @RequestBody
+        createGradleDockerfileRequest: CreateGradleDockerfileRequest
+    ) = createGradleDockerfileUseCase.createGradleDockerfile(deployId, containerEnvironment, createGradleDockerfileRequest)
+
+    @PostMapping("/node")
+    fun createNodeDockerfile(
+        @RequestParam(name = "deployId", required = true)
+        deployId: UUID,
+        @RequestParam(name = "environment", required = true)
+        containerEnvironment: ContainerEnvironment,
+        @RequestBody
+        createNodeDockerfileRequest: CreateNodeDockerfileRequest
+    ) = createNodeDockerfileUseCase.createNodeDockerfile(deployId, containerEnvironment, createNodeDockerfileRequest)
+
+    @PostMapping("/node-with-nginx")
+    fun createNodeWithNginxDockerfile(
+        @RequestParam(name = "deployId", required = true)
+        deployId: UUID,
+        @RequestParam(name = "environment", required = true)
+        containerEnvironment: ContainerEnvironment,
+        @RequestBody
+        createNodeWithNginxDockerfileRequest: CreateNodeWithNginxDockerfileRequest
+    ) = createNodeWithNginxDockerfileUseCase.createNodeWithNginxDockerfile(deployId, containerEnvironment, createNodeWithNginxDockerfileRequest)
 }
