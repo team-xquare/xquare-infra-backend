@@ -22,13 +22,13 @@ private class VaultUtilImpl(
     }
 
     override fun getPath(deploy: Deploy, container: Container): String {
-        return "${deploy.deployName}-${deploy.deployType.name}-${container.containerEnvironment.name}"
+        return "${deploy.deployName}-${container.containerEnvironment.name}"
     }
 
     override fun getPath(deploy: Deploy): List<String> {
         return listOf(
-            "${deploy.deployName}-${deploy.deployType.name}-prod",
-            "${deploy.deployName}-${deploy.deployType.name}-stag"
+            "${deploy.deployName}-prod",
+            "${deploy.deployName}-stag"
         )
     }
 }
