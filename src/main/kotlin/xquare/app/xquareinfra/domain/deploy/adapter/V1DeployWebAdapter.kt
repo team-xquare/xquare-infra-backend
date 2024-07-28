@@ -54,7 +54,7 @@ class V1DeployWebAdapter(
     @PostMapping("/migration")
     fun migrationDeploy() = migrationDeployUseCase.migrationDeploy()
 
-    @PutMapping("/migration/v2")
+    @PutMapping("/migration/v2/{deployId}")
     fun migrateToV2(
         @PathVariable("deployId", required = true)
         deployId: UUID
