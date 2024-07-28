@@ -16,7 +16,8 @@ class V1DeployWebAdapter(
     private val approveDeployUseCase: ApproveDeployUseCase,
     private val getAllDeployInTeamUseCase: GetAllDeployInTeamUseCase,
     private val getDeployDetailsUseCase: GetDeployDetailsUseCase,
-    private val migrationDeployUseCase: MigrationDeployUseCase
+    private val migrationDeployUseCase: MigrationDeployUseCase,
+    private val deployMigrationToV2PipelineUseCase: DeployMigrationToV2PipelineUseCase
 ) {
     @PostMapping
     fun createDeploy(
@@ -52,4 +53,10 @@ class V1DeployWebAdapter(
 
     @PostMapping("/migration")
     fun migrationDeploy() = migrationDeployUseCase.migrationDeploy()
+
+    @PutMapping("/migration/v2")
+    fun migrateToV2(
+        @PathVariable("deployId", required = true)
+        deployId: UUID
+    ) = deployMigrationToV2PipelineUseCase.migrationDeploy(deployId)
 }

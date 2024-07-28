@@ -1,5 +1,6 @@
 package xquare.app.xquareinfra.domain.deploy.domain
 
+import org.hibernate.annotations.ColumnDefault
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
 import xquare.app.xquareinfra.domain.team.domain.Team
 import java.util.*
@@ -18,7 +19,8 @@ class Deploy(
     deployStatus: DeployStatus,
     deployType: DeployType,
     useMysql: Boolean,
-    useRedis: Boolean
+    useRedis: Boolean,
+    isV2: Boolean = false
 ) : BaseUUIDEntity(id) {
     @Column(name = "deploy_name", nullable = false, unique = true)
     var deployName: String = deployName
@@ -67,11 +69,20 @@ class Deploy(
     var useMysql = useMysql
         protected set
 
+    @Column(name = "is_v2", nullable = false)
+    @ColumnDefault("false")
+    var isV2 = isV2
+        protected set
+
     fun updateSecret(secretKey: String) {
         this.secretKey = secretKey
     }
 
     fun approveDeploy() {
         this.deployStatus = DeployStatus.AVAILABLE
+    }
+
+    fun migrationToV2() {
+        this.isV2 = true
     }
 }
