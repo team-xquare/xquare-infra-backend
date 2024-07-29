@@ -5,10 +5,9 @@ import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateGradleD
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeDockerfileRequest
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeWithNginxDockerfileRequest
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.SetContainerConfigRequest
-import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateGradleDockerfileUseCase
-import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateNodeDockerfileUseCase
-import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateNodeWithNginxDockerfileUseCase
-import xquare.app.xquareinfra.domain.container.application.port.`in`.SetContainerConfigUseCase
+import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerDeployHistoryResponse
+import xquare.app.xquareinfra.domain.container.application.port.`in`.*
+import xquare.app.xquareinfra.domain.container.application.service.GetContainerDeployHistoryService
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import java.util.*
 
@@ -18,7 +17,9 @@ class V2ContainerWebAdapter(
     private val setContainerConfigUseCase: SetContainerConfigUseCase,
     private val createGradleDockerfileUseCase: CreateGradleDockerfileUseCase,
     private val createNodeWithNginxDockerfileUseCase: CreateNodeWithNginxDockerfileUseCase,
-    private val createNodeDockerfileUseCase: CreateNodeDockerfileUseCase
+    private val createNodeDockerfileUseCase: CreateNodeDockerfileUseCase,
+    private val getContainerDeployHistoryUseCase: GetContainerDeployHistoryUseCase,
+    private val getContainerDeployHistoryService: GetContainerDeployHistoryService
 ) {
     @PutMapping("/config")
     fun setContainerConfig(
@@ -57,4 +58,12 @@ class V2ContainerWebAdapter(
         @RequestBody
         createNodeWithNginxDockerfileRequest: CreateNodeWithNginxDockerfileRequest
     ) = createNodeWithNginxDockerfileUseCase.createNodeWithNginxDockerfile(deployId, containerEnvironment, createNodeWithNginxDockerfileRequest)
+
+    @GetMapping("/history")
+    fun getContainerDeployHistory(
+        @RequestParam(name = "deployId", required = true)
+        deployId: UUID,
+        @RequestParam(name = "environment", required = true)
+        containerEnvironment: ContainerEnvironment,
+    ): GetContainerDeployHistoryResponse = getContainerDeployHistoryUseCase.getContainerDeployHistory(deployId, containerEnvironment)
 }
