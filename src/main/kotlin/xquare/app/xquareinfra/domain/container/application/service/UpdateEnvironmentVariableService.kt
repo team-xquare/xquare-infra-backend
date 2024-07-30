@@ -12,6 +12,7 @@ import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.kubernetes.KubernetesClientUtil
 import xquare.app.xquareinfra.infrastructure.vault.VaultUtil
+import java.util.UUID
 
 @Transactional
 @Service
@@ -24,11 +25,11 @@ class UpdateEnvironmentVariableService(
     private val existsUserTeamPort: ExistsUserTeamPort
 ): UpdateEnvironmentVariableUseCase {
     override fun updateEnvironmentVariable(
-        deployName: String,
+        deployId: UUID,
         environment: ContainerEnvironment,
         environmentVariable: Map<String, String>
     ) {
-        val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val user = readCurrentUserPort.readCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {

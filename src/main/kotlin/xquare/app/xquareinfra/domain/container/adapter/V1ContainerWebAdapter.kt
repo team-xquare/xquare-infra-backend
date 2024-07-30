@@ -31,24 +31,24 @@ class V1ContainerWebAdapter(
 
     @GetMapping("/environment-variable")
     fun getEnvironmentVariable(
-        @RequestParam("deploy_name", required = true)
-        deployName: String,
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, String> {
-        return getEnvironmentVariableUseCase.getEnvironmentVariable(deployName, environment)
+        return getEnvironmentVariableUseCase.getEnvironmentVariable(deployId, environment)
     }
 
     @PatchMapping("/environment-variable")
     fun updateEnvironmentVariable(
-        @RequestParam("deploy_name", required = true)
-        deployName: String,
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment,
         @RequestBody
         environmentVariable: Map<String, String>
     ) {
-        updateEnvironmentVariableUseCase.updateEnvironmentVariable(deployName, environment, environmentVariable)
+        updateEnvironmentVariableUseCase.updateEnvironmentVariable(deployId, environment, environmentVariable)
     }
 
     @GetMapping
