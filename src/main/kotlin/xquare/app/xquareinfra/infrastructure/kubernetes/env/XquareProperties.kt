@@ -5,7 +5,8 @@ import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConfigurationProperties("xquare")
 @ConstructorBinding
-data class XquareAwsProperty(
+data class XquareProperties(
     val accessKey: String,
-    val secretKey: String
+    val secretKey: String,
+    val gatewayDns: String
 )

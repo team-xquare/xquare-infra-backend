@@ -58,4 +58,8 @@ class Container(
     fun updateContainerPort(containerPort: Int) {
         this.containerPort = containerPort
     }
+
+    fun updateDomain(domain: String) {
+        this.subDomain = domain
+    }
 }

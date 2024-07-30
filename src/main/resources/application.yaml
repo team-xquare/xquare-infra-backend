@@ -61,6 +61,7 @@ url:
   deploy: ${DEPLOY_URL}
   log: ${LOG_URL}
   gocd: ${GOCD_URL}
+  cloudflare: ${CLOUDFLARE_URL}
 
 secret:
   projectSecret: ${PROJECT_SECRET}
@@ -72,6 +73,12 @@ vault:
 xquare:
   accessKey: ${XQUARE_ACCESS}
   secretKey: ${XQUARE_SECRET}
+  gatewayDns: ${GATEWAY_DNS}
 
 kubernetes:
   kubeConfig: ${KUBE_CONFIG}
+
+cloudflare:
+  zoneId: ${ZONE_ID}
+  xAuthKey: ${X_AUTH_KEY}
+  xAuthEmail: ${X_AUTH_EMAIL}

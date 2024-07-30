@@ -7,7 +7,6 @@ import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeWit
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.SetContainerConfigRequest
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerDeployHistoryResponse
 import xquare.app.xquareinfra.domain.container.application.port.`in`.*
-import xquare.app.xquareinfra.domain.container.application.service.GetContainerDeployHistoryService
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import java.util.*
 
@@ -19,7 +18,7 @@ class V2ContainerWebAdapter(
     private val createNodeWithNginxDockerfileUseCase: CreateNodeWithNginxDockerfileUseCase,
     private val createNodeDockerfileUseCase: CreateNodeDockerfileUseCase,
     private val getContainerDeployHistoryUseCase: GetContainerDeployHistoryUseCase,
-    private val getContainerDeployHistoryService: GetContainerDeployHistoryService
+    private val syncContainerDomainUseCase: SyncContainerDomainUseCase
 ) {
     @PutMapping("/config")
     fun setContainerConfig(
@@ -66,4 +65,11 @@ class V2ContainerWebAdapter(
         @RequestParam(name = "environment", required = true)
         containerEnvironment: ContainerEnvironment,
     ): GetContainerDeployHistoryResponse = getContainerDeployHistoryUseCase.getContainerDeployHistory(deployId, containerEnvironment)
+
+    @PutMapping("/{deployName}/{containerEnvironment}/sync-domain")
+    fun syncContainerDomain(
+        @PathVariable("deployName") deployName: String,
+        @PathVariable("containerEnvironment") containerEnvironment: ContainerEnvironment,
+        @RequestParam("domain") domain: String
+    ) = syncContainerDomainUseCase.syncContainerDomain(deployName , containerEnvironment, domain)
 }
