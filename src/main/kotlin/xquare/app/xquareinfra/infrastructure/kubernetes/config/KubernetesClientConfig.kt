@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.infrastructure.kubernetes.config
 
 import xquare.app.xquareinfra.infrastructure.kubernetes.env.KubernetesProperty
-import xquare.app.xquareinfra.infrastructure.kubernetes.env.XquareAwsProperty
+import xquare.app.xquareinfra.infrastructure.kubernetes.env.XquareProperties
 import io.kubernetes.client.openapi.Configuration
 import io.kubernetes.client.openapi.apis.CoreV1Api
 import io.kubernetes.client.openapi.apis.CustomObjectsApi
@@ -17,12 +17,12 @@ import javax.annotation.PostConstruct
 
 @org.springframework.context.annotation.Configuration
 class KubernetesClientConfig(
-    private val xquareAwsProperty: XquareAwsProperty,
+    private val xquareProperties: XquareProperties,
     private val kubernetesProperty: KubernetesProperty
 ) {
     @PostConstruct
     fun initKubernetesConfig() {
-        configureAWS("default", xquareAwsProperty.accessKey, xquareAwsProperty.secretKey, Region.AP_NORTHEAST_2.toString())
+        configureAWS("default", xquareProperties.accessKey, xquareProperties.secretKey, Region.AP_NORTHEAST_2.toString())
         val decodedBytes = Base64.getDecoder().decode(kubernetesProperty.kubeConfig)
         val kubeconfig = String(decodedBytes, Charset.defaultCharset())
         val client = ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(StringReader(kubeconfig))).build()
