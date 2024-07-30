@@ -9,6 +9,7 @@ import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.team.application.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
+import java.util.UUID
 
 @Service
 class GetEnvironmentVariableService(
@@ -17,8 +18,8 @@ class GetEnvironmentVariableService(
     private val existsUserTeamPort: ExistsUserTeamPort,
     private val readCurrentUserPort: ReadCurrentUserPort
 ): GetEnvironmentVariableUseCase {
-    override fun getEnvironmentVariable(deployName: String, environment: ContainerEnvironment): Map<String, String> {
-        val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+    override fun getEnvironmentVariable(deployId: UUID, environment: ContainerEnvironment): Map<String, String> {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val user = readCurrentUserPort.readCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
