@@ -1,17 +1,18 @@
 package xquare.app.xquareinfra.infrastructure.kubernetes.config
 
+import io.kubernetes.client.openapi.Configuration
 import io.kubernetes.client.openapi.apis.CoreV1Api
 import io.kubernetes.client.openapi.apis.CustomObjectsApi
+import io.kubernetes.client.util.ClientBuilder
 import org.springframework.context.annotation.Bean
 import javax.annotation.PostConstruct
 
 @org.springframework.context.annotation.Configuration
-class KubernetesClientConfig(
-    private val kubernetesTokenRefreshScheduler: KubernetesTokenRefreshScheduler
-) {
+class KubernetesClientConfig {
     @PostConstruct
     fun initKubernetesConfig() {
-        kubernetesTokenRefreshScheduler.refreshKubernetesToken()
+        val client = ClientBuilder.defaultClient()
+        Configuration.setDefaultApiClient(client)
     }
 
     @Bean
