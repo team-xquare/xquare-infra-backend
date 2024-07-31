@@ -13,5 +13,5 @@ data class DeployHistoryResponse(
 
 data class StageStatus(
     val name: String,
-    val isSuccessful: Boolean
+    val status: String
 )
