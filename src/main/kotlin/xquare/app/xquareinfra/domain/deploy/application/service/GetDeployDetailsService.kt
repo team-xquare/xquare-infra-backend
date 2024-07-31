@@ -35,7 +35,8 @@ class GetDeployDetailsService(
             projectRootDir = deploy.projectRootDir,
             deployStatus = deploy.deployStatus,
             deployName = deploy.deployName,
-            githubFullUrl = "https://github.com/${deploy.organization}/${deploy.repository}"
+            githubFullUrl = "https://github.com/${deploy.organization}/${deploy.repository}",
+            isV2 = deploy.isV2
         )
     }
 }
