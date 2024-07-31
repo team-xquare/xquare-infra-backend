@@ -10,5 +10,6 @@ data class DeployDetailsResponse(
     val repository: String,
     val projectRootDir: String,
     val deployStatus: DeployStatus,
-    val githubFullUrl: String
+    val githubFullUrl: String,
+    val isV2: Boolean
 )
