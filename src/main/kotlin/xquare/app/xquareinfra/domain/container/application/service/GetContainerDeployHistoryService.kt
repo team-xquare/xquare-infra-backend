@@ -32,7 +32,7 @@ class GetContainerDeployHistoryService(
                 stages = it.stages.map {
                     StageStatus(
                         name = it.name,
-                        isSuccessful = it.status == "Passed"
+                        status = it.status
                     )
                 }.toList(),
                 commitMessage = it.buildCause.materialRevisions[0].modifications.get(0).comment
