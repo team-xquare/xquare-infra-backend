@@ -1,5 +1,6 @@
 package xquare.app.xquareinfra.infrastructure.feign.client.gocd.dto.response
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class GetPipelinesHistoryResponse(
@@ -68,6 +69,7 @@ data class Modification(
     val emailAddress: Any?,
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Stage(
     val result: String? = null,
     val status: String,
@@ -77,7 +79,7 @@ data class Stage(
     val counter: String,
     val scheduled: Boolean,
     @JsonProperty("approval_type")
-    val approvalType: String,
+    val approvalType: String? = null,
     @JsonProperty("approved_by")
     val approvedBy: String,
     @JsonProperty("operate_permission")
