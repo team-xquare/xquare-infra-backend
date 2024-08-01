@@ -29,7 +29,8 @@ class GetContainerDetailsService(
             lastDeploy = container.lastDeploy,
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
             teamNameKo = deploy.team.teamNameKo,
-            containerName = "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}"
+            containerName = "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}",
+            isV2 = deploy.isV2
         )
     }
 }
