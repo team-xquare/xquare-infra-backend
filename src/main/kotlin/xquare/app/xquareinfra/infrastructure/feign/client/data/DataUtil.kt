@@ -27,14 +27,36 @@ object DataUtil {
         }
     }
 
-    fun makeLogQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment): String {
-        val fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
-        val response = "{job=\"$team-${envType.toString().lowercase()}/$fullName\"} |~ \"(?i)\" \n"
+    fun getFullName(
+        containerName: String,
+        serviceType: DeployType,
+        envType: ContainerEnvironment,
+        isV2: Boolean
+    ): String {
+        var fullName: String
+        if(isV2) {
+            fullName = "${containerName}-${envType.toString().lowercase()}"
+        }
+        else {
+            fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
+        }
+        return fullName
+    }
+
+
+    fun makeLogQuery(
+        team: String,
+        containerName: String,
+        serviceType: DeployType,
+        envType: ContainerEnvironment,
+        isV2: Boolean
+    ): String {
+        val response = "{job=\"$team-${envType.toString().lowercase()}/${getFullName(containerName, serviceType, envType, isV2)}\"} |~ \"(?i)\" \n"
         return response
     }
 
-    fun makeCpuUsageQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment): String {
-        val fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
+    fun makeCpuUsageQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean): String {
+        val fullName = getFullName(containerName, serviceType, envType, isV2)
 
         val namespace = "$team-${envType.toString().lowercase()}"
 
@@ -56,8 +78,8 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeMemoryUsageQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment): String {
-        val fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
+    fun makeMemoryUsageQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean): String {
+        val fullName = getFullName(containerName, serviceType, envType, isV2)
         val namespace = "$team-${envType.toString().lowercase()}"
 
         return """
@@ -80,8 +102,8 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeRequestCountPerMinute(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, minute: Int): String {
-        val fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
+    fun makeRequestCountPerMinute(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, minute: Int, isV2: Boolean): String {
+        val fullName = getFullName(containerName, serviceType, envType, isV2)
         val namespace = "$team-${envType.toString().lowercase()}"
 
         return """
