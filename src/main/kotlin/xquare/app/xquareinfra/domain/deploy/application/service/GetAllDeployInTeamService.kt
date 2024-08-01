@@ -29,7 +29,7 @@ class GetAllDeployInTeamService(
                     repository = it.repository,
                     deployStatus = it.deployStatus,
                 )
-            }
+            }.sortedByDescending { it.deployName }
         )
     }
 }

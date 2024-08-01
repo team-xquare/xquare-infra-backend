@@ -32,7 +32,7 @@ class GetMyTeamService(
                 deployList = deploys.map { it.deployName }
 
             )
-        } ?: arrayListOf()
+        }?.sortedByDescending { it.teamNameEn } ?: arrayListOf()
 
         return SimpleTeamResponseList(teamList)
     }
