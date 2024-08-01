@@ -7,6 +7,7 @@ data class SetContainerConfigRequest(
 
 data class ContainerConfigDetails(
     val branch: String,
-    val containerPort: Int
+    val containerPort: Int,
+    val domain: String
 )
 
