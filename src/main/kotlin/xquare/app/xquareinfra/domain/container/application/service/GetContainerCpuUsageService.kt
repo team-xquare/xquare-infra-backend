@@ -56,7 +56,8 @@ class GetContainerCpuUsageService(
                         team = deploy.team.teamNameEn,
                         containerName = deploy.deployName,
                         serviceType = deploy.deployType,
-                        envType = environment
+                        envType = environment,
+                        isV2 = deploy.isV2
                     ),
                     refId = "A",
                     datasource = "prometheus",

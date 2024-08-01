@@ -68,7 +68,8 @@ class LogService(
                         team = deploy.team.teamNameEn,
                         containerName = deploy.deployName,
                         serviceType = deploy.deployType,
-                        envType = if(environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag
+                        envType = if(environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag,
+                        isV2 = deploy.isV2
                     ),
                     refId = "A",
                     datasource = "loki",
