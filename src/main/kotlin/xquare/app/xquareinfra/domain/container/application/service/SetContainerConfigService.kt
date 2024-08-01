@@ -77,5 +77,7 @@ class SetContainerConfigService(
                 )
             )
         )
+
+        deploy.migrationToV2()
     }
 }
