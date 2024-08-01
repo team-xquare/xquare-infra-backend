@@ -6,6 +6,7 @@ data class GetContainerDeployHistoryResponse(
 
 data class DeployHistoryResponse(
     val name: String,
+    val email: String,
     val scheduledDate: Long,
     val commitMessage: String,
     val stages: List<StageStatus>

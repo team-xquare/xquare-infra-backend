@@ -26,8 +26,10 @@ class GetContainerDeployHistoryService(
         val histories = gocdClient.getPipelinesHistory("build-${deploy.deployName}-${containerEnvironment.name}", "application/vnd.go.cd.v1+json")
 
         val response = histories.pipelines.map {
+            val splitedNameAndEmail = it.buildCause.materialRevisions[0].modifications.get(0).userName.split(" ")
             DeployHistoryResponse(
-                name = it.buildCause.materialRevisions[0].modifications.get(0).userName,
+                name = splitedNameAndEmail.get(0),
+                email = splitedNameAndEmail.get(1),
                 scheduledDate = it.scheduledDate,
                 stages = it.stages.map {
                     StageStatus(
