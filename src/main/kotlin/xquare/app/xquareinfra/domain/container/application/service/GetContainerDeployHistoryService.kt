@@ -17,7 +17,7 @@ import java.util.*
 class GetContainerDeployHistoryService(
     private val findDeployPort: FindDeployPort,
     private val gocdClient: GocdClient
-) : GetContainerDeployHistoryUseCase{
+) : GetContainerDeployHistoryUseCase {
     override fun getContainerDeployHistory(
         deployId: UUID,
         containerEnvironment: ContainerEnvironment
@@ -25,21 +25,25 @@ class GetContainerDeployHistoryService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val histories = gocdClient.getPipelinesHistory("build-${deploy.deployName}-${containerEnvironment.name}", "application/vnd.go.cd.v1+json")
 
-        val response = histories.pipelines.map {
-            val splitedNameAndEmail = it.buildCause.materialRevisions[0].modifications.get(0).userName.split(" ")
-            DeployHistoryResponse(
-                name = splitedNameAndEmail.get(0),
-                email = splitedNameAndEmail.get(1),
-                scheduledDate = it.scheduledDate,
-                stages = it.stages.map {
-                    StageStatus(
-                        name = it.name,
-                        status = it.status
-                    )
-                }.toList(),
-                commitMessage = it.buildCause.materialRevisions[0].modifications.get(0).comment
-            )
-        }.sortedByDescending { it.scheduledDate }.toList()
+        val response = histories.pipelines?.mapNotNull { pipeline ->
+            pipeline.buildCause?.materialRevisions?.firstOrNull()?.modifications?.firstOrNull()?.let { modification ->
+                val splitNameAndEmail = modification.userName?.split(" ") ?: listOf("", "")
+                DeployHistoryResponse(
+                    name = splitNameAndEmail.getOrNull(0) ?: "",
+                    email = splitNameAndEmail.getOrNull(1) ?: "",
+                    scheduledDate = pipeline.scheduledDate ?: 0L,
+                    stages = pipeline.stages?.mapNotNull { stage ->
+                        stage.name?.let { name ->
+                            StageStatus(
+                                name = name,
+                                status = stage.status ?: ""
+                            )
+                        }
+                    } ?: emptyList(),
+                    commitMessage = modification.comment ?: ""
+                )
+            }
+        }?.sortedByDescending { it.scheduledDate } ?: emptyList()
 
         return GetContainerDeployHistoryResponse(response)
     }
