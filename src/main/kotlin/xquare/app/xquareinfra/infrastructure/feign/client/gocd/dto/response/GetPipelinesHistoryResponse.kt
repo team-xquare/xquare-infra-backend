@@ -3,20 +3,24 @@ package xquare.app.xquareinfra.infrastructure.feign.client.gocd.dto.response
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class GetPipelinesHistoryResponse(
     @JsonProperty("_links")
     val links: Links,
     val pipelines: List<Pipeline>,
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Links(
     val next: Next,
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Next(
     val href: String,
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Pipeline(
     val name: String,
     val counter: Long,
@@ -35,6 +39,8 @@ data class Pipeline(
     val stages: List<Stage>,
 )
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class BuildCause(
     @JsonProperty("trigger_message")
     val triggerMessage: String,
@@ -45,12 +51,16 @@ data class BuildCause(
     val materialRevisions: List<MaterialRevision>,
 )
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class MaterialRevision(
     val changed: Boolean,
     val material: Material,
     val modifications: List<Modification>,
 )
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Material(
     val name: String,
     val fingerprint: String,
@@ -58,6 +68,7 @@ data class Material(
     val description: String,
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Modification(
     val revision: String,
     @JsonProperty("modified_time")
@@ -89,6 +100,8 @@ data class Stage(
     val jobs: List<Job>,
 )
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Job(
     val name: String,
     @JsonProperty("scheduled_date")
