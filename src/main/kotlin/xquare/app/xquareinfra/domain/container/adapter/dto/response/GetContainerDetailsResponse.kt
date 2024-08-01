@@ -11,5 +11,6 @@ data class GetContainerDetailsResponse(
     val domain: String,
     val lastDeploy: LocalDateTime,
     val containerStatus: ContainerStatus,
-    val containerName: String
+    val containerName: String,
+    val isV2: Boolean
 )
