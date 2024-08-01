@@ -53,10 +53,10 @@ class SetContainerConfigService(
                 deploy = deploy,
                 containerEnvironment = environment,
                 lastDeploy = LocalDateTime.now(),
-                subDomain = null,
+                subDomain = config.domain,
                 environmentVariable = container?.environmentVariable ?: mapOf(),
                 githubBranch = config.branch,
-                containerPort = config.containerPort
+                containerPort = config.containerPort,
             )
         )
 
@@ -72,7 +72,8 @@ class SetContainerConfigService(
                     "repository" to deploy.repository,
                     "branch" to container.githubBranch!!,
                     "environment" to container.containerEnvironment.name,
-                    "containerPort" to container.containerPort!!
+                    "containerPort" to container.containerPort!!,
+                    "domain" to container.subDomain!!
                 )
             )
         )
