@@ -69,7 +69,7 @@ data class Modification(
 )
 
 data class Stage(
-    val result: String,
+    val result: String? = null,
     val status: String,
     @JsonProperty("rerun_of_counter")
     val rerunOfCounter: Any?,
