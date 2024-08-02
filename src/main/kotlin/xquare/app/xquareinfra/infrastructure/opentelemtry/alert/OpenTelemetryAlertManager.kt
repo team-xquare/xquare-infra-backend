@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.WebhookType
 import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.AnalysisResult
+import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.analyzer.getAttributeValue
 import xquare.app.xquareinfra.infrastructure.webhook.discord.DiscordMessageSender
 
 @Component
@@ -12,9 +13,9 @@ class OpenTelemetryAlertManager(
     private val findContainerPort: FindContainerPort,
     private val discordMessageSender: DiscordMessageSender
 ){
-    fun notification(serviceName: String, span: Span, analysisResult: AnalysisResult) {
+    fun notification(span: Span, analysisResult: AnalysisResult) {
         val containers = findContainerPort.findAll()
-
+        val serviceName: String = span.getAttributeValue("service.name").toString()
         val service = containers.find { container ->
             listOf(
                 "${container.deploy.deployName}-${container.deploy.deployType}-${container.containerEnvironment}",
