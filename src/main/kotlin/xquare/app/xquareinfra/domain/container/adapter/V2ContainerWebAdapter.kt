@@ -18,7 +18,8 @@ class V2ContainerWebAdapter(
     private val createNodeWithNginxDockerfileUseCase: CreateNodeWithNginxDockerfileUseCase,
     private val createNodeDockerfileUseCase: CreateNodeDockerfileUseCase,
     private val getContainerDeployHistoryUseCase: GetContainerDeployHistoryUseCase,
-    private val syncContainerDomainUseCase: SyncContainerDomainUseCase
+    private val syncContainerDomainUseCase: SyncContainerDomainUseCase,
+    private val getStageLogUseCase: GetStageLogUseCase
 ) {
     @PutMapping("/config")
     fun setContainerConfig(
@@ -72,4 +73,11 @@ class V2ContainerWebAdapter(
         @PathVariable("containerEnvironment") containerEnvironment: ContainerEnvironment,
         @RequestParam("domain") domain: String
     ) = syncContainerDomainUseCase.syncContainerDomain(deployName , containerEnvironment, domain)
+
+    @GetMapping("/{pipelineName}/{pipelineCounter}/stage/{stageName}")
+    fun getStageLog(
+        @PathVariable("stageName") stageName: String,
+        @PathVariable("pipelineCounter") pipelineCounter: Int,
+        @PathVariable("pipelineName") pipelineName: String,
+    ): String = getStageLogUseCase.getStageLog(pipelineCounter, stageName, pipelineName)
 }
