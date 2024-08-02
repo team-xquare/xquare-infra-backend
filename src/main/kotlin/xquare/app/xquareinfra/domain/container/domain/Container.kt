@@ -15,7 +15,8 @@ class Container(
     subDomain: String?,
     environmentVariable: Map<String, String>,
     githubBranch: String? = null,
-    containerPort: Int? = null
+    containerPort: Int? = null,
+    webhookInfo: WebhookInfo? = null,
 ) : BaseUUIDEntity(id) {
     @OneToOne
     @JoinColumn(name = "deploy_id")
@@ -47,6 +48,10 @@ class Container(
     var environmentVariable: Map<String, String> = environmentVariable
         protected set
 
+    @Embedded
+    var webhookInfo: WebhookInfo? = webhookInfo
+        protected set
+
     fun updateEnvironmentVariable(environmentVariable: Map<String, String>) {
         this.environmentVariable = environmentVariable
     }
@@ -61,5 +66,9 @@ class Container(
 
     fun updateDomain(domain: String) {
         this.subDomain = domain
+    }
+
+    fun updateWebhookUrl(webhookUrl: String, webhookType: WebhookType) {
+        this.webhookInfo = WebhookInfo(webhookType, webhookUrl)
     }
 }

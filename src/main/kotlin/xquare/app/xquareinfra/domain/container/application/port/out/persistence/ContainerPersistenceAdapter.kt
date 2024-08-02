@@ -17,5 +17,7 @@ class ContainerPersistenceAdapter(
 
     override fun findAllByDeploy(deploy: Deploy): List<Container> = containerRepository.findAllByDeploy(deploy)
 
+    override fun findAll(): List<Container> = containerRepository.findAll()
+
     override fun save(container: Container): Container = containerRepository.save(container)
 }

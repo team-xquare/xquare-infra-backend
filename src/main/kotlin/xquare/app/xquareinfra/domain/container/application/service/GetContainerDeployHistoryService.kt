@@ -9,7 +9,7 @@ import xquare.app.xquareinfra.domain.container.application.port.`in`.GetContaine
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.feign.client.gocd.GocdClient
+import xquare.app.xquareinfra.infrastructure.external.client.gocd.GocdClient
 import java.util.*
 
 @Transactional

@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.deploy.application.port.`in`.MigrationDeployUseCase
 import xquare.app.xquareinfra.domain.deploy.application.port.out.ExistDeployPort
-import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.application.port.out.saveDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.deploy.domain.DeployStatus
@@ -14,7 +13,7 @@ import xquare.app.xquareinfra.domain.team.application.port.out.ExistsUserTeamPor
 import xquare.app.xquareinfra.domain.team.application.port.out.FindTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.feign.client.deploy.DeployClient
+import xquare.app.xquareinfra.infrastructure.external.client.deploy.DeployClient
 
 @Transactional
 @Service
