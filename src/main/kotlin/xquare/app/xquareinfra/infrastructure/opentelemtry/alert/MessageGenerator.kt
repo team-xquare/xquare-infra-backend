@@ -10,24 +10,25 @@ import kotlin.math.abs
 object MessageGenerator {
     fun makeErrorMessage(span: Span, result: AnalysisResult): String {
         val content = """
-        :rotating_light: **에러가 발생하였습니다.** :rotating_light:
+        :rotating_light: **에러 알림** :rotating_light:
         
-        **Timestamp:** ${unixToKoreanTime(span.startTimeUnixNano / 1_000_000)} // 나노초를 밀리초로 변환
-        **Operation:** ${span.name}
-        **Trace ID:** ${bytesToHex(span.traceId.toByteArray())}
-        **Span ID:** ${bytesToHex(span.spanId.toByteArray())}
+        >>> ### 기본 정보
+        • **시간:** ${unixToKoreanTime(span.startTimeUnixNano / 1_000_000)}
+        • **작업:** \`${span.name}\`
+        • **소요 시간:** ${calculateDurationMs(span.startTimeUnixNano, span.endTimeUnixNano)}ms
         
-        **Error Message:**
-        ```
-        ${span.eventsList}
-        ```
+        ### 추적 정보
+        • **Trace ID:** \`${bytesToHex(span.traceId.toByteArray())}\`
+        • **Span ID:** \`${bytesToHex(span.spanId.toByteArray())}\`
+        • **Parent Span ID:** \`${if (span.parentSpanId.isEmpty) "N/A" else bytesToHex(span.parentSpanId.toByteArray())}\`
         
-        **추가 정보:**
-        - Duration: ${calculateDurationMs(span.startTimeUnixNano, span.endTimeUnixNano)}ms
-        - Parent Span ID: ${if (span.parentSpanId.isEmpty) "N/A" else bytesToHex(span.parentSpanId.toByteArray())}
+        ### 조치 사항
+        1. 스퀘어 인프라 웹사이트에서 자세한 내용을 확인하세요.
+        2. 에러를 분석하고 필요한 조치를 취해주세요.
         
-        스퀘어 인프라 웹사이트에서 자세히 확인하고 에러를 고쳐주세요.
-        CC: @DevOps @SRE @Backend
+        <@&DevOpsRoleID> <@&SRERoleID> <@&BackendRoleID>
+        
+        ---
         """.trimIndent()
 
         return content
