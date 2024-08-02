@@ -9,7 +9,8 @@ data class DeployHistoryResponse(
     val email: String,
     val scheduledDate: Long,
     val commitMessage: String,
-    val stages: List<StageStatus>
+    val stages: List<StageStatus>,
+    val pipelineCounter: Long
 )
 
 data class StageStatus(
