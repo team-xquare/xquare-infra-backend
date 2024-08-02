@@ -12,11 +12,11 @@ class HttpStatusAnalyzer : SpanAnalyzer {
         val httpStatusValue = span.getAttributeValue("http.status_code")
         val httpStatus = when {
             httpStatusValue?.hasIntValue() == true -> httpStatusValue.intValue
-            httpStatusValue?.hasStringValue() == true -> httpStatusValue.stringValue.toIntOrNull()
+            httpStatusValue?.hasStringValue() == true -> httpStatusValue.stringValue.toLongOrNull()
             else -> null
         }
 
-        return if (httpStatus != null && httpStatus as Int >= 500) {
+        return if (httpStatus != null && httpStatus >= 500) {
             AnalysisResult(
                 level = AnalysisResult.Level.ERROR,
                 message = "HTTP $httpStatus detected in span: ${span.name}"
