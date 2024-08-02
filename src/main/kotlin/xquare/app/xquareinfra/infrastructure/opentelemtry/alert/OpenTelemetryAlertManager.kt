@@ -13,9 +13,8 @@ class OpenTelemetryAlertManager(
     private val findContainerPort: FindContainerPort,
     private val discordMessageSender: DiscordMessageSender
 ){
-    fun notification(span: Span, analysisResult: AnalysisResult) {
+    fun notification(span: Span, analysisResult: AnalysisResult, serviceName: String?) {
         val containers = findContainerPort.findAll()
-        val serviceName: String = span.getAttributeValue("service.name").toString()
         println(serviceName)
         val service = containers.find { container ->
             listOf(
@@ -23,7 +22,6 @@ class OpenTelemetryAlertManager(
                 "${container.deploy.deployName}-${container.containerEnvironment}"
             ).any { it == serviceName }
         }
-
         println(service)
 
         service?.webhookInfo?.let {

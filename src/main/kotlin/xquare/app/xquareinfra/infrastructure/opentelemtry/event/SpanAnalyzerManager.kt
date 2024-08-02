@@ -21,7 +21,8 @@ class SpanAnalyzerManager(
                 AnalysisResult.Level.ERROR ->
                     openTelemetryAlertManager.notification(
                         analysisResult = result,
-                        span = event.span
+                        span = event.span,
+                        serviceName = event.rootServiceName
                     )
             }
         }
