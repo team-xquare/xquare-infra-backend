@@ -40,7 +40,8 @@ class GetContainerDeployHistoryService(
                             )
                         }
                     } ?: emptyList(),
-                    commitMessage = modification.comment ?: ""
+                    commitMessage = modification.comment ?: "",
+                    pipelineCounter = pipeline.counter!!
                 )
             }
         }?.sortedByDescending { it.scheduledDate } ?: emptyList()
