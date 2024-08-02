@@ -9,11 +9,11 @@ import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.team.application.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.feign.client.data.DataClient
-import xquare.app.xquareinfra.infrastructure.feign.client.data.DataUtil
-import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.DataQueryResponse
-import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryDto
-import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryRequest
+import xquare.app.xquareinfra.infrastructure.external.client.data.DataClient
+import xquare.app.xquareinfra.infrastructure.external.client.data.DataUtil
+import xquare.app.xquareinfra.infrastructure.external.client.data.dto.DataQueryResponse
+import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryDto
+import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryRequest
 import java.time.Instant
 import java.util.UUID
 

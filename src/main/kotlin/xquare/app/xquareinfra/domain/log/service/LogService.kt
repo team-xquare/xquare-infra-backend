@@ -9,10 +9,10 @@ import xquare.app.xquareinfra.domain.container.adapter.dto.response.LogEntry
 import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
-import xquare.app.xquareinfra.infrastructure.feign.client.data.DataClient
-import xquare.app.xquareinfra.infrastructure.feign.client.data.DataUtil
-import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryRequest
-import xquare.app.xquareinfra.infrastructure.feign.client.data.dto.QueryDto
+import xquare.app.xquareinfra.infrastructure.external.client.data.DataClient
+import xquare.app.xquareinfra.infrastructure.external.client.data.DataUtil
+import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryRequest
+import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryDto
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.Instant
 import java.time.LocalDateTime

@@ -2,16 +2,14 @@ package xquare.app.xquareinfra.domain.container.application.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeDockerfileRequest
 import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeWithNginxDockerfileRequest
-import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateNodeDockerfileUseCase
 import xquare.app.xquareinfra.domain.container.application.port.`in`.CreateNodeWithNginxDockerfileUseCase
 import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.feign.client.github.GithubClient
-import xquare.app.xquareinfra.infrastructure.feign.client.github.dto.request.DispatchEventRequest
+import xquare.app.xquareinfra.infrastructure.external.client.github.GithubClient
+import xquare.app.xquareinfra.infrastructure.external.client.github.dto.request.DispatchEventRequest
 import xquare.app.xquareinfra.infrastructure.global.env.github.GithubProperties
 import java.util.*
 
