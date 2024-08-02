@@ -41,7 +41,8 @@ class GetContainerDeployHistoryService(
                         }
                     } ?: emptyList(),
                     commitMessage = modification.comment ?: "",
-                    pipelineCounter = pipeline.counter!!
+                    pipelineCounter = pipeline.counter!!,
+                    pipelineName = pipeline.name!!
                 )
             }
         }?.sortedByDescending { it.scheduledDate } ?: emptyList()

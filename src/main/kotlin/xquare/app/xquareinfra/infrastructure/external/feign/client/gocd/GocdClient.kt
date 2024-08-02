@@ -18,4 +18,12 @@ interface GocdClient {
         @PathVariable("pipeline_name") pipelineName: String,
         @RequestHeader("Accept") accept: String
     ): GetPipelinesHistoryResponse
+
+    @GetMapping("/files/{pipelineName}/{pipelineCounter}/{stage}/1/{stage}/cruise-output/console.log")
+    fun getStageLog(
+        @PathVariable("pipelineName") pipelineName: String,
+        @PathVariable("pipelineCounter") pipelineCounter: Int,
+        @PathVariable("stage") stage: String,
+        @RequestHeader("Accept") accept: String
+    ): String
 }
