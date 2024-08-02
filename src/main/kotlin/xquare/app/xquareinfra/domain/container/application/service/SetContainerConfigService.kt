@@ -9,6 +9,7 @@ import xquare.app.xquareinfra.domain.container.application.port.out.FindContaine
 import xquare.app.xquareinfra.domain.container.application.port.out.SaveContainerPort
 import xquare.app.xquareinfra.domain.container.domain.Container
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.domain.Language
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
@@ -32,15 +33,15 @@ class SetContainerConfigService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         setContainerConfigRequest.stag?.let {
-            processContainerConfig(deploy, it, ContainerEnvironment.stag)
+            processContainerConfig(deploy, it, ContainerEnvironment.stag, setContainerConfigRequest.language)
         }
 
         setContainerConfigRequest.prod?.let {
-            processContainerConfig(deploy, it, ContainerEnvironment.prod)
+            processContainerConfig(deploy, it, ContainerEnvironment.prod, setContainerConfigRequest.language)
         }
     }
 
-    private fun processContainerConfig(deploy: Deploy, config: ContainerConfigDetails, environment: ContainerEnvironment) {
+    private fun processContainerConfig(deploy: Deploy, config: ContainerConfigDetails, environment: ContainerEnvironment, language: Language) {
         var container = findContainerPort.findByDeployAndEnvironment(deploy, environment)
         var containerId: UUID? = null
         if (container != null) {
@@ -73,7 +74,8 @@ class SetContainerConfigService(
                     "branch" to container.githubBranch!!,
                     "environment" to container.containerEnvironment.name,
                     "containerPort" to container.containerPort!!,
-                    "domain" to container.subDomain!!
+                    "domain" to container.subDomain!!,
+                    "language" to language
                 )
             )
         )
