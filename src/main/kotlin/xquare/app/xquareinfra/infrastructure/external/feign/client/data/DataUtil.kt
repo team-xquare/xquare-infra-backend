@@ -51,7 +51,7 @@ object DataUtil {
         envType: ContainerEnvironment,
         isV2: Boolean
     ): String {
-        val response = "{job=\"$team-${envType.toString().lowercase()}/${getFullName(containerName, serviceType, envType, isV2)}\"} |~ \"(?i)\" \n"
+        val response = "{job=\"$team-${envType.toString().lowercase()}/${getFullName(containerName, serviceType, envType, isV2)}\", container=~\"${getFullName(containerName, serviceType, envType, isV2)}\"} |~ \"(?i)\" \n"
         return response
     }
 
