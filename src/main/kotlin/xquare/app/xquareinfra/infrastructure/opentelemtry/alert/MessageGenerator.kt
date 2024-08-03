@@ -13,6 +13,7 @@ object MessageGenerator {
         :rotating_light: **에러 알림** :rotating_light:
         
         >>> ### 기본 정보
+        • **에러 정보:** ${result.message}
         • **시간:** ${unixToKoreanTime(span.startTimeUnixNano / 1_000_000)}
         • **작업:** \`${span.name}\`
         • **소요 시간:** ${calculateDurationMs(span.startTimeUnixNano, span.endTimeUnixNano)}ms

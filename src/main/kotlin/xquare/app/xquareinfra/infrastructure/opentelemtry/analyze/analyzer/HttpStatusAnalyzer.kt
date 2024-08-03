@@ -1,10 +1,10 @@
 package xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.analyzer
 
-import io.opentelemetry.proto.common.v1.AnyValue
 import io.opentelemetry.proto.trace.v1.Span
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.AnalysisResult
 import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.SpanAnalyzer
+import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.getAttributeValue
 
 @Component
 class HttpStatusAnalyzer : SpanAnalyzer {
@@ -25,6 +25,3 @@ class HttpStatusAnalyzer : SpanAnalyzer {
     }
 }
 
-fun Span.getAttributeValue(key: String): AnyValue? {
-    return attributesList.find { it.key == key }?.value
-}

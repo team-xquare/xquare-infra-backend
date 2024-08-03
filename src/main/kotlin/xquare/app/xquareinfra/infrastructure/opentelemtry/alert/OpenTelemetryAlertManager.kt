@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.WebhookType
 import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.AnalysisResult
-import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.analyzer.getAttributeValue
 import xquare.app.xquareinfra.infrastructure.webhook.discord.DiscordMessageSender
 
 @Component
