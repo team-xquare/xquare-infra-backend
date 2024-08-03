@@ -4,6 +4,7 @@ import io.opentelemetry.proto.trace.v1.Span
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.AnalysisResult
 import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.SpanAnalyzer
+import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.getAttributeValue
 
 @Component
 class SlowQueryAnalyzer : SpanAnalyzer {
