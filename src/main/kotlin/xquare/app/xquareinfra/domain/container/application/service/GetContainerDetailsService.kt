@@ -4,10 +4,12 @@ import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.domain.container.application.port.`in`.GetContainerDetailsUseCase
 import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
+import xquare.app.xquareinfra.domain.container.domain.Container
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.domain.ContainerStatus
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
+import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.util.*
 
@@ -29,8 +31,15 @@ class GetContainerDetailsService(
             lastDeploy = container.lastDeploy,
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
             teamNameKo = deploy.team.teamNameKo,
-            containerName = "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}",
+            containerName = getContainerName(deploy, container),
             isV2 = deploy.isV2
         )
+    }
+
+    fun getContainerName(deploy: Deploy, container: Container): String {
+        if(deploy.isV2) {
+            return "${deploy.deployName}-${container.containerEnvironment}"
+        }
+        else return "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}"
     }
 }
