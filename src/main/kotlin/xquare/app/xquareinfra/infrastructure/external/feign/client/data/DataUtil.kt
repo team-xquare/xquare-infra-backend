@@ -102,6 +102,20 @@ object DataUtil {
         """.trimIndent()
     }
 
+    fun makeRequestPerMinuteQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean): String {
+        val fullName = getFullName(containerName, serviceType, envType, isV2)
+
+        return """
+            sum(
+                rate(
+                    http_server_requests_seconds_count{
+                        exported_job="$fullName"
+                    }[1m]
+                )
+            ) * 60
+        """.trimIndent()
+    }
+
     fun makeRequestCountPerMinute(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, minute: Int, isV2: Boolean): String {
         val fullName = getFullName(containerName, serviceType, envType, isV2)
         val namespace = "$team-${envType.toString().lowercase()}"
