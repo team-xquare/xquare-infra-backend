@@ -108,7 +108,7 @@ object DataUtil {
         return """
             sum(
                 rate(
-                    http_server_requests_seconds_count{
+                    http_server_duration_milliseconds_count{
                         exported_job="$fullName"
                     }[1m]
                 )
