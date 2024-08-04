@@ -19,7 +19,8 @@ class V2ContainerWebAdapter(
     private val createNodeDockerfileUseCase: CreateNodeDockerfileUseCase,
     private val getContainerDeployHistoryUseCase: GetContainerDeployHistoryUseCase,
     private val syncContainerDomainUseCase: SyncContainerDomainUseCase,
-    private val getStageLogUseCase: GetStageLogUseCase
+    private val getStageLogUseCase: GetStageLogUseCase,
+    private val getContainerHttpRequestPerMinuteUseCase: GetContainerHttpRequestPerMinuteUseCase
 ) {
     @PutMapping("/config")
     fun setContainerConfig(
@@ -80,4 +81,12 @@ class V2ContainerWebAdapter(
         @PathVariable("pipelineCounter") pipelineCounter: Int,
         @PathVariable("pipelineName") pipelineName: String,
     ): String = getStageLogUseCase.getStageLog(pipelineCounter, stageName, pipelineName)
+
+    @GetMapping("/request-per-minute")
+    fun getHttpRequestPerMinute(
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment
+    ): MutableMap<String, Map<String, String>> = getContainerHttpRequestPerMinuteUseCase.getContainerHttpRequestPerMinute(deployId, environment)
 }

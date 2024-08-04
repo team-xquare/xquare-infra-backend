@@ -4,5 +4,5 @@ import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import java.util.UUID
 
 interface GetContainerCpuUsageUseCase {
-    fun getContainerCpuUsage(deployName: UUID, environment: ContainerEnvironment): MutableMap<String, Map<String, String>>
+    fun getContainerCpuUsage(deployId: UUID, environment: ContainerEnvironment): MutableMap<String, Map<String, String>>
 }
