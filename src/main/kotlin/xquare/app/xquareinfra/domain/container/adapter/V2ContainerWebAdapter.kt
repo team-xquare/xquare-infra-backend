@@ -20,7 +20,8 @@ class V2ContainerWebAdapter(
     private val getContainerDeployHistoryUseCase: GetContainerDeployHistoryUseCase,
     private val syncContainerDomainUseCase: SyncContainerDomainUseCase,
     private val getStageLogUseCase: GetStageLogUseCase,
-    private val getContainerHttpRequestPerMinuteUseCase: GetContainerHttpRequestPerMinuteUseCase
+    private val getContainerHttpRequestPerMinuteUseCase: GetContainerHttpRequestPerMinuteUseCase,
+    private val getContainerHttpErrorRequestPerMinuteUseCase: GetContainerHttpErrorRequestPerMinuteUseCase
 ) {
     @PutMapping("/config")
     fun setContainerConfig(
@@ -82,11 +83,19 @@ class V2ContainerWebAdapter(
         @PathVariable("pipelineName") pipelineName: String,
     ): String = getStageLogUseCase.getStageLog(pipelineCounter, stageName, pipelineName)
 
-    @GetMapping("/request-per-minute")
+    @GetMapping("/metrics/requests/rate")
     fun getHttpRequestPerMinute(
         @RequestParam("deployId", required = true)
         deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): MutableMap<String, Map<String, String>> = getContainerHttpRequestPerMinuteUseCase.getContainerHttpRequestPerMinute(deployId, environment)
+
+    @GetMapping("/metrics/http-errors/500/rate")
+    fun getHttpErrorRequestPerMinute(
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment
+    ): MutableMap<String, Map<String, String>> = getContainerHttpErrorRequestPerMinuteUseCase.getContainerHttpErrorRequestPerMinute(deployId, environment)
 }

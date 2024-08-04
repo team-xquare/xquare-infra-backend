@@ -116,17 +116,18 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeRequestCountPerMinute(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, minute: Int, isV2: Boolean): String {
+    fun makeHttpStatus500RequestPerMinuteQuery(containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean): String {
         val fullName = getFullName(containerName, serviceType, envType, isV2)
-        val namespace = "$team-${envType.toString().lowercase()}"
 
         return """
             sum(
-                increase(
-                    istio_requests_total{namespace="$namespace", 
-                    destination_app="$fullName"}[${minute}m]
+                rate(
+                    http_server_duration_milliseconds_count{
+                        exported_job="$fullName",
+                        http_status_code="500"
+                    }[1m]
                 )
-            )
+            ) * 60
         """.trimIndent()
     }
 
