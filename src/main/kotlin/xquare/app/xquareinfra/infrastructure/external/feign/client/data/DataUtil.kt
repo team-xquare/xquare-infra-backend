@@ -116,6 +116,23 @@ object DataUtil {
         """.trimIndent()
     }
 
+    fun makeGetLatencyPerMinuteQuery(containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean, percent: Double): String {
+        val fullName = getFullName(containerName, serviceType, envType, isV2)
+
+        return """
+            histogram_quantile(
+                $percent, 
+                sum(
+                    rate(
+                        http_server_duration_milliseconds_bucket {
+                            exported_job="$fullName"
+                        }[1m]
+                    )
+                ) by (le)
+            )
+        """.trimIndent()
+    }
+
     fun makeHttpStatus500RequestPerMinuteQuery(containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean): String {
         val fullName = getFullName(containerName, serviceType, envType, isV2)
 

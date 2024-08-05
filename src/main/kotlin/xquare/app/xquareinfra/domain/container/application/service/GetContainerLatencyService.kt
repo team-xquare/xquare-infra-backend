@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.domain.container.application.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
-import xquare.app.xquareinfra.domain.container.application.port.`in`.GetContainerHttpRequestPerMinuteUseCase
+import xquare.app.xquareinfra.domain.container.application.port.`in`.GetContainerLatencyUseCase
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
@@ -18,15 +18,16 @@ import java.time.Instant
 import java.util.*
 
 @Service
-class GetContainerHttpRequestPerMinuteService(
+class GetContainerLatencyService(
     private val dataClient: DataClient,
     private val findDeployPort: FindDeployPort,
     private val readCurrentUserPort: ReadCurrentUserPort,
     private val existsUserTeamPort: ExistsUserTeamPort
-) : GetContainerHttpRequestPerMinuteUseCase{
-    override fun getContainerHttpRequestPerMinute(
+): GetContainerLatencyUseCase {
+    override fun getContainerLatency(
         deployId: UUID,
-        environment: ContainerEnvironment
+        environment: ContainerEnvironment,
+        percent: Int
     ): MutableMap<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
@@ -36,12 +37,16 @@ class GetContainerHttpRequestPerMinuteService(
             throw XquareException.FORBIDDEN
         }
 
-        val queryReq = createQueryRequest(deploy, environment)
+        val queryReq = createQueryRequest(deploy, environment, percent / 100.0)
         val queryResponse = queryHttpRequestPerMinute(queryReq)
         val formattedData = DataUtil.formatData(queryResponse)
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
-                String.format("%.2f", usage.toDouble())
+                try {
+                    String.format("%.2f", usage.toDouble())
+                } catch (e: NumberFormatException) {
+                    "0.00"
+                }
             }
             formattedData[key] = updatedTimeToUsageMap
         }
@@ -49,18 +54,18 @@ class GetContainerHttpRequestPerMinuteService(
         return formattedData
     }
 
-    private fun createQueryRequest(deploy: Deploy, environment: ContainerEnvironment): QueryRequest {
+    private fun createQueryRequest(deploy: Deploy, environment: ContainerEnvironment, percent: Double): QueryRequest {
         val currentTimeMillis = Instant.now().toEpochMilli()
         val halfMinuteAgoMillis = currentTimeMillis - (30 * 60 * 1000)
         return QueryRequest(
             queries = listOf(
                 QueryDto(
-                    expr = DataUtil.makeRequestPerMinuteQuery(
-                        team = deploy.team.teamNameEn,
+                    expr = DataUtil.makeGetLatencyPerMinuteQuery(
                         containerName = deploy.deployName,
                         serviceType = deploy.deployType,
                         envType = environment,
-                        isV2 = deploy.isV2
+                        isV2 = deploy.isV2,
+                        percent = percent
                     ),
                     refId = "A",
                     datasource = "prometheus",
