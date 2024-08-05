@@ -27,7 +27,8 @@ class GetContainerLatencyService(
     override fun getContainerLatency(
         deployId: UUID,
         environment: ContainerEnvironment,
-        percent: Int
+        percent: Int,
+        timeRange: Int
     ): MutableMap<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
@@ -37,7 +38,7 @@ class GetContainerLatencyService(
             throw XquareException.FORBIDDEN
         }
 
-        val queryReq = createQueryRequest(deploy, environment, percent / 100.0)
+        val queryReq = createQueryRequest(deploy, environment, percent / 100.0, timeRange)
         val queryResponse = queryHttpRequestPerMinute(queryReq)
         val formattedData = DataUtil.formatData(queryResponse)
         formattedData.forEach { (key, timeToUsageMap) ->
@@ -54,9 +55,9 @@ class GetContainerLatencyService(
         return formattedData
     }
 
-    private fun createQueryRequest(deploy: Deploy, environment: ContainerEnvironment, percent: Double): QueryRequest {
+    private fun createQueryRequest(deploy: Deploy, environment: ContainerEnvironment, percent: Double, timeRange: Int): QueryRequest {
         val currentTimeMillis = Instant.now().toEpochMilli()
-        val halfMinuteAgoMillis = currentTimeMillis - (30 * 60 * 1000)
+        val timeRangeMinuteAgoMillis = currentTimeMillis - (timeRange * 60 * 1000)
         return QueryRequest(
             queries = listOf(
                 QueryDto(
@@ -78,7 +79,7 @@ class GetContainerLatencyService(
                     datasourceId = 3
                 )
             ),
-            from = halfMinuteAgoMillis.toString(),
+            from = timeRangeMinuteAgoMillis.toString(),
             to = currentTimeMillis.toString()
         )
     }

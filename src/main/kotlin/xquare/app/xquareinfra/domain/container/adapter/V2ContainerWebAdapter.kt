@@ -89,16 +89,20 @@ class V2ContainerWebAdapter(
         @RequestParam("deployId", required = true)
         deployId: UUID,
         @RequestParam("environment", required = true)
-        environment: ContainerEnvironment
-    ): MutableMap<String, Map<String, String>> = getContainerHttpRequestPerMinuteUseCase.getContainerHttpRequestPerMinute(deployId, environment)
+        environment: ContainerEnvironment,
+        @RequestParam("timeRange", required = true)
+        timeRange: Int
+    ): MutableMap<String, Map<String, String>> = getContainerHttpRequestPerMinuteUseCase.getContainerHttpRequestPerMinute(deployId, environment, timeRange)
 
     @GetMapping("/metrics/http-errors/500/rate")
     fun getHttpErrorRequestPerMinute(
         @RequestParam("deployId", required = true)
         deployId: UUID,
         @RequestParam("environment", required = true)
-        environment: ContainerEnvironment
-    ): MutableMap<String, Map<String, String>> = getContainerHttpErrorRequestPerMinuteUseCase.getContainerHttpErrorRequestPerMinute(deployId, environment)
+        environment: ContainerEnvironment,
+        @RequestParam("timeRange", required = true)
+        timeRange: Int
+    ): MutableMap<String, Map<String, String>> = getContainerHttpErrorRequestPerMinuteUseCase.getContainerHttpErrorRequestPerMinute(deployId, environment, timeRange)
 
     @GetMapping("/metrics/latency/{percent}")
     fun getLatency(
@@ -106,6 +110,8 @@ class V2ContainerWebAdapter(
         deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment,
-        @PathVariable("percent", required = true) percent: Int
-    ): MutableMap<String, Map<String, String>> = getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent)
+        @PathVariable("percent", required = true) percent: Int,
+        @RequestParam("timeRange", required = true)
+        timeRange: Int
+    ): MutableMap<String, Map<String, String>> = getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent, timeRange)
 }

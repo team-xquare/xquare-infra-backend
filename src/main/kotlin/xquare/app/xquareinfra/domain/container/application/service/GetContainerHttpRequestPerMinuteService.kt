@@ -26,7 +26,8 @@ class GetContainerHttpRequestPerMinuteService(
 ) : GetContainerHttpRequestPerMinuteUseCase{
     override fun getContainerHttpRequestPerMinute(
         deployId: UUID,
-        environment: ContainerEnvironment
+        environment: ContainerEnvironment,
+        timeRange: Int
     ): MutableMap<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
@@ -36,7 +37,7 @@ class GetContainerHttpRequestPerMinuteService(
             throw XquareException.FORBIDDEN
         }
 
-        val queryReq = createQueryRequest(deploy, environment)
+        val queryReq = createQueryRequest(deploy, environment, timeRange)
         val queryResponse = queryHttpRequestPerMinute(queryReq)
         val formattedData = DataUtil.formatData(queryResponse)
         formattedData.forEach { (key, timeToUsageMap) ->
@@ -49,9 +50,9 @@ class GetContainerHttpRequestPerMinuteService(
         return formattedData
     }
 
-    private fun createQueryRequest(deploy: Deploy, environment: ContainerEnvironment): QueryRequest {
+    private fun createQueryRequest(deploy: Deploy, environment: ContainerEnvironment, timeRange: Int): QueryRequest {
         val currentTimeMillis = Instant.now().toEpochMilli()
-        val halfMinuteAgoMillis = currentTimeMillis - (30 * 60 * 1000)
+        val timeRangeMinuteAgoMillis = currentTimeMillis - (timeRange * 60 * 1000)
         return QueryRequest(
             queries = listOf(
                 QueryDto(
@@ -73,7 +74,7 @@ class GetContainerHttpRequestPerMinuteService(
                     datasourceId = 3
                 )
             ),
-            from = halfMinuteAgoMillis.toString(),
+            from = timeRangeMinuteAgoMillis.toString(),
             to = currentTimeMillis.toString()
         )
     }
