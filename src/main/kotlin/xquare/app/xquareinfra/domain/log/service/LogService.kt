@@ -98,6 +98,6 @@ class LogService(
             }
         }.sortedBy { it.timestamp }
 
-        return GetContainerLogResponse(logs.reversed())
+        return GetContainerLogResponse(logs)
     }
 }
