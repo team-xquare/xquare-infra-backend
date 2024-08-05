@@ -21,7 +21,8 @@ class V2ContainerWebAdapter(
     private val syncContainerDomainUseCase: SyncContainerDomainUseCase,
     private val getStageLogUseCase: GetStageLogUseCase,
     private val getContainerHttpRequestPerMinuteUseCase: GetContainerHttpRequestPerMinuteUseCase,
-    private val getContainerHttpErrorRequestPerMinuteUseCase: GetContainerHttpErrorRequestPerMinuteUseCase
+    private val getContainerHttpErrorRequestPerMinuteUseCase: GetContainerHttpErrorRequestPerMinuteUseCase,
+    private val getContainerLatencyUseCase: GetContainerLatencyUseCase
 ) {
     @PutMapping("/config")
     fun setContainerConfig(
@@ -98,4 +99,13 @@ class V2ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): MutableMap<String, Map<String, String>> = getContainerHttpErrorRequestPerMinuteUseCase.getContainerHttpErrorRequestPerMinute(deployId, environment)
+
+    @GetMapping("/metrics/latency/{percent}")
+    fun getLatency(
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment,
+        @PathVariable("percent", required = true) percent: Int
+    ): MutableMap<String, Map<String, String>> = getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent)
 }
