@@ -24,7 +24,7 @@ class V2ContainerWebAdapter(
     private val getContainerHttpErrorRequestPerMinuteUseCase: GetContainerHttpErrorRequestPerMinuteUseCase,
     private val getContainerLatencyUseCase: GetContainerLatencyUseCase
 ) {
-    @PutMapping("/config")
+    @PostMapping("/config")
     fun setContainerConfig(
         @RequestParam(name = "deployId", required = true)
         deployId: UUID,
