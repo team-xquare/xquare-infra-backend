@@ -87,16 +87,17 @@ class LogService(
         )
 
         val response = dataClient.query(request)
-
+        println(response)
         val frames = response.results.a.frames
         val logs = frames.flatMap { frame ->
-            val timestamps = (frame.data.values[1] as List<Long>).reversed()
-            val bodies = (frame.data.values[2] as List<String>).reversed()
+            val timestamps = (frame.data.values[1] as List<Long>)
+            val bodies = (frame.data.values[2] as List<String>)
             timestamps.zip(bodies) { timestamp, body ->
                 val kstTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.of("Asia/Seoul"))
-                LogEntry(kstTime.format(formatter), body)
+                LogEntry(kstTime.toString(), body)
             }
-        }
-        return GetContainerLogResponse(logs)
+        }.sortedBy { it.timestamp }
+
+        return GetContainerLogResponse(logs.reversed())
     }
 }
