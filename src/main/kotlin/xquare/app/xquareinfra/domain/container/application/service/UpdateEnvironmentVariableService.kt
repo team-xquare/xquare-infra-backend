@@ -50,21 +50,22 @@ class UpdateEnvironmentVariableService(
         val namespace = "${deploy.team.teamNameEn}-${container.containerEnvironment.name}"
         kubernetesClientUtil.deleteSecret(namespace, path)
 
-        val pipelineName = "build-${deploy.deployName}-${container.containerEnvironment.name}"
-        val accept = "application/vnd.go.cd.v1+json"
-        val pipelinesHistory = gocdClient.getPipelinesHistory(
-            pipelineName,
-            accept
-        )
-
-        pipelinesHistory.pipelines?.get(0)?.let {
-            gocdClient.runSelectedJob(
+        if(deploy.isV2) {
+            val pipelineName = "build-${deploy.deployName}-${container.containerEnvironment.name}"
+            val pipelinesHistory = gocdClient.getPipelinesHistory(
                 pipelineName,
-                it.counter,
-                "deploy",
-                accept,
-                RunSelectedJobRequest(jobs = listOf("deploy"))
+                "application/vnd.go.cd.v1+json"
             )
+
+            pipelinesHistory.pipelines?.get(0)?.let {
+                gocdClient.runSelectedJob(
+                    pipelineName,
+                    it.counter,
+                    "deploy",
+                    "application/vnd.go.cd.v3+json",
+                    RunSelectedJobRequest(jobs = listOf("deploy"))
+                )
+            }
         }
     }
 }
