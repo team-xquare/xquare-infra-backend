@@ -23,7 +23,7 @@ data class Next(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Pipeline(
     val name: String? = null,
-    val counter: Long? = null,
+    val counter: Int,
     val label: String? = null,
     @JsonProperty("natural_order")
     val naturalOrder: Double? = null,
