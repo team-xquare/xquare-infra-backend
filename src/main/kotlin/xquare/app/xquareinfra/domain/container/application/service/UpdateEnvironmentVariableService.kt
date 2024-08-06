@@ -10,6 +10,8 @@ import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.team.application.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
+import xquare.app.xquareinfra.infrastructure.external.client.gocd.GocdClient
+import xquare.app.xquareinfra.infrastructure.external.feign.client.gocd.dto.request.RunSelectedJobRequest
 import xquare.app.xquareinfra.infrastructure.kubernetes.KubernetesClientUtil
 import xquare.app.xquareinfra.infrastructure.vault.VaultUtil
 import java.util.UUID
@@ -22,7 +24,8 @@ class UpdateEnvironmentVariableService(
     private val vaultUtil: VaultUtil,
     private val kubernetesClientUtil: KubernetesClientUtil,
     private val readCurrentUserPort: ReadCurrentUserPort,
-    private val existsUserTeamPort: ExistsUserTeamPort
+    private val existsUserTeamPort: ExistsUserTeamPort,
+    private val gocdClient: GocdClient
 ): UpdateEnvironmentVariableUseCase {
     override fun updateEnvironmentVariable(
         deployId: UUID,
@@ -46,5 +49,22 @@ class UpdateEnvironmentVariableService(
 
         val namespace = "${deploy.team.teamNameEn}-${container.containerEnvironment.name}"
         kubernetesClientUtil.deleteSecret(namespace, path)
+
+        val pipelineName = "build-${deploy.deployName}-${container.containerEnvironment.name}"
+        val accept = "application/vnd.go.cd.v1+json"
+        val pipelinesHistory = gocdClient.getPipelinesHistory(
+            pipelineName,
+            accept
+        )
+
+        pipelinesHistory.pipelines?.get(0)?.let {
+            gocdClient.runSelectedJob(
+                pipelineName,
+                it.counter as Int,
+                "deploy",
+                accept,
+                RunSelectedJobRequest(jobs = listOf("deploy"))
+            )
+        }
     }
 }
