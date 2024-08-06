@@ -28,7 +28,6 @@ class KubernetesClientUtilImpl(
                 v1DeleteOption
             )
         } catch (e: Exception) {
-            println(e.printStackTrace())
             throw CriticalException(500, "Kubernetes Exception")
         }
     }
