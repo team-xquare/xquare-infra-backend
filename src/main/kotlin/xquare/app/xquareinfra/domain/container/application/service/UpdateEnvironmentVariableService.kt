@@ -60,7 +60,7 @@ class UpdateEnvironmentVariableService(
         pipelinesHistory.pipelines?.get(0)?.let {
             gocdClient.runSelectedJob(
                 pipelineName,
-                it.counter as Int,
+                it.counter,
                 "deploy",
                 accept,
                 RunSelectedJobRequest(jobs = listOf("deploy"))
