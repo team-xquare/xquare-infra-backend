@@ -104,8 +104,7 @@ object DataUtil {
 
     fun makeRequestPerMinuteQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean): String {
         val fullName = getFullName(containerName, serviceType, envType, isV2)
-
-        return """
+        val response = """
             sum(
                 rate(
                     http_server_duration_milliseconds_count{
@@ -114,6 +113,8 @@ object DataUtil {
                 )
             ) * 60
         """.trimIndent()
+        println("request per minute query : $response" )
+        return response
     }
 
     fun makeGetLatencyPerMinuteQuery(containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean, percent: Double): String {
