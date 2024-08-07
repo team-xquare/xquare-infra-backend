@@ -1,5 +1,6 @@
 package xquare.app.xquareinfra.domain.container.application.service
 
+import okhttp3.internal.format
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.container.application.port.`in`.GetContainerHttpRequestPerMinuteUseCase
@@ -39,7 +40,9 @@ class GetContainerHttpRequestPerMinuteService(
 
         val queryReq = createQueryRequest(deploy, environment, timeRange)
         val queryResponse = queryHttpRequestPerMinute(queryReq)
+        println("queryResponse : $queryResponse")
         val formattedData = DataUtil.formatData(queryResponse)
+        println("formattedData: $formattedData")
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
                 String.format("%.2f", usage.toDouble())
