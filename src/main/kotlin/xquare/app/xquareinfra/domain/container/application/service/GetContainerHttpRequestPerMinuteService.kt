@@ -39,6 +39,7 @@ class GetContainerHttpRequestPerMinuteService(
         }
 
         val queryReq = createQueryRequest(deploy, environment, timeRange)
+        println("queryReq: $queryReq")
         val queryResponse = queryHttpRequestPerMinute(queryReq)
         println("queryResponse : $queryResponse")
         val formattedData = DataUtil.formatData(queryResponse)
