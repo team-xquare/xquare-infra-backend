@@ -16,7 +16,7 @@ data class A(
 )
 
 data class Frame(
-    val data: Data,
+    val data: Data?,
 )
 
 data class Data(
