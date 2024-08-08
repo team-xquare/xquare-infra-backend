@@ -3,7 +3,9 @@ package xquare.app.xquareinfra.infrastructure.external.client.data
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.domain.DeployType
 import xquare.app.xquareinfra.infrastructure.external.feign.client.data.dto.DataQueryResponse
+import xquare.app.xquareinfra.infrastructure.external.feign.client.data.dto.Frame
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -151,16 +153,18 @@ object DataUtil {
         val response = mutableMapOf<String, Map<String, String>>()
         queryResponse.results?.a?.frames?.forEach { frame ->
             frame.data?.let { data ->
-                val times = data.values[0]
-                val usages = data.values[1]
+                if (data.values.isNotEmpty()) {
+                    val times = data.values[0]
+                    val usages = data.values[1]
 
-                val timeToUsageMap = mutableMapOf<String, String>()
-                times.zip(usages).forEach { (time, usage) ->
-                    val formattedTime = formatTime(time.toString())
-                    timeToUsageMap[formattedTime] = usage.toString()
+                    val timeToUsageMap = mutableMapOf<String, String>()
+                    times.zip(usages).forEach { (time, usage) ->
+                        val formattedTime = formatTime(time.toString())
+                        timeToUsageMap[formattedTime] = usage.toString()
+                    }
+                    count++
+                    response[count.toString()] = timeToUsageMap
                 }
-                count++
-                response[count.toString()] = timeToUsageMap
             }
         }
         return response
@@ -170,5 +174,25 @@ object DataUtil {
         val timestamp = Instant.ofEpochMilli(time.toLong())
         val kstTime = ZonedDateTime.ofInstant(timestamp, ZoneId.of("Asia/Seoul"))
         return kstTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+    }
+
+    data class LogEntry(val timestamp: String, val body: String)
+
+    fun parseLogs(frames: List<Frame>?): List<LogEntry> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return frames?.flatMap { frame ->
+            frame.data?.let { data ->
+                if (data.values.size >= 3) {
+                    val timestamps = (data.values[1] as List<Long>).reversed()
+                    val bodies = (data.values[2] as List<String>).reversed()
+                    timestamps.zip(bodies) { timestamp, body ->
+                        val kstTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.of("Asia/Seoul"))
+                        LogEntry(kstTime.format(formatter), body)
+                    }
+                } else {
+                    emptyList()
+                }
+            } ?: emptyList()
+        }?.sortedBy { it.timestamp } ?: emptyList()
     }
 }
