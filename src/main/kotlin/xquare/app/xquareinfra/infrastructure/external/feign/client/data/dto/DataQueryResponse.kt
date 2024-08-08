@@ -1,9 +1,9 @@
-package xquare.app.xquareinfra.infrastructure.external.client.data.dto
+package xquare.app.xquareinfra.infrastructure.external.feign.client.data.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class DataQueryResponse(
-    val results: Results,
+    val results: Results?,
 )
 
 data class Results(

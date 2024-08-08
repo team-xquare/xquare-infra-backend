@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.infrastructure.external.client.data
 
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.domain.DeployType
-import xquare.app.xquareinfra.infrastructure.external.client.data.dto.DataQueryResponse
+import xquare.app.xquareinfra.infrastructure.external.feign.client.data.dto.DataQueryResponse
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -34,15 +34,13 @@ object DataUtil {
         isV2: Boolean
     ): String {
         var fullName: String
-        if(isV2) {
+        if (isV2) {
             fullName = "${containerName}-${envType.toString().lowercase()}"
-        }
-        else {
+        } else {
             fullName = "${containerName}-${serviceType.toString().lowercase()}-${envType.toString().lowercase()}"
         }
         return fullName
     }
-
 
     fun makeLogQuery(
         team: String,
@@ -57,7 +55,6 @@ object DataUtil {
 
     fun makeCpuUsageQuery(team: String, containerName: String, serviceType: DeployType, envType: ContainerEnvironment, isV2: Boolean): String {
         val fullName = getFullName(containerName, serviceType, envType, isV2)
-
         val namespace = "$team-${envType.toString().lowercase()}"
 
         return """
@@ -152,17 +149,19 @@ object DataUtil {
     fun formatData(queryResponse: DataQueryResponse): MutableMap<String, Map<String, String>> {
         var count = 0
         val response = mutableMapOf<String, Map<String, String>>()
-        queryResponse.results.a.frames.forEach { frame ->
-            val times = frame.data.values[0]
-            val usages = frame.data.values[1]
+        queryResponse.results?.a?.frames?.forEach { frame ->
+            frame.data?.let { data ->
+                val times = data.values[0]
+                val usages = data.values[1]
 
-            val timeToUsageMap = mutableMapOf<String, String>()
-            times.zip(usages).forEach { (time, usage) ->
-                val formattedTime = formatTime(time.toString())
-                timeToUsageMap[formattedTime] = usage.toString()
+                val timeToUsageMap = mutableMapOf<String, String>()
+                times.zip(usages).forEach { (time, usage) ->
+                    val formattedTime = formatTime(time.toString())
+                    timeToUsageMap[formattedTime] = usage.toString()
+                }
+                count++
+                response[count.toString()] = timeToUsageMap
             }
-            count++
-            response[count.toString()] = timeToUsageMap
         }
         return response
     }
