@@ -16,9 +16,9 @@ data class A(
 )
 
 data class Frame(
-    val data: Data?,
+    val data: Data = Data(emptyList()),
 )
 
 data class Data(
-    val values: List<List<Any?>>,
+    val values: List<List<Any?>> = emptyList()
 )

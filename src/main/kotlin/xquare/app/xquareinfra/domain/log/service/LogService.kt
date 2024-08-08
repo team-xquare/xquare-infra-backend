@@ -58,7 +58,7 @@ class LogService(
         val fromMillis = currentTimeMillis - durationMillis
 
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-        val container = findContainerPort.findByDeployAndEnvironment(deploy, if(environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag)
+        val container = findContainerPort.findByDeployAndEnvironment(deploy, if (environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag)
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         val request = QueryRequest(
@@ -68,7 +68,7 @@ class LogService(
                         team = deploy.team.teamNameEn,
                         containerName = deploy.deployName,
                         serviceType = deploy.deployType,
-                        envType = if(environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag,
+                        envType = if (environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag,
                         isV2 = deploy.isV2
                     ),
                     refId = "A",
@@ -92,15 +92,20 @@ class LogService(
 
         val logs = frames?.flatMap { frame ->
             frame.data?.let { data ->
-                val timestamps = (data.values[1] as List<Long>).reversed()
-                val bodies = (data.values[2] as List<String>).reversed()
-                timestamps.zip(bodies) { timestamp, body ->
-                    val kstTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.of("Asia/Seoul"))
-                    LogEntry(kstTime.format(formatter), body)
+                if (data.values.size >= 3) {
+                    val timestamps = (data.values[1] as List<Long>).reversed()
+                    val bodies = (data.values[2] as List<String>).reversed()
+                    timestamps.zip(bodies) { timestamp, body ->
+                        val kstTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.of("Asia/Seoul"))
+                        LogEntry(kstTime.format(formatter), body)
+                    }
+                } else {
+                    emptyList()
                 }
             } ?: emptyList()
         }?.sortedBy { it.timestamp } ?: emptyList()
 
         return GetContainerLogResponse(logs)
     }
+
 }
