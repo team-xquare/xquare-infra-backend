@@ -20,10 +20,12 @@ class DeployMigrationToV2PipelineService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val containers = findContainerPort.findAllByDeploy(deploy)
 
+        deploy.migrationToV2()
+
         containers.map {
+            val path = vaultUtil.getPath(deploy, it)
+            println(path)
             vaultUtil.addSecret(it.environmentVariable, vaultUtil.getPath(deploy, it))
         }
-
-        deploy.migrationToV2()
     }
 }
