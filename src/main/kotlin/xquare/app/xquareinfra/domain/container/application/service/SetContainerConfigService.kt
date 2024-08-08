@@ -33,15 +33,15 @@ class SetContainerConfigService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         setContainerConfigRequest.stag?.let {
-            processContainerConfig(deploy, it, ContainerEnvironment.stag, setContainerConfigRequest.language)
+            processContainerConfig(deploy, it, ContainerEnvironment.stag, setContainerConfigRequest.language, setContainerConfigRequest.criticalService)
         }
 
         setContainerConfigRequest.prod?.let {
-            processContainerConfig(deploy, it, ContainerEnvironment.prod, setContainerConfigRequest.language)
+            processContainerConfig(deploy, it, ContainerEnvironment.prod, setContainerConfigRequest.language, setContainerConfigRequest.criticalService)
         }
     }
 
-    private fun processContainerConfig(deploy: Deploy, config: ContainerConfigDetails, environment: ContainerEnvironment, language: Language) {
+    private fun processContainerConfig(deploy: Deploy, config: ContainerConfigDetails, environment: ContainerEnvironment, language: Language, criticalService: Boolean) {
         var container = findContainerPort.findByDeployAndEnvironment(deploy, environment)
         var containerId: UUID? = null
         if (container != null) {
@@ -75,7 +75,8 @@ class SetContainerConfigService(
                     "environment" to container.containerEnvironment.name,
                     "containerPort" to container.containerPort!!,
                     "domain" to container.subDomain!!,
-                    "language" to language
+                    "language" to language,
+                    "critical_service" to criticalService
                 )
             )
         )
