@@ -1,6 +1,5 @@
 package xquare.app.xquareinfra.domain.container.application.service
 
-import okhttp3.internal.format
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.container.application.port.`in`.GetContainerHttpRequestPerMinuteUseCase
@@ -12,7 +11,7 @@ import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.external.client.data.DataClient
 import xquare.app.xquareinfra.infrastructure.external.client.data.DataUtil
-import xquare.app.xquareinfra.infrastructure.external.client.data.dto.DataQueryResponse
+import xquare.app.xquareinfra.infrastructure.external.feign.client.data.dto.DataQueryResponse
 import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryDto
 import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryRequest
 import java.time.Instant
