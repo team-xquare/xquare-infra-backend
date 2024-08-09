@@ -29,6 +29,25 @@ object DataUtil {
         }
     }
 
+    fun aggregateDataToMinute(rawData: MutableMap<String, Map<String, String>>, intervalSeconds: Int): MutableMap<String, Map<String, String>> {
+        val aggregatedData = mutableMapOf<String, MutableMap<String, Double>>()
+        val entriesPerMinute = 60 / intervalSeconds
+
+        rawData.forEach { (key, timeToUsageMap) ->
+            val aggregatedTimeToUsageMap = mutableMapOf<String, Double>()
+
+            timeToUsageMap.entries.groupBy { it.key.substring(0, 16) }
+                .forEach { (minute, entries) ->
+                    val sum = entries.take(entriesPerMinute).sumOf { it.value.toDouble() }
+                    aggregatedTimeToUsageMap[minute] = sum
+                }
+
+            aggregatedData[key] = aggregatedTimeToUsageMap
+        }
+
+        return aggregatedData.mapValues { (_, value) -> value.mapValues { it.value.toString() } }.toMutableMap()
+    }
+
     fun getFullName(
         containerName: String,
         serviceType: DeployType,

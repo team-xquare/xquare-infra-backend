@@ -40,7 +40,9 @@ class GetContainerLatencyService(
 
         val queryReq = createQueryRequest(deploy, environment, percent / 100.0, timeRange)
         val queryResponse = queryHttpRequestPerMinute(queryReq)
-        val formattedData = DataUtil.formatData(queryResponse)
+        val rawData = DataUtil.formatData(queryResponse)
+
+        val formattedData = DataUtil.aggregateDataToMinute(rawData, 20)
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
                 try {
@@ -72,8 +74,8 @@ class GetContainerLatencyService(
                     datasource = "prometheus",
                     hide = false,
                     queryType = "range",
-                    intervalMs = 60000,
-                    maxDataPoints = 630,
+                    intervalMs = 20000,
+                    maxDataPoints = 630 * 3,
                     maxLines = 3000,
                     legendFormat = "",
                     datasourceId = 3
