@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import xquare.app.xquareinfra.infrastructure.external.client.dsm.dto.GetDsmUserInfoResponse
+import xquare.app.xquareinfra.infrastructure.external.feign.client.dsm.dto.GetDsmUserInfoResponse
 
 @FeignClient(name = "dsm-login", url = "https://prod-server.xquare.app/dsm-login")
 interface DsmLoginClient {
