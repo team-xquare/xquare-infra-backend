@@ -38,11 +38,11 @@ class GetContainerHttpRequestPerMinuteService(
         }
 
         val queryReq = createQueryRequest(deploy, environment, timeRange)
-        println("queryReq: $queryReq")
         val queryResponse = queryHttpRequestPerMinute(queryReq)
-        println("queryResponse : $queryResponse")
-        val formattedData = DataUtil.formatData(queryResponse)
-        println("formattedData: $formattedData")
+        val rawData = DataUtil.formatData(queryResponse)
+
+        val formattedData = DataUtil.aggregateDataToMinute(rawData, 20)
+
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
                 String.format("%.2f", usage.toDouble())
@@ -70,8 +70,8 @@ class GetContainerHttpRequestPerMinuteService(
                     datasource = "prometheus",
                     hide = false,
                     queryType = "range",
-                    intervalMs = 60000,
-                    maxDataPoints = 630,
+                    intervalMs = 20000,
+                    maxDataPoints = 630 * 3,
                     maxLines = 3000,
                     legendFormat = "",
                     datasourceId = 3
