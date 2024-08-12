@@ -23,9 +23,13 @@ class GetContainerDeployHistoryService(
         containerEnvironment: ContainerEnvironment
     ): GetContainerDeployHistoryResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-        val histories = gocdClient.getPipelinesHistory("build-${deploy.deployName}-${containerEnvironment.name}", "application/vnd.go.cd.v1+json")
+        var histories = gocdClient.getPipelinesHistory("build-${deploy.deployName}-${containerEnvironment.name}", "application/vnd.go.cd.v1+json")
 
-        val response = histories.pipelines?.mapNotNull { pipeline ->
+        if(histories.statusCode.is4xxClientError) {
+            return GetContainerDeployHistoryResponse(histories = emptyList())
+        }
+
+        val response = histories.body?.pipelines?.mapNotNull { pipeline ->
             pipeline.buildCause?.materialRevisions?.firstOrNull()?.modifications?.firstOrNull()?.let { modification ->
                 val splitNameAndEmail = modification.userName?.split(" ") ?: listOf("", "")
                 DeployHistoryResponse(
