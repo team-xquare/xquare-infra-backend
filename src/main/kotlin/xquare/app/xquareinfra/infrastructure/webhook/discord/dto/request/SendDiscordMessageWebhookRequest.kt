@@ -1,5 +1,5 @@
 package xquare.app.xquareinfra.infrastructure.webhook.discord.dto.request
 
-data class SendMessageWebhookRequest(
+data class SendDiscordMessageWebhookRequest(
     val content: String
 )
