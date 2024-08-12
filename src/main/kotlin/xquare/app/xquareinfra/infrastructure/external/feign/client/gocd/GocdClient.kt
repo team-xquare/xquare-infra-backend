@@ -1,6 +1,7 @@
 package xquare.app.xquareinfra.infrastructure.external.client.gocd
 
 import org.springframework.cloud.openfeign.FeignClient
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,7 +21,7 @@ interface GocdClient {
     fun getPipelinesHistory(
         @PathVariable("pipeline_name") pipelineName: String,
         @RequestHeader("Accept") accept: String
-    ): GetPipelinesHistoryResponse
+    ): ResponseEntity<GetPipelinesHistoryResponse>
 
     @GetMapping("/files/{pipelineName}/{pipelineCounter}/{stage}/1/{stage}/cruise-output/console.log")
     fun getStageLog(

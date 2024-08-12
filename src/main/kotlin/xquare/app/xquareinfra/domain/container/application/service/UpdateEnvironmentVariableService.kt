@@ -57,7 +57,11 @@ class UpdateEnvironmentVariableService(
                 "application/vnd.go.cd.v1+json"
             )
 
-            pipelinesHistory.pipelines?.get(0)?.let {
+            if(pipelinesHistory.statusCode.is4xxClientError) {
+                return
+            }
+
+            pipelinesHistory.body?.pipelines?.get(0)?.let {
                 gocdClient.runSelectedJob(
                     pipelineName,
                     it.counter,
