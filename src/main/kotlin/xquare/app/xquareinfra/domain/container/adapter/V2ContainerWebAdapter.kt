@@ -1,10 +1,7 @@
 package xquare.app.xquareinfra.domain.container.adapter
 
 import org.springframework.web.bind.annotation.*
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateGradleDockerfileRequest
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeDockerfileRequest
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeWithNginxDockerfileRequest
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.SetContainerConfigRequest
+import xquare.app.xquareinfra.domain.container.adapter.dto.request.*
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerDeployHistoryResponse
 import xquare.app.xquareinfra.domain.container.application.port.`in`.*
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
@@ -22,7 +19,8 @@ class V2ContainerWebAdapter(
     private val getStageLogUseCase: GetStageLogUseCase,
     private val getContainerHttpRequestPerMinuteUseCase: GetContainerHttpRequestPerMinuteUseCase,
     private val getContainerHttpErrorRequestPerMinuteUseCase: GetContainerHttpErrorRequestPerMinuteUseCase,
-    private val getContainerLatencyUseCase: GetContainerLatencyUseCase
+    private val getContainerLatencyUseCase: GetContainerLatencyUseCase,
+    private val updateContainerWebhookUseCase: UpdateContainerWebhookUseCase
 ) {
     @PostMapping("/config")
     fun setContainerConfig(
@@ -113,5 +111,16 @@ class V2ContainerWebAdapter(
         @PathVariable("percent", required = true) percent: Int,
         @RequestParam("timeRange", required = true)
         timeRange: Int
-    ): MutableMap<String, Map<String, String>> = getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent, timeRange)
+    ): MutableMap<String, Map<String, String>> =
+        getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent, timeRange)
+
+    @PutMapping("/webhook")
+    fun updateWebhook(
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment,
+        @RequestBody
+        updateContainerWebhookRequest: UpdateContainerWebhookRequest
+    ) = updateContainerWebhookUseCase.updateContainerWebhook(updateContainerWebhookRequest, deployId, environment)
 }
