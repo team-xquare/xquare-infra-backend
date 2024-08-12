@@ -179,7 +179,8 @@ object DataUtil {
                     val timeToUsageMap = mutableMapOf<String, String>()
                     times.zip(usages).forEach { (time, usage) ->
                         val formattedTime = formatTime(time.toString())
-                        timeToUsageMap[formattedTime] = usage.toString()
+                        val formattedUsage = usage?.toString() ?: "0.00"
+                        timeToUsageMap[formattedTime] = formattedUsage
                     }
                     count++
                     response[count.toString()] = timeToUsageMap
