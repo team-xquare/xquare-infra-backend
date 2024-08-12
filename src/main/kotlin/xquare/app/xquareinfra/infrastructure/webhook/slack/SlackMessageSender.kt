@@ -1,15 +1,15 @@
-package xquare.app.xquareinfra.infrastructure.webhook.discord
+package xquare.app.xquareinfra.infrastructure.webhook.slack
 
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.infrastructure.external.resttemplate.RestTemplateHttpRequestSender
 import xquare.app.xquareinfra.infrastructure.webhook.WebhookMessageSender
-import xquare.app.xquareinfra.infrastructure.webhook.discord.dto.request.SendDiscordMessageWebhookRequest
+import xquare.app.xquareinfra.infrastructure.webhook.slack.dto.request.SendSlackMessageWebhookRequest
 
 @Component
-class DiscordMessageSender(
+class SlackMessageSender(
     private val restTemplateHttpRequestSender: RestTemplateHttpRequestSender
-) : WebhookMessageSender{
+) : WebhookMessageSender {
     override fun send(webhookUrl: String, message: String) {
-        restTemplateHttpRequestSender.requestPost(webhookUrl, SendDiscordMessageWebhookRequest(message))
+        restTemplateHttpRequestSender.requestPost(webhookUrl, SendSlackMessageWebhookRequest(message))
     }
 }
