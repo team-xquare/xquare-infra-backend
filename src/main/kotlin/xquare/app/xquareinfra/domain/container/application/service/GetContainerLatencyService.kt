@@ -46,7 +46,7 @@ class GetContainerLatencyService(
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
                 try {
-                    String.format("%.2f", usage.toDouble())
+                    usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
                 } catch (e: NumberFormatException) {
                     "0.00"
                 }

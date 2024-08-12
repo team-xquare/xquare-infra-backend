@@ -45,7 +45,7 @@ class GetContainerHttpRequestPerMinuteService(
 
         formattedData.forEach { (key, timeToUsageMap) ->
             val updatedTimeToUsageMap = timeToUsageMap.mapValues { (_, usage) ->
-                String.format("%.2f", usage.toDouble())
+                usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
             }
             formattedData[key] = updatedTimeToUsageMap
         }
