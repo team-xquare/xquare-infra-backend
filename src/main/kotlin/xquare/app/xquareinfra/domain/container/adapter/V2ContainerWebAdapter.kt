@@ -114,7 +114,7 @@ class V2ContainerWebAdapter(
     ): MutableMap<String, Map<String, String>> =
         getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent, timeRange)
 
-    @PutMapping("/webhook")
+    @PostMapping("/webhook")
     fun updateWebhook(
         @RequestParam("deployId", required = true)
         deployId: UUID,
