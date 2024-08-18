@@ -2,8 +2,6 @@ package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.application.container.port.`in`.SyncContainerDomainUseCase
-import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
@@ -11,7 +9,7 @@ import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.CloudflareClient
 import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.request.CreateDnsRecordRequest
 import xquare.app.xquareinfra.infrastructure.env.cloudflare.CloudflareProperties
-import xquare.app.xquareinfra.infrastructure.kubernetes.env.XquareProperties
+import xquare.app.xquareinfra.infrastructure.env.kubernetes.XquareProperties
 
 @Transactional
 @Service
