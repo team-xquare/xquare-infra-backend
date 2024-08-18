@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.infrastructure.exception.CriticalException
 
 @Service
-class KubernetesClientUtilImpl(
+class KubernetesOperationServiceImpl(
     private val customObjectsApi: CustomObjectsApi,
     private val coreV1Api: CoreV1Api
-): KubernetesClientUtil {
+): KubernetesOperationService {
     override fun deleteSecret(namespace: String, crName: String) {
         val v1DeleteOption = V1DeleteOptions()
         try {
