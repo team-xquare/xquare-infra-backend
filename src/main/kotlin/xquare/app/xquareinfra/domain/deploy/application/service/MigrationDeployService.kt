@@ -13,7 +13,7 @@ import xquare.app.xquareinfra.domain.team.application.port.out.ExistsUserTeamPor
 import xquare.app.xquareinfra.domain.team.application.port.out.FindTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.external.client.deploy.DeployClient
+import xquare.app.xquareinfra.infrastructure.external.deploy.client.DeployClient
 
 @Transactional
 @Service

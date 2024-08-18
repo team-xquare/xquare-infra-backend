@@ -9,8 +9,8 @@ import xquare.app.xquareinfra.domain.user.application.port.out.SaveUserPort
 import xquare.app.xquareinfra.domain.user.domain.Role
 import xquare.app.xquareinfra.domain.user.domain.User
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.external.client.dsm.DsmLoginClient
-import xquare.app.xquareinfra.infrastructure.external.client.dsm.DsmLoginRequest
+import xquare.app.xquareinfra.infrastructure.external.dsm.client.DsmLoginClient
+import xquare.app.xquareinfra.infrastructure.external.dsm.client.DsmLoginRequest
 
 @Transactional
 @Service
