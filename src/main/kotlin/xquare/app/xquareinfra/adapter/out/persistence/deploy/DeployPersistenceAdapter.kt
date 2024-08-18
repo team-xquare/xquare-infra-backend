@@ -1,11 +1,11 @@
-package xquare.app.xquareinfra.application.deploy.port.out.persistence
+package xquare.app.xquareinfra.adapter.out.persistence.deploy
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.application.deploy.port.out.saveDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
-import xquare.app.xquareinfra.application.deploy.port.out.persistence.repository.DeployRepository
+import xquare.app.xquareinfra.adapter.out.persistence.deploy.repository.DeployRepository
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.team.domain.Team
 import java.util.*

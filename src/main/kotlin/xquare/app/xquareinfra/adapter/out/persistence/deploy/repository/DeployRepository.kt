@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.application.deploy.port.out.persistence.repository
+package xquare.app.xquareinfra.adapter.out.persistence.deploy.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy

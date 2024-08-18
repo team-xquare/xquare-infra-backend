@@ -1,11 +1,11 @@
-package xquare.app.xquareinfra.application.user.port.out.persistence
+package xquare.app.xquareinfra.adapter.out.persistence.user
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.application.user.port.out.ExistsUserPort
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.application.user.port.out.SaveUserPort
-import xquare.app.xquareinfra.application.user.port.out.persistence.repository.UserRepository
+import xquare.app.xquareinfra.adapter.out.persistence.user.repository.UserRepository
 import xquare.app.xquareinfra.domain.user.domain.User
 import java.util.*
 

@@ -1,16 +1,14 @@
-package xquare.app.xquareinfra.application.container.port.out.persistence
+package xquare.app.xquareinfra.adapter.out.persistence.container
 
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
-import xquare.app.xquareinfra.application.container.port.out.SaveContainerPort
-import xquare.app.xquareinfra.application.container.port.out.persistence.repository.ContainerRepository
+import xquare.app.xquareinfra.adapter.out.persistence.container.repository.ContainerRepository
 import xquare.app.xquareinfra.domain.container.domain.Container
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 
 @Component
 class ContainerPersistenceAdapter(
-    private val containerRepository: xquare.app.xquareinfra.application.container.port.out.persistence.repository.ContainerRepository
+    private val containerRepository: ContainerRepository
 ): xquare.app.xquareinfra.application.container.port.out.FindContainerPort,
     xquare.app.xquareinfra.application.container.port.out.SaveContainerPort {
     override fun findByDeployAndEnvironment(deploy: Deploy, containerEnvironment: ContainerEnvironment): Container? =
