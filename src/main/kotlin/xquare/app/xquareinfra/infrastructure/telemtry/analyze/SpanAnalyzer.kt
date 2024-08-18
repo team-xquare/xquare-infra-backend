@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.opentelemtry.analyze
+package xquare.app.xquareinfra.infrastructure.telemtry.analyze
 
 import io.opentelemetry.proto.common.v1.AnyValue
 import io.opentelemetry.proto.trace.v1.Span

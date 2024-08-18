@@ -1,10 +1,10 @@
-package xquare.app.xquareinfra.infrastructure.opentelemtry.event
+package xquare.app.xquareinfra.infrastructure.telemtry.event
 
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.infrastructure.opentelemtry.alert.OpenTelemetryAlertManager
-import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.AnalysisResult
-import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.SpanAnalyzer
+import xquare.app.xquareinfra.infrastructure.telemtry.alert.OpenTelemetryAlertManager
+import xquare.app.xquareinfra.infrastructure.telemtry.analyze.AnalysisResult
+import xquare.app.xquareinfra.infrastructure.telemtry.analyze.SpanAnalyzer
 
 @Component
 class SpanAnalyzerManager(

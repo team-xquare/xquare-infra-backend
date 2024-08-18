@@ -1,7 +1,7 @@
-package xquare.app.xquareinfra.infrastructure.opentelemtry.alert
+package xquare.app.xquareinfra.infrastructure.telemtry.alert
 
 import io.opentelemetry.proto.trace.v1.Span
-import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.AnalysisResult
+import xquare.app.xquareinfra.infrastructure.telemtry.analyze.AnalysisResult
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
