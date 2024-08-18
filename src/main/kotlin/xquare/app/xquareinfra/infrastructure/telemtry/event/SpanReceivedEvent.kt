@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.opentelemtry.event
+package xquare.app.xquareinfra.infrastructure.telemtry.event
 
 import io.opentelemetry.proto.trace.v1.Span
 import org.springframework.context.ApplicationEvent
