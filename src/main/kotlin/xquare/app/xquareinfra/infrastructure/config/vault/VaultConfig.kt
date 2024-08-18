@@ -5,7 +5,7 @@ import com.bettercloud.vault.Vault
 import com.bettercloud.vault.VaultConfig
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import xquare.app.xquareinfra.infrastructure.vault.env.VaultProperty
+import xquare.app.xquareinfra.infrastructure.env.vault.VaultProperty
 
 @Configuration
 class VaultConfig(
