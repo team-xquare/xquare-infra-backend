@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.kubernetes.config
+package xquare.app.xquareinfra.infrastructure.config.kubernetes
 
 import io.kubernetes.client.openapi.Configuration
 import io.kubernetes.client.openapi.apis.CoreV1Api

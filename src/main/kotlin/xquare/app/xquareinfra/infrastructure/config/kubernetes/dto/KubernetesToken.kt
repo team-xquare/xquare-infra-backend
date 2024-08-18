@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.kubernetes.config.dto
+package xquare.app.xquareinfra.infrastructure.config.kubernetes.dto
 
 import kotlinx.serialization.Serializable
 
