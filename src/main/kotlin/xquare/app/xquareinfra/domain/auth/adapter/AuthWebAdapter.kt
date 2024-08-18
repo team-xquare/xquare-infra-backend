@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import xquare.app.xquareinfra.domain.auth.adapter.dto.request.LoginRequest
 import xquare.app.xquareinfra.domain.auth.adapter.dto.request.SignupRequest
-import xquare.app.xquareinfra.domain.auth.application.port.`in`.LoginUseCase
-import xquare.app.xquareinfra.domain.auth.application.port.`in`.SignupUseCase
+import xquare.app.xquareinfra.application.auth.port.`in`.LoginUseCase
+import xquare.app.xquareinfra.application.auth.port.`in`.SignupUseCase
 
 @RequestMapping("/v1/auth")
 @RestController

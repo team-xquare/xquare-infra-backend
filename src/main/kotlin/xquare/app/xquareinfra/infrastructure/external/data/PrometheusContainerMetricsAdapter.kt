@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.infrastructure.external.prometheus
 
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.container.application.port.out.ContainerMetricsPort
+import xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.infrastructure.external.data.client.DataClient
@@ -14,7 +14,7 @@ import java.time.Instant
 @Component
 class PrometheusContainerMetricsAdapter(
     private val dataClient: DataClient
-) : ContainerMetricsPort {
+) : xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort {
 
     override fun getCpuUsage(deploy: Deploy, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeCpuUsageQuery(

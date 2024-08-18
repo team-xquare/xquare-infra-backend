@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.infrastructure.opentelemtry.alert
 
 import io.opentelemetry.proto.trace.v1.Span
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
+import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.WebhookType
 import xquare.app.xquareinfra.infrastructure.opentelemtry.analyze.AnalysisResult
 import xquare.app.xquareinfra.infrastructure.webhook.discord.DiscordMessageSender
@@ -10,7 +10,7 @@ import xquare.app.xquareinfra.infrastructure.webhook.slack.SlackMessageSender
 
 @Component
 class OpenTelemetryAlertManager(
-    private val findContainerPort: FindContainerPort,
+    private val findContainerPort: xquare.app.xquareinfra.application.container.port.out.FindContainerPort,
     private val discordMessageSender: DiscordMessageSender,
     private val slackMessageSender: SlackMessageSender
 ){

@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.infrastructure.auth
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.auth.application.port.out.ReadCurrentUserPort
+import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.domain.user.domain.User
 import xquare.app.xquareinfra.infrastructure.security.principle.CustomUserDetails
 

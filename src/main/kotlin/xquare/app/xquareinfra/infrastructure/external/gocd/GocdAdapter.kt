@@ -3,14 +3,14 @@ package xquare.app.xquareinfra.infrastructure.external.gocd
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.DeployHistoryResponse
 import xquare.app.xquareinfra.domain.container.adapter.dto.response.StageStatus
-import xquare.app.xquareinfra.domain.container.application.port.out.ContainerDeployHistoryPort
+import xquare.app.xquareinfra.application.container.port.out.ContainerDeployHistoryPort
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.infrastructure.external.gocd.client.GocdClient
 
 @Component
 class GocdAdapter(
     private val gocdClient: GocdClient
-): ContainerDeployHistoryPort {
+): xquare.app.xquareinfra.application.container.port.out.ContainerDeployHistoryPort {
     override fun getContainerDeployHistory(
         deployName: String,
         containerEnvironment: ContainerEnvironment

@@ -14,10 +14,10 @@ import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.auth.application.port.out.GenerateJwtPort
-import xquare.app.xquareinfra.domain.auth.application.port.out.GetJwtBodyPort
-import xquare.app.xquareinfra.domain.auth.application.port.out.ReissuePort
-import xquare.app.xquareinfra.domain.auth.application.port.out.RevokeTokensPort
+import xquare.app.xquareinfra.application.auth.port.out.GenerateJwtPort
+import xquare.app.xquareinfra.application.auth.port.out.GetJwtBodyPort
+import xquare.app.xquareinfra.application.auth.port.out.ReissuePort
+import xquare.app.xquareinfra.application.auth.port.out.RevokeTokensPort
 import java.security.PublicKey
 import java.util.*
 

@@ -10,17 +10,17 @@ import java.util.*
 @RequestMapping("/v2/container")
 @RestController
 class V2ContainerWebAdapter(
-    private val setContainerConfigUseCase: SetContainerConfigUseCase,
-    private val createGradleDockerfileUseCase: CreateGradleDockerfileUseCase,
-    private val createNodeWithNginxDockerfileUseCase: CreateNodeWithNginxDockerfileUseCase,
-    private val createNodeDockerfileUseCase: CreateNodeDockerfileUseCase,
-    private val getContainerDeployHistoryUseCase: GetContainerDeployHistoryUseCase,
-    private val syncContainerDomainUseCase: SyncContainerDomainUseCase,
-    private val getStageLogUseCase: GetStageLogUseCase,
-    private val getContainerHttpRequestPerMinuteUseCase: GetContainerHttpRequestPerMinuteUseCase,
-    private val getContainerHttpStatusRequestPerMinuteUseCase: GetContainerHttpStatusRequestPerMinuteUseCase,
-    private val getContainerLatencyUseCase: GetContainerLatencyUseCase,
-    private val updateContainerWebhookUseCase: UpdateContainerWebhookUseCase
+    private val setContainerConfigUseCase: xquare.app.xquareinfra.application.container.port.`in`.SetContainerConfigUseCase,
+    private val createGradleDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateGradleDockerfileUseCase,
+    private val createNodeWithNginxDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeWithNginxDockerfileUseCase,
+    private val createNodeDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeDockerfileUseCase,
+    private val getContainerDeployHistoryUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDeployHistoryUseCase,
+    private val syncContainerDomainUseCase: xquare.app.xquareinfra.application.container.port.`in`.SyncContainerDomainUseCase,
+    private val getStageLogUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetStageLogUseCase,
+    private val getContainerHttpRequestPerMinuteUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerHttpRequestPerMinuteUseCase,
+    private val getContainerHttpStatusRequestPerMinuteUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerHttpStatusRequestPerMinuteUseCase,
+    private val getContainerLatencyUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerLatencyUseCase,
+    private val updateContainerWebhookUseCase: xquare.app.xquareinfra.application.container.port.`in`.UpdateContainerWebhookUseCase
 ) {
     @PostMapping("/config")
     fun setContainerConfig(
