@@ -8,7 +8,7 @@ import xquare.app.xquareinfra.application.deploy.port.`in`.ApproveDeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.vault.VaultService
+import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
 
 @Transactional
 @Service

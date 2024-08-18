@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.deploy.port.`in`.DeployMigrationToV2PipelineUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.vault.VaultService
+import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
 import java.util.*
 
 @Transactional

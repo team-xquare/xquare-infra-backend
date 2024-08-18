@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.vault
+package xquare.app.xquareinfra.infrastructure.integration.vault
 
 import com.bettercloud.vault.Vault
 import org.springframework.stereotype.Service
