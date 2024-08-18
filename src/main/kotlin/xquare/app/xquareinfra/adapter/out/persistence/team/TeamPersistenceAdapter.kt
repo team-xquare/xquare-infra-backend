@@ -1,17 +1,14 @@
-package xquare.app.xquareinfra.application.team.port.out.persistence
+package xquare.app.xquareinfra.adapter.out.persistence.team
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.application.team.port.out.ExistsTeamPort
-import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
-import xquare.app.xquareinfra.application.team.port.out.SaveTeamPort
-import xquare.app.xquareinfra.application.team.port.out.persistence.repository.TeamRepository
+import xquare.app.xquareinfra.adapter.out.persistence.team.repository.TeamRepository
 import xquare.app.xquareinfra.domain.team.domain.Team
 import java.util.*
 
 @Component
 class TeamPersistenceAdapter(
-    private val teamRepository: xquare.app.xquareinfra.application.team.port.out.persistence.repository.TeamRepository
+    private val teamRepository: TeamRepository
 ): xquare.app.xquareinfra.application.team.port.out.SaveTeamPort,
     xquare.app.xquareinfra.application.team.port.out.ExistsTeamPort,
     xquare.app.xquareinfra.application.team.port.out.FindTeamPort {

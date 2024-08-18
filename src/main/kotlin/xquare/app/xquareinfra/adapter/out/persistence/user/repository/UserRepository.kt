@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.application.user.port.out.persistence.repository
+package xquare.app.xquareinfra.adapter.out.persistence.user.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import xquare.app.xquareinfra.domain.user.domain.User
