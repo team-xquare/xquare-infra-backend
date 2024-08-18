@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.application.container.port.`in`
 
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.SyncContainerRequest
+import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 
 interface SyncContainerUseCase {
     fun syncContainer(syncContainerRequest: SyncContainerRequest)

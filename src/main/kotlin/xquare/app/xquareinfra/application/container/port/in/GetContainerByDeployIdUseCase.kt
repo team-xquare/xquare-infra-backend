@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.application.container.port.`in`
 
-import xquare.app.xquareinfra.domain.container.adapter.dto.response.SimpleContainerResponse
+import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
 import java.util.UUID
 
 interface GetContainerByDeployIdUseCase {

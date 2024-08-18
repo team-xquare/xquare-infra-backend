@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.application.container.port.out
 
-import xquare.app.xquareinfra.domain.container.adapter.dto.response.DeployHistoryResponse
+import xquare.app.xquareinfra.adapter.`in`.container.dto.response.DeployHistoryResponse
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 
 interface ContainerDeployHistoryPort {

@@ -3,11 +3,8 @@ package xquare.app.xquareinfra.application.team.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
-import xquare.app.xquareinfra.domain.team.adapter.dto.response.DetailTeamResponse
-import xquare.app.xquareinfra.domain.team.adapter.dto.response.TeamMemberResponse
-import xquare.app.xquareinfra.application.team.port.`in`.GetTeamDetailUseCase
-import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
-import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
+import xquare.app.xquareinfra.adapter.`in`.team.dto.response.DetailTeamResponse
+import xquare.app.xquareinfra.adapter.`in`.team.dto.response.TeamMemberResponse
 import xquare.app.xquareinfra.domain.team.domain.UserTeam
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException

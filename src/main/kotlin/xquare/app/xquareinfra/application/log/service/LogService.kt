@@ -4,9 +4,8 @@ import org.springframework.stereotype.Service
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
-import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerLogResponse
-import xquare.app.xquareinfra.domain.container.adapter.dto.response.LogEntry
-import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
+import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerLogResponse
+import xquare.app.xquareinfra.adapter.`in`.container.dto.response.LogEntry
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.external.data.client.DataClient

@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.application.container.port.`in`
 
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateNodeDockerfileRequest
+import xquare.app.xquareinfra.adapter.`in`.container.dto.request.CreateNodeDockerfileRequest
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import java.util.*
 

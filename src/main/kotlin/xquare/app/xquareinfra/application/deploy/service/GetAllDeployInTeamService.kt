@@ -2,11 +2,10 @@ package xquare.app.xquareinfra.application.deploy.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.SimpleDeployListResponse
-import xquare.app.xquareinfra.domain.deploy.adapter.dto.response.SimpleDeployResponse
+import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployListResponse
+import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployResponse
 import xquare.app.xquareinfra.application.deploy.port.`in`.GetAllDeployInTeamUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
-import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.util.*
 
