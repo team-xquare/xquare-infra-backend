@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.global.env.cloudflare
+package xquare.app.xquareinfra.infrastructure.env.cloudflare
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding

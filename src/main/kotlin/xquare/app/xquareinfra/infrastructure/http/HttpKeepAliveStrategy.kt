@@ -10,7 +10,7 @@ import org.apache.http.message.BasicHeaderElementIterator
 import org.apache.http.protocol.HTTP
 import org.apache.http.protocol.HttpContext
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.infrastructure.http.env.UrlProperties
+import xquare.app.xquareinfra.infrastructure.env.http.UrlProperties
 
 @Component
 class HttpKeepAliveStrategy(
