@@ -1,9 +1,11 @@
 package xquare.app.xquareinfra.domain.container.adapter.dto.request
 
+import xquare.app.xquareinfra.infrastructure.external.github.client.dto.request.DockerfileRequest
+
 data class CreateNodeDockerfileRequest(
     val nodeVersion: String,
     val buildCommands: List<String> = emptyList(),
-    val builder: String = "node",
+    override val builder: String = "node",
     val command: String,
     var port: Int? = null
-)
+) : DockerfileRequest

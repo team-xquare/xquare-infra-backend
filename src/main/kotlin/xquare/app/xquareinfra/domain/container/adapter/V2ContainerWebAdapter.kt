@@ -18,7 +18,7 @@ class V2ContainerWebAdapter(
     private val syncContainerDomainUseCase: SyncContainerDomainUseCase,
     private val getStageLogUseCase: GetStageLogUseCase,
     private val getContainerHttpRequestPerMinuteUseCase: GetContainerHttpRequestPerMinuteUseCase,
-    private val getContainerHttpErrorRequestPerMinuteUseCase: GetContainerHttpErrorRequestPerMinuteUseCase,
+    private val getContainerHttpStatusRequestPerMinuteUseCase: GetContainerHttpStatusRequestPerMinuteUseCase,
     private val getContainerLatencyUseCase: GetContainerLatencyUseCase,
     private val updateContainerWebhookUseCase: UpdateContainerWebhookUseCase
 ) {
@@ -90,17 +90,18 @@ class V2ContainerWebAdapter(
         environment: ContainerEnvironment,
         @RequestParam("timeRange", required = true)
         timeRange: Int
-    ): MutableMap<String, Map<String, String>> = getContainerHttpRequestPerMinuteUseCase.getContainerHttpRequestPerMinute(deployId, environment, timeRange)
+    ): Map<String, Map<String, String>> = getContainerHttpRequestPerMinuteUseCase.getContainerHttpRequestPerMinute(deployId, environment, timeRange)
 
-    @GetMapping("/metrics/http-errors/500/rate")
+    @GetMapping("/metrics/http-errors/{statusCode}/rate")
     fun getHttpErrorRequestPerMinute(
         @RequestParam("deployId", required = true)
         deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment,
         @RequestParam("timeRange", required = true)
-        timeRange: Int
-    ): MutableMap<String, Map<String, String>> = getContainerHttpErrorRequestPerMinuteUseCase.getContainerHttpErrorRequestPerMinute(deployId, environment, timeRange)
+        timeRange: Int,
+        @PathVariable("statusCode", required = true) statusCode: Int
+    ): Map<String, Map<String, String>> = getContainerHttpStatusRequestPerMinuteUseCase.getContainerHttpStatusRequestPerMinute(deployId, environment, timeRange, statusCode)
 
     @GetMapping("/metrics/latency/{percent}")
     fun getLatency(
@@ -111,7 +112,7 @@ class V2ContainerWebAdapter(
         @PathVariable("percent", required = true) percent: Int,
         @RequestParam("timeRange", required = true)
         timeRange: Int
-    ): MutableMap<String, Map<String, String>> =
+    ): Map<String, Map<String, String>> =
         getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent, timeRange)
 
     @PostMapping("/webhook")

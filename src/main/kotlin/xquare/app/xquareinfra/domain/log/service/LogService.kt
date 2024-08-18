@@ -9,10 +9,10 @@ import xquare.app.xquareinfra.domain.container.adapter.dto.response.LogEntry
 import xquare.app.xquareinfra.domain.container.application.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
-import xquare.app.xquareinfra.infrastructure.external.client.data.DataClient
-import xquare.app.xquareinfra.infrastructure.external.client.data.DataUtil
-import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryRequest
-import xquare.app.xquareinfra.infrastructure.external.client.data.dto.QueryDto
+import xquare.app.xquareinfra.infrastructure.external.data.client.DataClient
+import xquare.app.xquareinfra.infrastructure.external.data.util.DataUtil
+import xquare.app.xquareinfra.infrastructure.external.data.client.dto.QueryRequest
+import xquare.app.xquareinfra.infrastructure.external.data.client.dto.QueryDto
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.Instant
 import java.time.LocalDateTime
@@ -65,11 +65,8 @@ class LogService(
             queries = listOf(
                 QueryDto(
                     expr = DataUtil.makeLogQuery(
-                        team = deploy.team.teamNameEn,
-                        containerName = deploy.deployName,
-                        serviceType = deploy.deployType,
-                        envType = if (environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag,
-                        isV2 = deploy.isV2
+                        containerEnvironment = if (environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag,
+                        deploy = deploy
                     ),
                     refId = "A",
                     datasource = "loki",

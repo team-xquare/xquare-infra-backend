@@ -13,9 +13,9 @@ import xquare.app.xquareinfra.domain.container.domain.Language
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.external.client.github.GithubClient
-import xquare.app.xquareinfra.infrastructure.external.client.github.dto.request.DispatchEventRequest
-import xquare.app.xquareinfra.infrastructure.global.env.github.GithubProperties
+import xquare.app.xquareinfra.infrastructure.external.github.client.GithubClient
+import xquare.app.xquareinfra.infrastructure.external.github.client.dto.request.DispatchEventRequest
+import xquare.app.xquareinfra.infrastructure.external.github.env.GithubProperties
 import java.time.LocalDateTime
 import java.util.*
 
@@ -27,7 +27,6 @@ class SetContainerConfigService(
     private val githubClient: GithubClient,
     private val githubProperties: GithubProperties,
     private val saveContainerPort: SaveContainerPort
-
 ) : SetContainerConfigUseCase{
     override fun setContainerConfig(deployId: UUID, setContainerConfigRequest: SetContainerConfigRequest) {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND

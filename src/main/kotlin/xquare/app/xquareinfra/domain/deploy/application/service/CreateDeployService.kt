@@ -12,8 +12,8 @@ import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.deploy.domain.DeployStatus
 import xquare.app.xquareinfra.domain.team.application.port.out.FindTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.external.client.deploy.DeployClient
-import xquare.app.xquareinfra.infrastructure.external.client.deploy.dto.request.FeignCreateDeployRequest
+import xquare.app.xquareinfra.infrastructure.external.deploy.client.DeployClient
+import xquare.app.xquareinfra.infrastructure.external.deploy.client.dto.request.FeignCreateDeployRequest
 import java.util.*
 
 @Transactional
