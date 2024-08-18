@@ -63,7 +63,7 @@ class V1ContainerWebAdapter(
         deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
-    ): MutableMap<String, Map<String, String>> =
+    ): Map<String, Map<String, String>> =
         getContainerCpuUsageUseCase.getContainerCpuUsage(deployId, environment)
 
     @GetMapping("/memory")
@@ -72,7 +72,7 @@ class V1ContainerWebAdapter(
         deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
-    ): MutableMap<String, Map<String, String>> =
+    ): Map<String, Map<String, String>> =
         getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployId, environment)
 
     @GetMapping("/details")
