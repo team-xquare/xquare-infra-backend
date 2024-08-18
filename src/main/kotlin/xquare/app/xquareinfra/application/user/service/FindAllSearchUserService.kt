@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.application.user.service
 
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.domain.user.adapter.dto.response.UserSearchResponse
+import xquare.app.xquareinfra.adapter.`in`.user.dto.response.UserSearchResponse
 import xquare.app.xquareinfra.application.user.port.`in`.FindAllSearchUserUseCase
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 

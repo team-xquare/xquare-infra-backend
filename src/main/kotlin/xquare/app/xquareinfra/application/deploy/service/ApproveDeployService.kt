@@ -3,7 +3,7 @@ package xquare.app.xquareinfra.application.deploy.service
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.domain.deploy.adapter.dto.request.ApproveDeployRequest
+import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.ApproveDeployRequest
 import xquare.app.xquareinfra.application.deploy.port.`in`.ApproveDeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException

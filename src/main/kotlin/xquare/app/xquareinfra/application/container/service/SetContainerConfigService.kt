@@ -2,11 +2,8 @@ package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.ContainerConfigDetails
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.SetContainerConfigRequest
-import xquare.app.xquareinfra.application.container.port.`in`.SetContainerConfigUseCase
-import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
-import xquare.app.xquareinfra.application.container.port.out.SaveContainerPort
+import xquare.app.xquareinfra.adapter.`in`.container.dto.request.ContainerConfigDetails
+import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SetContainerConfigRequest
 import xquare.app.xquareinfra.domain.container.domain.Container
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.domain.Language

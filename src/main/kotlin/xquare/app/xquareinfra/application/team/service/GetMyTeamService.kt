@@ -4,9 +4,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
-import xquare.app.xquareinfra.domain.team.adapter.dto.response.SimpleTeamResponse
-import xquare.app.xquareinfra.domain.team.adapter.dto.response.SimpleTeamResponseList
-import xquare.app.xquareinfra.application.team.port.`in`.GetMyTeamUseCase
+import xquare.app.xquareinfra.adapter.`in`.team.dto.response.SimpleTeamResponse
+import xquare.app.xquareinfra.adapter.`in`.team.dto.response.SimpleTeamResponseList
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 

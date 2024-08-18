@@ -3,11 +3,7 @@ package xquare.app.xquareinfra.application.team.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
-import xquare.app.xquareinfra.domain.team.adapter.dto.request.CreateTeamRequest
-import xquare.app.xquareinfra.application.team.port.`in`.CreateTeamUseCase
-import xquare.app.xquareinfra.application.team.port.out.ExistsTeamPort
-import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
-import xquare.app.xquareinfra.application.team.port.out.SaveTeamPort
+import xquare.app.xquareinfra.adapter.`in`.team.dto.request.CreateTeamRequest
 import xquare.app.xquareinfra.domain.team.domain.Team
 import xquare.app.xquareinfra.domain.team.domain.role.TeamMemberRole
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort

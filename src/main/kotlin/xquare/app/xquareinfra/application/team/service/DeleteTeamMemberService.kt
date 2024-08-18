@@ -2,10 +2,7 @@ package xquare.app.xquareinfra.application.team.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.domain.team.adapter.dto.request.DeleteTeamMemberRequest
-import xquare.app.xquareinfra.application.team.port.`in`.DeleteTeamMemberUseCase
-import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
-import xquare.app.xquareinfra.application.team.port.out.FindUserTeamPort
+import xquare.app.xquareinfra.adapter.`in`.team.dto.request.DeleteTeamMemberRequest
 import xquare.app.xquareinfra.domain.team.domain.role.TeamMemberRole
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException

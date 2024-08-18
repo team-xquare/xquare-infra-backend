@@ -1,10 +1,7 @@
 package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.domain.container.adapter.dto.request.CreateGradleDockerfileRequest
-import xquare.app.xquareinfra.application.container.port.`in`.CreateGradleDockerfileUseCase
-import xquare.app.xquareinfra.application.container.port.out.CreateDockerfilePort
-import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
+import xquare.app.xquareinfra.adapter.`in`.container.dto.request.CreateGradleDockerfileRequest
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException

@@ -2,12 +2,10 @@ package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.domain.container.adapter.dto.response.GetContainerDeployHistoryResponse
-import xquare.app.xquareinfra.application.container.port.`in`.GetContainerDeployHistoryUseCase
+import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDeployHistoryResponse
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.application.container.port.out.ContainerDeployHistoryPort
 import java.util.*
 
 @Transactional
