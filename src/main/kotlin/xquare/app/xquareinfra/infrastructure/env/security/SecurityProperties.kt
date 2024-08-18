@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.security.env
+package xquare.app.xquareinfra.infrastructure.env.security
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding

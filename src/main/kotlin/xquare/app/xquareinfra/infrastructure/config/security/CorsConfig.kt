@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.infrastructure.config.security
 
-import xquare.app.xquareinfra.infrastructure.security.env.SecurityProperties
+import xquare.app.xquareinfra.infrastructure.env.security.SecurityProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.cors.CorsConfiguration
