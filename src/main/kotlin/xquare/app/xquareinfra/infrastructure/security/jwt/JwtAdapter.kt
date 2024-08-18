@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.infrastructure.security.jwt
 
 import xquare.app.xquareinfra.infrastructure.exception.AuthenticationException
-import xquare.app.xquareinfra.infrastructure.security.jwt.env.JwtProperties
+import xquare.app.xquareinfra.infrastructure.env.jwt.JwtProperties
 import xquare.app.xquareinfra.infrastructure.security.jwt.entity.AccessTokenRedisEntity
 import xquare.app.xquareinfra.infrastructure.security.jwt.entity.RefreshTokenRedisEntity
 import xquare.app.xquareinfra.infrastructure.security.jwt.repository.AccessTokenRepository
