@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.security.config
+package xquare.app.xquareinfra.infrastructure.config.security
 
 import xquare.app.xquareinfra.infrastructure.security.env.SecurityProperties
 import org.springframework.context.annotation.Bean

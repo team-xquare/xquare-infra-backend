@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.security.config
+package xquare.app.xquareinfra.infrastructure.config.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import xquare.app.xquareinfra.infrastructure.error.filter.ErrorLogResponseFilter

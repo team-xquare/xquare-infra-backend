@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.websocket.config
+package xquare.app.xquareinfra.infrastructure.config.web
 
 import WebSocketLogHandler
 import org.springframework.context.annotation.Bean
