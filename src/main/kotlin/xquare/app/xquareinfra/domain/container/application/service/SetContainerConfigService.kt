@@ -66,7 +66,7 @@ class SetContainerConfigService(
             request = DispatchEventRequest(
                 event_type = "write-values",
                 client_payload = mapOf(
-                    "club" to deploy.team.teamNameEn,
+                    "club" to deploy.team.teamNameEn.lowercase(Locale.getDefault()),
                     "name" to deploy.deployName,
                     "organization" to deploy.organization,
                     "repository" to deploy.repository,
