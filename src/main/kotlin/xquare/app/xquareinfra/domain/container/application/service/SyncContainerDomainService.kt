@@ -8,8 +8,8 @@ import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.application.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.external.client.cloudflare.CloudflareClient
-import xquare.app.xquareinfra.infrastructure.external.client.cloudflare.dto.request.CreateDnsRecordRequest
+import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.CloudflareClient
+import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.request.CreateDnsRecordRequest
 import xquare.app.xquareinfra.infrastructure.global.env.cloudflare.CloudflareProperties
 import xquare.app.xquareinfra.infrastructure.kubernetes.env.XquareProperties
 

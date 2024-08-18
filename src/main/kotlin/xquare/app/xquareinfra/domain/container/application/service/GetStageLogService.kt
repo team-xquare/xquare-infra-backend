@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.domain.container.application.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.domain.container.application.port.`in`.GetStageLogUseCase
-import xquare.app.xquareinfra.infrastructure.external.client.gocd.GocdClient
+import xquare.app.xquareinfra.infrastructure.external.gocd.client.GocdClient
 
 @Service
 class GetStageLogService(

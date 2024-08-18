@@ -31,15 +31,8 @@ class GetContainerDetailsService(
             lastDeploy = container.lastDeploy,
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
             teamNameKo = deploy.team.teamNameKo,
-            containerName = getContainerName(deploy, container),
+            containerName = ContainerUtil.getContainerName(deploy, container),
             isV2 = deploy.isV2
         )
-    }
-
-    fun getContainerName(deploy: Deploy, container: Container): String {
-        if(deploy.isV2) {
-            return "${deploy.deployName}-${container.containerEnvironment}"
-        }
-        else return "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}"
     }
 }
