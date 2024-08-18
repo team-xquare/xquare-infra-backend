@@ -7,9 +7,9 @@ import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.infrastructure.exception.CriticalException
 
 @Service
-private class VaultUtilImpl(
+private class VaultServiceImpl(
     private val vault: Vault
-): VaultUtil {
+): VaultService {
 
     companion object {
         const val XQUARE_PATH = "xquare-kv"
