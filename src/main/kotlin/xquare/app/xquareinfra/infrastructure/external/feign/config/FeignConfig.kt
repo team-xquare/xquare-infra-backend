@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import xquare.app.xquareinfra.infrastructure.external.feign.config.error.FeignClientErrorDecoder
-import xquare.app.xquareinfra.infrastructure.http.HttpKeepAliveStrategy
+import xquare.app.xquareinfra.infrastructure.config.http.HttpKeepAliveStrategyConfiguration
 
 @EnableFeignClients(basePackages = ["xquare.app.xquareinfra"])
 @Configuration
 @Import(FeignClientErrorDecoder::class)
 class FeignConfig(
-    private val keepAliveStrategy: HttpKeepAliveStrategy
+    private val keepAliveStrategy: HttpKeepAliveStrategyConfiguration
 ) {
 
     @Bean

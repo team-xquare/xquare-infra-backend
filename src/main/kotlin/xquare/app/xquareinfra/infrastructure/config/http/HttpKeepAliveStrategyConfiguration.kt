@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.http
+package xquare.app.xquareinfra.infrastructure.config.http
 
 import org.apache.http.HeaderElement
 import org.apache.http.HeaderElementIterator
@@ -9,11 +9,12 @@ import org.apache.http.conn.ConnectionKeepAliveStrategy
 import org.apache.http.message.BasicHeaderElementIterator
 import org.apache.http.protocol.HTTP
 import org.apache.http.protocol.HttpContext
+import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.infrastructure.env.http.UrlProperties
 
-@Component
-class HttpKeepAliveStrategy(
+@Configuration
+class HttpKeepAliveStrategyConfiguration(
     private val urlProperties: UrlProperties
 ) : ConnectionKeepAliveStrategy {
 
