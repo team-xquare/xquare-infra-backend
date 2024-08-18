@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.response
+package xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

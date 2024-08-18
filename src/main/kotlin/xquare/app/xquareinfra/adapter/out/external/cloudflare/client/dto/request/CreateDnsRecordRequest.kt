@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.request
+package xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request
 
 data class CreateDnsRecordRequest(
     val content: String,

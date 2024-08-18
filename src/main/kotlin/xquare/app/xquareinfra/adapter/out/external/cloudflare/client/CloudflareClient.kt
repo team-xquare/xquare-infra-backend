@@ -1,10 +1,10 @@
-package xquare.app.xquareinfra.infrastructure.external.cloudflare.client
+package xquare.app.xquareinfra.adapter.out.external.cloudflare.client
 
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.request.CreateDnsRecordRequest
-import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.response.ListDnsRecordsResponse
+import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request.CreateDnsRecordRequest
+import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.response.ListDnsRecordsResponse
 import xquare.app.xquareinfra.infrastructure.external.feign.config.FeignConfig
 
 @FeignClient(
