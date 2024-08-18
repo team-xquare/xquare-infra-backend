@@ -9,8 +9,8 @@ import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.external.gocd.client.GocdClient
 import xquare.app.xquareinfra.infrastructure.external.gocd.client.dto.request.RunSelectedJobRequest
-import xquare.app.xquareinfra.infrastructure.kubernetes.KubernetesOperationService
-import xquare.app.xquareinfra.infrastructure.vault.VaultService
+import xquare.app.xquareinfra.infrastructure.integration.kubernetes.KubernetesOperationService
+import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
 import java.util.UUID
 
 @Transactional

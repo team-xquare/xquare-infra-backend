@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.vault
+package xquare.app.xquareinfra.infrastructure.integration.vault
 
 import xquare.app.xquareinfra.domain.container.domain.Container
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy

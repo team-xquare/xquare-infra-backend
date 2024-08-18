@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.kubernetes
+package xquare.app.xquareinfra.infrastructure.integration.kubernetes
 
 import io.kubernetes.client.openapi.ApiException
 import io.kubernetes.client.openapi.apis.CoreV1Api
