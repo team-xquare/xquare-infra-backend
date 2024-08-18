@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.vault.config
+package xquare.app.xquareinfra.infrastructure.config.vault
 
 import com.bettercloud.vault.SslConfig
 import com.bettercloud.vault.Vault
