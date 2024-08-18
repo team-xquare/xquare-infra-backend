@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.global.config.filter
+package xquare.app.xquareinfra.infrastructure.config.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import xquare.app.xquareinfra.infrastructure.exception.CriticalException

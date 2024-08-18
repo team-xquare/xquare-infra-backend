@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.auth
+package xquare.app.xquareinfra.infrastructure.auth.adapter
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component

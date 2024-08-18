@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.security.config
+package xquare.app.xquareinfra.infrastructure.config.security
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

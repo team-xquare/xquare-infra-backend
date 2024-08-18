@@ -1,13 +1,12 @@
-package xquare.app.xquareinfra.infrastructure.security.config
+package xquare.app.xquareinfra.infrastructure.config.security
 
-import xquare.app.xquareinfra.infrastructure.error.CustomAccessDeniedHandler
-import xquare.app.xquareinfra.infrastructure.error.CustomAuthenticationEntryPoint
+import xquare.app.xquareinfra.infrastructure.error.handler.CustomAccessDeniedHandler
+import xquare.app.xquareinfra.infrastructure.error.handler.CustomAuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 
 @Configuration
 class SecurityConfig(
