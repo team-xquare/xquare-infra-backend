@@ -21,11 +21,11 @@ import java.util.UUID
 @RequestMapping("/v1/team")
 @RestController
 class V1TeamWebAdapter(
-    private val createTeamUseCase: CreateTeamUseCase,
-    private val getMyTeamUseCase: GetMyTeamUseCase,
-    private val getTeamDetailUseCase: GetTeamDetailUseCase,
-    private val addTeamMemberUseCase: AddTeamMemberUseCase,
-    private val deleteTeamMemberUseCase: DeleteTeamMemberUseCase
+    private val createTeamUseCase: xquare.app.xquareinfra.application.team.port.`in`.CreateTeamUseCase,
+    private val getMyTeamUseCase: xquare.app.xquareinfra.application.team.port.`in`.GetMyTeamUseCase,
+    private val getTeamDetailUseCase: xquare.app.xquareinfra.application.team.port.`in`.GetTeamDetailUseCase,
+    private val addTeamMemberUseCase: xquare.app.xquareinfra.application.team.port.`in`.AddTeamMemberUseCase,
+    private val deleteTeamMemberUseCase: xquare.app.xquareinfra.application.team.port.`in`.DeleteTeamMemberUseCase
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping

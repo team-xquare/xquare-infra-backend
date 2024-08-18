@@ -11,13 +11,13 @@ import java.util.*
 @RequestMapping("/v1/container")
 @RestController
 class V1ContainerWebAdapter(
-    private val syncContainerUseCase: SyncContainerUseCase,
-    private val getEnvironmentVariableUseCase: GetEnvironmentVariableUseCase,
-    private val updateEnvironmentVariableUseCase: UpdateEnvironmentVariableUseCase,
-    private val getContainerByDeployIdUseCase: GetContainerByDeployIdUseCase,
-    private val getContainerCpuUsageUseCase: GetContainerCpuUsageUseCase,
-    private val getContainerMemoryUsageUseCase: GetContainerMemoryUsageUseCase,
-    private val getContainerDetailsUseCase: GetContainerDetailsUseCase
+    private val syncContainerUseCase: xquare.app.xquareinfra.application.container.port.`in`.SyncContainerUseCase,
+    private val getEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetEnvironmentVariableUseCase,
+    private val updateEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.UpdateEnvironmentVariableUseCase,
+    private val getContainerByDeployIdUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerByDeployIdUseCase,
+    private val getContainerCpuUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerCpuUsageUseCase,
+    private val getContainerMemoryUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerMemoryUsageUseCase,
+    private val getContainerDetailsUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDetailsUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(

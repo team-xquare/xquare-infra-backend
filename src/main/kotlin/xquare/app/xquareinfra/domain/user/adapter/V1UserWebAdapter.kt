@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import xquare.app.xquareinfra.domain.user.adapter.dto.response.UserSearchResponse
-import xquare.app.xquareinfra.domain.user.application.port.`in`.FindAllSearchUserUseCase
+import xquare.app.xquareinfra.application.user.port.`in`.FindAllSearchUserUseCase
 
 @RestController
 @RequestMapping("/v1/user")

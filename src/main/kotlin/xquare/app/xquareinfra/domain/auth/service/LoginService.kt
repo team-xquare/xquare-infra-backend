@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.domain.auth.adapter.dto.request.LoginRequest
 import xquare.app.xquareinfra.domain.auth.adapter.dto.response.TokenResponse
-import xquare.app.xquareinfra.domain.auth.application.port.`in`.LoginUseCase
-import xquare.app.xquareinfra.domain.auth.application.port.out.GenerateJwtPort
-import xquare.app.xquareinfra.domain.user.application.port.out.FindUserPort
+import xquare.app.xquareinfra.application.auth.port.`in`.LoginUseCase
+import xquare.app.xquareinfra.application.auth.port.out.GenerateJwtPort
+import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.external.dsm.client.DsmLoginClient
 import xquare.app.xquareinfra.infrastructure.external.dsm.client.DsmLoginRequest
