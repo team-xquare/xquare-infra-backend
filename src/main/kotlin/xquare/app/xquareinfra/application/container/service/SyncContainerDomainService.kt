@@ -10,7 +10,7 @@ import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.CloudflareClient
 import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.request.CreateDnsRecordRequest
-import xquare.app.xquareinfra.infrastructure.global.env.cloudflare.CloudflareProperties
+import xquare.app.xquareinfra.infrastructure.env.cloudflare.CloudflareProperties
 import xquare.app.xquareinfra.infrastructure.kubernetes.env.XquareProperties
 
 @Transactional

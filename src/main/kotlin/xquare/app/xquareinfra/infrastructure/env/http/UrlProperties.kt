@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.http.env
+package xquare.app.xquareinfra.infrastructure.env.http
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding

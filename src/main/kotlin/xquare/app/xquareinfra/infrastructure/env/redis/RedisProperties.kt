@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.global.env.redis
+package xquare.app.xquareinfra.infrastructure.env.redis
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
