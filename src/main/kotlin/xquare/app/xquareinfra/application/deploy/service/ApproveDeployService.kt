@@ -8,7 +8,7 @@ import xquare.app.xquareinfra.application.deploy.port.`in`.ApproveDeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.vault.VaultUtil
+import xquare.app.xquareinfra.infrastructure.vault.VaultService
 
 @Transactional
 @Service
@@ -16,7 +16,7 @@ class ApproveDeployService(
     @Value("\${secret.projectSecret}")
     private val accessKey: String,
     private val findDeployPort: FindDeployPort,
-    private val vaultUtil: VaultUtil
+    private val vaultService: VaultService
 ): ApproveDeployUseCase {
 
     override fun approveDeploy(deployNameEn: String, req: ApproveDeployRequest) {
@@ -27,9 +27,9 @@ class ApproveDeployService(
         deploy.updateSecret(req.secretKey)
         deploy.approveDeploy()
 
-        val path = vaultUtil.getPath(deploy)
+        val path = vaultService.getPath(deploy)
         path.forEach {
-            vaultUtil.addSecret(mapOf("init" to "Please delete this variable"), it)
+            vaultService.addSecret(mapOf("init" to "Please delete this variable"), it)
         }
     }
 }

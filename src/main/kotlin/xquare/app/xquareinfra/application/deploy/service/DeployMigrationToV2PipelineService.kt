@@ -2,11 +2,10 @@ package xquare.app.xquareinfra.application.deploy.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.`in`.DeployMigrationToV2PipelineUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.vault.VaultUtil
+import xquare.app.xquareinfra.infrastructure.vault.VaultService
 import java.util.*
 
 @Transactional
@@ -14,7 +13,7 @@ import java.util.*
 class DeployMigrationToV2PipelineService(
     private val findDeployPort: FindDeployPort,
     private val findContainerPort: xquare.app.xquareinfra.application.container.port.out.FindContainerPort,
-    private val vaultUtil: VaultUtil
+    private val vaultService: VaultService
 ) : DeployMigrationToV2PipelineUseCase {
     override fun migrationDeploy(deployId: UUID) {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
@@ -23,9 +22,9 @@ class DeployMigrationToV2PipelineService(
         deploy.migrationToV2()
 
         containers.map {
-            val path = vaultUtil.getPath(deploy, it)
+            val path = vaultService.getPath(deploy, it)
             println(path)
-            vaultUtil.addSecret(it.environmentVariable, vaultUtil.getPath(deploy, it))
+            vaultService.addSecret(it.environmentVariable, vaultService.getPath(deploy, it))
         }
     }
 }

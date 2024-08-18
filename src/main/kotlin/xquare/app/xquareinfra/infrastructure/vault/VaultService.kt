@@ -3,7 +3,7 @@ package xquare.app.xquareinfra.infrastructure.vault
 import xquare.app.xquareinfra.domain.container.domain.Container
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 
-interface VaultUtil {
+interface VaultService {
     fun addSecret(secrets: Map<String, String>, path: String)
 //    fun revoke(path: String)
 

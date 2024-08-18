@@ -10,7 +10,7 @@ import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.external.gocd.client.GocdClient
 import xquare.app.xquareinfra.infrastructure.external.gocd.client.dto.request.RunSelectedJobRequest
 import xquare.app.xquareinfra.infrastructure.kubernetes.KubernetesOperationService
-import xquare.app.xquareinfra.infrastructure.vault.VaultUtil
+import xquare.app.xquareinfra.infrastructure.vault.VaultService
 import java.util.UUID
 
 @Transactional
@@ -18,7 +18,7 @@ import java.util.UUID
 class UpdateEnvironmentVariableService(
     private val findDeployPort: FindDeployPort,
     private val findContainerPort: xquare.app.xquareinfra.application.container.port.out.FindContainerPort,
-    private val vaultUtil: VaultUtil,
+    private val vaultService: VaultService,
     private val kubernetesOperationService: KubernetesOperationService,
     private val readCurrentUserPort: ReadCurrentUserPort,
     private val existsUserTeamPort: xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort,
@@ -41,8 +41,8 @@ class UpdateEnvironmentVariableService(
 
         container.updateEnvironmentVariable(environmentVariable)
 
-        val path = vaultUtil.getPath(deploy, container)
-        vaultUtil.addSecret(environmentVariable, path)
+        val path = vaultService.getPath(deploy, container)
+        vaultService.addSecret(environmentVariable, path)
 
         val namespace = "${deploy.team.teamNameEn}-${container.containerEnvironment.name}"
         kubernetesOperationService.deleteSecret(namespace, path)
