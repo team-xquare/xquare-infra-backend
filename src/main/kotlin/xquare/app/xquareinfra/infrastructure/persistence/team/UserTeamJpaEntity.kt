@@ -11,11 +11,11 @@ class UserTeamJpaEntity(
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    val userJpaEntity: UserJpaEntity,
+    var userJpaEntity: UserJpaEntity,
 
     @ManyToOne
     @JoinColumn(name = "team_id")
-    val teamJpaEntity: TeamJpaEntity,
+    var teamJpaEntity: TeamJpaEntity,
 
     val teamMemberRole: TeamMemberRole
 )
