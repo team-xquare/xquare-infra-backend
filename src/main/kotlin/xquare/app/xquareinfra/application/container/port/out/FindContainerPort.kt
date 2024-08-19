@@ -6,7 +6,7 @@ import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
 
 interface FindContainerPort {
-    fun findByDeployAndEnvironment(deploy: Deploy, containerEnvironment: ContainerEnvironment): ContainerJpaEntity?
+    fun findByDeployAndEnvironment(deploy: Deploy, containerEnvironment: ContainerEnvironment): Container?
     fun findAllByDeploy(deploy: Deploy): List<Container>
     fun findAll(): List<Container>
 }

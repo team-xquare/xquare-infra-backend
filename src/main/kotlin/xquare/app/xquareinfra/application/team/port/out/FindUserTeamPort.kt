@@ -8,4 +8,6 @@ import xquare.app.xquareinfra.infrastructure.persistence.team.UserTeamJpaEntity
 
 interface FindUserTeamPort {
     fun findByUserAndTeam(user: User, team: Team): UserTeam?
+    fun findAllByUser(user: User): List<UserTeam>
+    fun findAllByTeam(team: Team): List<UserTeam>
 }

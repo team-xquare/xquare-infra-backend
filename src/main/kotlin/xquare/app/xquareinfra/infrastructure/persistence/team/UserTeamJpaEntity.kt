@@ -11,11 +11,13 @@ class UserTeamJpaEntity(
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    var userJpaEntity: UserJpaEntity,
+    var user: UserJpaEntity,
 
     @ManyToOne
     @JoinColumn(name = "team_id")
-    var teamJpaEntity: TeamJpaEntity,
+    var team: TeamJpaEntity,
 
-    val teamMemberRole: TeamMemberRole
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    val role: TeamMemberRole
 )

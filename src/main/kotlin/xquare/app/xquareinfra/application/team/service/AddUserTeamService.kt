@@ -4,8 +4,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.adapter.`in`.team.dto.request.AddTeamMemberRequest
+import xquare.app.xquareinfra.application.team.port.out.SaveUserTeamPort
 import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
+import xquare.app.xquareinfra.domain.team.model.UserTeam
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.util.UUID
 
@@ -15,7 +17,8 @@ class AddUserTeamService(
     private val findTeamPort: xquare.app.xquareinfra.application.team.port.out.FindTeamPort,
     private val findUserPort: FindUserPort,
     private val existsUserTeamPort: xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort,
-    private val readCurrentUserPort: ReadCurrentUserPort
+    private val readCurrentUserPort: ReadCurrentUserPort,
+    private val saveUserTeamPort: SaveUserTeamPort
 ): xquare.app.xquareinfra.application.team.port.`in`.AddTeamMemberUseCase {
     override fun addTeamMember(req: AddTeamMemberRequest, teamId: UUID) {
         val user = readCurrentUserPort.readCurrentUser()
@@ -30,7 +33,7 @@ class AddUserTeamService(
             if(existsUserTeamPort.existsByTeamAndUser(team, addMember)) {
                 throw BusinessLogicException.ALREADY_EXISTS_USER_TEAM
             }
-            addMember.addTeam(team, TeamMemberRole.MEMBER)
+            saveUserTeamPort.saveUserTeam(UserTeam(user = addMember, team = team, role = TeamMemberRole.MEMBER ))
         }
     }
 }

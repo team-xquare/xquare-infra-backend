@@ -16,7 +16,7 @@ class DeployJpaEntity(
     repository: String,
     projectRootDir: String,
     oneLineDescription: String,
-    teamJpaEntity: TeamJpaEntity,
+    team: TeamJpaEntity,
     secretKey: String?,
     deployStatus: DeployStatus,
     deployType: DeployType,
@@ -46,7 +46,7 @@ class DeployJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", columnDefinition = "BINARY(16)")
-    var teamJpaEntity: TeamJpaEntity = teamJpaEntity
+    var team: TeamJpaEntity = team
         protected set
 
     @Column(name = "secret_key", nullable = true)

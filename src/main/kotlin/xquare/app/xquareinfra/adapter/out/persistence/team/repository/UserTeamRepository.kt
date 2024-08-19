@@ -9,4 +9,10 @@ interface UserTeamRepository : JpaRepository<UserTeamJpaEntity, Long> {
     fun existsByTeamAndUser(teamJpaEntity: TeamJpaEntity, userJpaEntity: UserJpaEntity): Boolean
 
     fun findByTeamAndUser(teamJpaEntity: TeamJpaEntity, userJpaEntity: UserJpaEntity): UserTeamJpaEntity?
+
+    fun deleteByUserAndTeam(userJpaEntity: UserJpaEntity, teamJpaEntity: TeamJpaEntity)
+
+    fun findAllByUser(userJpaEntity: UserJpaEntity): List<UserTeamJpaEntity>
+
+    fun findAllByTeam(teamJpaEntity: TeamJpaEntity): List<UserTeamJpaEntity>
 }

@@ -1,36 +1,36 @@
 package xquare.app.xquareinfra.domain.container.util
 
-import xquare.app.xquareinfra.infrastructure.persistence.container.ContainerJpaEntity
+import xquare.app.xquareinfra.domain.container.model.Container
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
-import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
+import xquare.app.xquareinfra.domain.deploy.model.Deploy
 
 object ContainerUtil {
-    fun generateDomain(containerJpaEntity: ContainerJpaEntity): String {
-        if(containerJpaEntity.subDomain!!.isEmpty() || containerJpaEntity.subDomain!! == "null" || containerJpaEntity.subDomain == null) {
-            val baseDomain = when (containerJpaEntity.containerEnvironment) {
+    fun generateDomain(container: Container): String {
+        if(container.subDomain!!.isEmpty() || container.subDomain!! == "null") {
+            val baseDomain = when (container.containerEnvironment) {
                 ContainerEnvironment.prod -> "prod-server.xquare.app"
                 else -> "stag-server.xquare.app"
             }
-            return "https://$baseDomain/${containerJpaEntity.deployJpaEntity.deployName}"
+            return "https://$baseDomain/${container.deploy.deployName}"
         }
-        return containerJpaEntity.subDomain!!
+        return container.subDomain!!
     }
 
-    fun getContainerName(deployJpaEntity: DeployJpaEntity, containerJpaEntity: ContainerJpaEntity): String {
-        if(deployJpaEntity.isV2) {
-            return "${deployJpaEntity.deployName}-${containerJpaEntity.containerEnvironment}"
+    fun getContainerName(deploy: Deploy, container: Container): String {
+        if(deploy.isV2) {
+            return "${deploy.deployName}-${container.containerEnvironment}"
         }
-        else return "${deployJpaEntity.deployName}-${deployJpaEntity.deployType}-${containerJpaEntity.containerEnvironment}"
+        else return "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}"
     }
 
-    fun getContainerName(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
-        if(deployJpaEntity.isV2) {
-            return "${deployJpaEntity.deployName}-${containerEnvironment}"
+    fun getContainerName(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
+        if(deploy.isV2) {
+            return "${deploy.deployName}-${containerEnvironment}"
         }
-        else return "${deployJpaEntity.deployName}-${deployJpaEntity.deployType}-${containerEnvironment}"
+        else return "${deploy.deployName}-${deploy.deployType}-${containerEnvironment}"
     }
 
-    fun getNamespaceName(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
-        return "${deployJpaEntity.teamJpaEntity.teamNameEn}-$containerEnvironment"
+    fun getNamespaceName(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
+        return "${deploy.team.teamNameEn}-$containerEnvironment"
     }
 }

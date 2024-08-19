@@ -25,7 +25,7 @@ class GetContainerLatencyService(
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val user = readCurrentUserPort.readCurrentUser()
-        if (!existsUserTeamPort.existsByTeamAndUser(deploy.teamJpaEntity, user)) {
+        if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
 

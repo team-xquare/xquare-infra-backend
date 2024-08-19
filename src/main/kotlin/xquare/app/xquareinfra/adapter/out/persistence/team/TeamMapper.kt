@@ -1,8 +1,6 @@
 package xquare.app.xquareinfra.adapter.out.persistence.team
 
 import org.mapstruct.Mapper
-import org.mapstruct.Mapping
-import org.mapstruct.MappingTarget
 import xquare.app.xquareinfra.domain.team.model.Team
 import xquare.app.xquareinfra.domain.team.model.UserTeam
 import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity

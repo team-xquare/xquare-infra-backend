@@ -5,6 +5,7 @@ import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.Frame
+import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -50,18 +51,18 @@ object DataUtil {
     }
 
     fun makeLogQuery(
-        deployJpaEntity: DeployJpaEntity,
+        deploy: Deploy,
         containerEnvironment: ContainerEnvironment
     ): String {
-        val namespace = ContainerUtil.getNamespaceName(deployJpaEntity, containerEnvironment)
-        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
+        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
         val response = "{job=\"$namespace/$fullName}\", container=~\"${fullName}\"} |~ \"(?i)\" \n"
         return response
     }
 
-    fun makeCpuUsageQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
-        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
-        val namespace = ContainerUtil.getNamespaceName(deployJpaEntity, containerEnvironment)
+    fun makeCpuUsageQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
+        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
 
         return """
             sum(
@@ -81,9 +82,9 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeMemoryUsageQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
-        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
-        val namespace = ContainerUtil.getNamespaceName(deployJpaEntity, containerEnvironment)
+    fun makeMemoryUsageQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
+        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
 
         return """
             sum(
@@ -105,8 +106,8 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeRequestPerMinuteQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
-        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
+    fun makeRequestPerMinuteQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
+        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
         val response = """
             sum(
                 rate(
@@ -120,8 +121,8 @@ object DataUtil {
         return response
     }
 
-    fun makeGetLatencyPerMinuteQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment, percent: Double): String {
-        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
+    fun makeGetLatencyPerMinuteQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment, percent: Double): String {
+        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
 
         return """
             histogram_quantile(
@@ -137,8 +138,8 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeHttpStatusRequestPerMinuteQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment, statusCode: Int): String {
-        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
+    fun makeHttpStatusRequestPerMinuteQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment, statusCode: Int): String {
+        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
 
         return """
             sum(

@@ -23,7 +23,7 @@ class ContainerJpaEntity(
 ) : BaseUUIDEntity(id) {
     @OneToOne
     @JoinColumn(name = "deploy_id")
-    var deployJpaEntity: DeployJpaEntity = deployJpaEntity
+    var deploy: DeployJpaEntity = deployJpaEntity
         protected set
 
     @Column(name = "container_environment", nullable = false)

@@ -45,20 +45,7 @@ class UserJpaEntity(
     var roles: MutableList<Role> = roles
         protected set
 
-    @OneToMany(mappedBy = "userJpaEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
-    val teams: MutableSet<UserTeamJpaEntity> = HashSet()
-
     @Column(name = "email", nullable = false)
     var email: String = email
         protected set
-
-    fun addTeam(teamJpaEntity: TeamJpaEntity, teamMemberRole: TeamMemberRole) {
-        val userTeamJpaEntity = UserTeamJpaEntity(userJpaEntity = this, teamJpaEntity = teamJpaEntity, teamMemberRole = teamMemberRole)
-        teams.add(userTeamJpaEntity)
-        teamJpaEntity.members.add(userTeamJpaEntity)
-    }
-
-    fun deleteTeam(userTeamJpaEntity: UserTeamJpaEntity) {
-        teams.remove(userTeamJpaEntity)
-    }
 }

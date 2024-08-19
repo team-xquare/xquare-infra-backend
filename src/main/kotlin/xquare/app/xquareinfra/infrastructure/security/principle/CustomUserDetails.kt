@@ -3,20 +3,20 @@ package xquare.app.xquareinfra.infrastructure.security.principle
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
+import xquare.app.xquareinfra.domain.user.model.User
 
 class CustomUserDetails(
-    val userJpaEntity: UserJpaEntity
+    val user: User
 ) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
-        userJpaEntity.roles.map {
+        user.roles.map {
             SimpleGrantedAuthority(it.name)
         }.toMutableList()
 
     override fun getPassword(): String? = null
 
-    override fun getUsername(): String = userJpaEntity.accountId
+    override fun getUsername(): String = user.accountId
 
     override fun isAccountNonExpired(): Boolean = true
 
