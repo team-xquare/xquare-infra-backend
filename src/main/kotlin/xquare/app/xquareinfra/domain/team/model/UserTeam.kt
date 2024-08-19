@@ -1,7 +1,7 @@
-package xquare.app.xquareinfra.domain.model.domain
+package xquare.app.xquareinfra.domain.team.model
 
-import xquare.app.xquareinfra.domain.model.domain.role.TeamMemberRole
-import xquare.app.xquareinfra.domain.user.domain.User
+import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
+import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
 import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import javax.persistence.*
 
@@ -12,7 +12,7 @@ class UserTeam(
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    val user: User,
+    val userJpaEntity: UserJpaEntity,
 
     @ManyToOne
     @JoinColumn(name = "team_id")

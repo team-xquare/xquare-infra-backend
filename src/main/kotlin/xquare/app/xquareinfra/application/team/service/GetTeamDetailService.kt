@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.adapter.`in`.team.dto.response.DetailTeamResponse
 import xquare.app.xquareinfra.adapter.`in`.team.dto.response.TeamMemberResponse
-import xquare.app.xquareinfra.domain.model.domain.UserTeam
+import xquare.app.xquareinfra.domain.team.model.UserTeam
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
@@ -44,7 +44,7 @@ class GetTeamDetailService(
 
     private fun getMemberResponse(members: MutableSet<UserTeam>): List<TeamMemberResponse> {
         return members.map {
-            val member = it.user
+            val member = it.userJpaEntity
             TeamMemberResponse(
                 memberName = member.name,
                 memberNumber = "${member.grade}${member.classNum}${String.format("%02d", member.number)}",

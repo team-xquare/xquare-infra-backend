@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.domain.model.domain.role
+package xquare.app.xquareinfra.domain.team.model.role
 
 enum class TeamMemberRole {
     MEMBER,

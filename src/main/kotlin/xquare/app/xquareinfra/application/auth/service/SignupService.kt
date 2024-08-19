@@ -6,8 +6,8 @@ import xquare.app.xquareinfra.adapter.`in`.auth.dto.request.SignupRequest
 import xquare.app.xquareinfra.application.auth.port.`in`.SignupUseCase
 import xquare.app.xquareinfra.application.user.port.out.ExistsUserPort
 import xquare.app.xquareinfra.application.user.port.out.SaveUserPort
-import xquare.app.xquareinfra.domain.user.domain.Role
-import xquare.app.xquareinfra.domain.user.domain.User
+import xquare.app.xquareinfra.domain.user.model.Role
+import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.adapter.out.external.dsm.client.DsmLoginClient
 import xquare.app.xquareinfra.adapter.out.external.dsm.client.DsmLoginRequest
@@ -33,7 +33,7 @@ class SignupService(
 
         userInfo.run {
             saveUserPort.saveUser(
-                User(
+                UserJpaEntity(
                     id = null,
                     name = name,
                     accountId = accountId,

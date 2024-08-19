@@ -1,8 +1,8 @@
 package xquare.app.xquareinfra.infrastructure.persistence.team
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
-import xquare.app.xquareinfra.domain.model.domain.UserTeam
-import xquare.app.xquareinfra.domain.model.domain.type.TeamType
+import xquare.app.xquareinfra.domain.team.model.UserTeam
+import xquare.app.xquareinfra.domain.team.model.type.TeamType
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*

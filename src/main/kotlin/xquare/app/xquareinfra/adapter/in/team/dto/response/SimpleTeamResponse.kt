@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.team.dto.response
 
-import xquare.app.xquareinfra.domain.model.domain.type.TeamType
+import xquare.app.xquareinfra.domain.team.model.type.TeamType
 import java.util.UUID
 
 data class SimpleTeamResponse(
