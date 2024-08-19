@@ -7,7 +7,8 @@ import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.CloudflareClient
-import xquare.app.xquareinfra.infrastructure.external.cloudflare.client.dto.request.CreateDnsRecordRequest
+import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request.CreateDnsRecordRequest
+import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.infrastructure.env.cloudflare.CloudflareProperties
 import xquare.app.xquareinfra.infrastructure.env.kubernetes.XquareProperties
 
@@ -15,7 +16,7 @@ import xquare.app.xquareinfra.infrastructure.env.kubernetes.XquareProperties
 @Service
 class SyncContainerDomainService(
     private val findDeployPort: FindDeployPort,
-    private val findContainerPort: xquare.app.xquareinfra.application.container.port.out.FindContainerPort,
+    private val findContainerPort: FindContainerPort,
     private val cloudflareClient: CloudflareClient,
     private val cloudflareProperties: CloudflareProperties,
     private val xquareProperties: XquareProperties
