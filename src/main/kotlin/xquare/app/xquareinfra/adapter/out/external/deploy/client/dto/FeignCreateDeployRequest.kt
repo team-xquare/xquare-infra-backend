@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.external.deploy.client.dto
+package xquare.app.xquareinfra.adapter.out.external.deploy.client.dto
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming

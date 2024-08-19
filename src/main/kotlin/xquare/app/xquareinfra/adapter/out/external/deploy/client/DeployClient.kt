@@ -1,6 +1,6 @@
-package xquare.app.xquareinfra.infrastructure.external.deploy.client
+package xquare.app.xquareinfra.adapter.out.external.deploy.client
 
-import xquare.app.xquareinfra.infrastructure.external.deploy.client.dto.request.FeignCreateDeployRequest
+import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
