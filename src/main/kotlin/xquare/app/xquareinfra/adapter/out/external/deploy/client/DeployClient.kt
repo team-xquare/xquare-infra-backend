@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import xquare.app.xquareinfra.infrastructure.external.feign.client.deploy.dto.response.DeployResponse
-import xquare.app.xquareinfra.infrastructure.external.feign.config.FeignConfig
+import xquare.app.xquareinfra.adapter.out.external.feign.config.FeignConfig
 
 @FeignClient(
     name = "deploy-client",

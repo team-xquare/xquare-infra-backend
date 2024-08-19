@@ -8,8 +8,8 @@ import xquare.app.xquareinfra.application.auth.port.`in`.LoginUseCase
 import xquare.app.xquareinfra.application.auth.port.out.GenerateJwtPort
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.external.dsm.client.DsmLoginClient
-import xquare.app.xquareinfra.infrastructure.external.dsm.client.DsmLoginRequest
+import xquare.app.xquareinfra.adapter.out.external.dsm.client.DsmLoginClient
+import xquare.app.xquareinfra.adapter.out.external.dsm.client.DsmLoginRequest
 
 @Transactional
 @Service

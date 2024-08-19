@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.container.dto.request
 
-import xquare.app.xquareinfra.infrastructure.external.github.client.dto.request.DockerfileRequest
+import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DockerfileRequest
 
 data class CreateGradleDockerfileRequest(
     val jdkVersion: Int,

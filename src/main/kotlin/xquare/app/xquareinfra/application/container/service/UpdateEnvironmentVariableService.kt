@@ -7,8 +7,8 @@ import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.external.gocd.client.GocdClient
-import xquare.app.xquareinfra.infrastructure.external.gocd.client.dto.request.RunSelectedJobRequest
+import xquare.app.xquareinfra.adapter.out.external.gocd.client.GocdClient
+import xquare.app.xquareinfra.adapter.out.external.gocd.client.dto.request.RunSelectedJobRequest
 import xquare.app.xquareinfra.infrastructure.integration.kubernetes.KubernetesOperationService
 import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
 import java.util.UUID
