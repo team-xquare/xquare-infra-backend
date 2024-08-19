@@ -9,11 +9,9 @@ import xquare.app.xquareinfra.application.deploy.port.out.saveDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.domain.deploy.domain.DeployStatus
 import xquare.app.xquareinfra.domain.deploy.domain.DeployType
-import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
-import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import xquare.app.xquareinfra.infrastructure.external.deploy.client.DeployClient
+import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 
 @Transactional
 @Service
