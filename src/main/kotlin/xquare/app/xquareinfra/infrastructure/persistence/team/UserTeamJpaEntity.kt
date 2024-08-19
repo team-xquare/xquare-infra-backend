@@ -18,7 +18,6 @@ class UserTeamJpaEntity(
     @JoinColumn(name = "team_id")
     var team: TeamJpaEntity,
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val role: TeamMemberRole
 )
