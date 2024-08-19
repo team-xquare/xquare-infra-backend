@@ -1,8 +1,7 @@
-package xquare.app.xquareinfra.infrastructure.external.data.client.dto
+package xquare.app.xquareinfra.adapter.out.external.data.client.dto
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import xquare.app.xquareinfra.infrastructure.external.data.client.dto.QueryDto
 
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class QueryRequest(

@@ -1,11 +1,10 @@
-package xquare.app.xquareinfra.infrastructure.external.data.util
+package xquare.app.xquareinfra.adapter.out.external.data.util
 
 import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
-import xquare.app.xquareinfra.domain.deploy.domain.DeployType
-import xquare.app.xquareinfra.infrastructure.external.data.client.dto.DataQueryResponse
-import xquare.app.xquareinfra.infrastructure.external.data.client.dto.Frame
+import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
+import xquare.app.xquareinfra.adapter.out.external.data.client.dto.Frame
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
