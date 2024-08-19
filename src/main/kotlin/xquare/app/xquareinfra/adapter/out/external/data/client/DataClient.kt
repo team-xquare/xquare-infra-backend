@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryRequest
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
-import xquare.app.xquareinfra.infrastructure.external.feign.config.FeignConfig
+import xquare.app.xquareinfra.adapter.out.external.feign.config.FeignConfig
 
 @FeignClient(
     name = "tsdata-client",

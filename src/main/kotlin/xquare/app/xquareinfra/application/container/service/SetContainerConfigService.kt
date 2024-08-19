@@ -10,9 +10,9 @@ import xquare.app.xquareinfra.domain.container.domain.Language
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
-import xquare.app.xquareinfra.infrastructure.external.github.client.GithubClient
-import xquare.app.xquareinfra.infrastructure.external.github.client.dto.request.DispatchEventRequest
-import xquare.app.xquareinfra.infrastructure.external.github.env.GithubProperties
+import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
+import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
+import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import java.time.LocalDateTime
 import java.util.*
 

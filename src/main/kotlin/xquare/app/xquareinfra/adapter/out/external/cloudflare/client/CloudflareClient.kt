@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request.CreateDnsRecordRequest
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.response.ListDnsRecordsResponse
-import xquare.app.xquareinfra.infrastructure.external.feign.config.FeignConfig
+import xquare.app.xquareinfra.adapter.out.external.feign.config.FeignConfig
 
 @FeignClient(
     name = "cloudflare-client",
