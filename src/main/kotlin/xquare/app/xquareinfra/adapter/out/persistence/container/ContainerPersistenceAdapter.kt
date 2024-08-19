@@ -2,22 +2,27 @@ package xquare.app.xquareinfra.adapter.out.persistence.container
 
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.container.repository.ContainerRepository
+import xquare.app.xquareinfra.adapter.out.persistence.deploy.DeployMapper
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.container.port.out.SaveContainerPort
+import xquare.app.xquareinfra.domain.container.model.Container
 import xquare.app.xquareinfra.infrastructure.persistence.container.ContainerJpaEntity
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
-import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
+import xquare.app.xquareinfra.domain.deploy.model.Deploy
 
 @Component
 class ContainerPersistenceAdapter(
-    private val containerRepository: ContainerRepository
+    private val containerRepository: ContainerRepository,
+    private val containerMapper: ContainerMapper,
+    private val deployMapper: DeployMapper
 ): FindContainerPort, SaveContainerPort {
-    override fun findByDeployAndEnvironment(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): ContainerJpaEntity? =
-        containerRepository.findByContainerEnvironmentAndDeploy(containerEnvironment, deployJpaEntity)
+    override fun findByDeployAndEnvironment(deploy: Deploy, containerEnvironment: ContainerEnvironment): ContainerJpaEntity? =
+        containerRepository.findByContainerEnvironmentAndDeploy(containerEnvironment, deployMapper.toEntity(deploy))
 
-    override fun findAllByDeploy(deployJpaEntity: DeployJpaEntity): List<ContainerJpaEntity> = containerRepository.findAllByDeploy(deployJpaEntity)
+    override fun findAllByDeploy(deploy: Deploy): List<Container> =
+        containerRepository.findAllByDeploy(deployMapper.toEntity(deploy)).map { containerMapper.toModel(it) }
 
-    override fun findAll(): List<ContainerJpaEntity> = containerRepository.findAll()
+    override fun findAll(): List<Container> = containerRepository.findAll().map { containerMapper.toModel(it) }
 
     override fun save(containerJpaEntity: ContainerJpaEntity): ContainerJpaEntity = containerRepository.save(containerJpaEntity)
 }

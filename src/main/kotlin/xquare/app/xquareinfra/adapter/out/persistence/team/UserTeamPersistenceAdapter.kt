@@ -6,10 +6,9 @@ import xquare.app.xquareinfra.adapter.out.persistence.user.UserMapper
 import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.application.team.port.out.FindUserTeamPort
 import xquare.app.xquareinfra.domain.team.model.Team
+import xquare.app.xquareinfra.domain.team.model.UserTeam
 import xquare.app.xquareinfra.domain.user.model.User
-import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import xquare.app.xquareinfra.infrastructure.persistence.team.UserTeamJpaEntity
-import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
 
 @Component
 class UserTeamPersistenceAdapter(
@@ -21,7 +20,8 @@ class UserTeamPersistenceAdapter(
         return userTeamRepository.existsByTeamAndUser(teamMapper.toEntity(team), userMapper.toEntity(user))
     }
 
+    override fun findByUserAndTeam(user: User, team: Team): UserTeam? {
+        return userTeamRepository.findByTeamAndUser(teamMapper.toEntity(team), userMapper.toEntity(user))?.let { teamMapper.toUserTeamModel(it) }
+    }
 
-    override fun findByUserAndTeam(user: UserJpaEntity, teamJpaEntity: TeamJpaEntity): UserTeamJpaEntity? =
-        userTeamRepository.findByTeamAndUser(teamJpaEntity, user)
 }

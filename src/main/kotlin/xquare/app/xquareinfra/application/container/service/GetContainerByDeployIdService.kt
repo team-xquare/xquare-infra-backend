@@ -22,7 +22,7 @@ class GetContainerByDeployIdService(
         val containers = findContainerPort.findAllByDeploy(deploy)
 
         val user = readCurrentUserPort.readCurrentUser()
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.teamJpaEntity, user)) {
+        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
 
