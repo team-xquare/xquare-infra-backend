@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.application.team.port.out
 
-import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
+import xquare.app.xquareinfra.domain.team.model.Team
 
 interface SaveTeamPort {
-    fun save(teamJpaEntity: TeamJpaEntity): TeamJpaEntity
+    fun save(team: Team): Team
 }
