@@ -1,7 +1,6 @@
 package xquare.app.xquareinfra.infrastructure.persistence.team
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
-import xquare.app.xquareinfra.domain.team.model.UserTeam
 import xquare.app.xquareinfra.domain.team.model.type.TeamType
 import java.time.LocalDateTime
 import java.util.*
@@ -33,7 +32,7 @@ class TeamJpaEntity(
         protected set
 
     @OneToMany(mappedBy = "teamJpaEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
-    val members: MutableSet<UserTeam> = HashSet()
+    val members: MutableSet<UserTeamJpaEntity> = HashSet()
 
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime? = LocalDateTime.now()

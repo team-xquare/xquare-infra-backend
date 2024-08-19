@@ -1,12 +1,11 @@
-package xquare.app.xquareinfra.domain.team.model
+package xquare.app.xquareinfra.infrastructure.persistence.team
 
 import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
 import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
-import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import javax.persistence.*
 
 @Entity
-class UserTeam(
+class UserTeamJpaEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
