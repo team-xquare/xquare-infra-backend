@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.team.dto.response
 
-import xquare.app.xquareinfra.domain.team.domain.role.TeamMemberRole
+import xquare.app.xquareinfra.domain.model.domain.role.TeamMemberRole
 import java.util.UUID
 
 data class TeamMemberResponse(

@@ -1,13 +1,14 @@
-package xquare.app.xquareinfra.domain.team.domain
+package xquare.app.xquareinfra.infrastructure.persistence.team
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
-import xquare.app.xquareinfra.domain.team.domain.type.TeamType
+import xquare.app.xquareinfra.domain.model.domain.UserTeam
+import xquare.app.xquareinfra.domain.model.domain.type.TeamType
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
 @Entity(name = "tbl_team")
-class Team(
+class TeamJpaEntity(
     id: UUID?,
     adminId: UUID,
     teamNameKo: String,
@@ -31,7 +32,7 @@ class Team(
     var teamType: TeamType = teamType
         protected set
 
-    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "teamJpaEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     val members: MutableSet<UserTeam> = HashSet()
 
     @Column(name = "created_at", nullable = false)

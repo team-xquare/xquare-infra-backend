@@ -32,7 +32,7 @@ class UpdateEnvironmentVariableService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val user = readCurrentUserPort.readCurrentUser()
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if(!existsUserTeamPort.existsByTeamAndUser(deploy.teamJpaEntity, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -44,7 +44,7 @@ class UpdateEnvironmentVariableService(
         val path = vaultService.getPath(deploy, container)
         vaultService.addSecret(environmentVariable, path)
 
-        val namespace = "${deploy.team.teamNameEn}-${container.containerEnvironment.name}"
+        val namespace = "${deploy.teamJpaEntity.teamNameEn}-${container.containerEnvironment.name}"
         kubernetesOperationService.deleteSecret(namespace, path)
 
         if(deploy.isV2) {

@@ -1,7 +1,8 @@
-package xquare.app.xquareinfra.domain.team.domain
+package xquare.app.xquareinfra.domain.model.domain
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
-import xquare.app.xquareinfra.domain.team.domain.role.TeamMemberRole
+import xquare.app.xquareinfra.domain.model.domain.role.TeamMemberRole
+import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import java.util.UUID
 import javax.persistence.*
 
@@ -10,7 +11,7 @@ class TeamMember(
     id: UUID?,
     memberId: UUID,
     teamMemberRole: TeamMemberRole,
-    team: Team
+    teamJpaEntity: TeamJpaEntity
 ) : BaseUUIDEntity(id) {
     @Column(name = "member_id", columnDefinition = "BINARY(16)", nullable = false)
     var memberId: UUID = memberId
@@ -23,6 +24,6 @@ class TeamMember(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", columnDefinition = "BINARY(16)")
-    var team: Team = team
+    var teamJpaEntity: TeamJpaEntity = teamJpaEntity
         protected set
 }

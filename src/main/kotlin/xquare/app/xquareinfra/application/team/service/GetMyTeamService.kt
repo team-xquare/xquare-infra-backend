@@ -20,13 +20,13 @@ class GetMyTeamService(
         val user = readCurrentUserPort.readCurrentUser()
 
         val teamList = user.teams.takeUnless { it.isEmpty() }?.map { userTeam ->
-            val deploys = findDeployPort.findAllByTeam(userTeam.team)
-            val admin = findUserPort.findById(userTeam.team.adminId) ?: throw BusinessLogicException.USER_NOT_FOUND
+            val deploys = findDeployPort.findAllByTeam(userTeam.teamJpaEntity)
+            val admin = findUserPort.findById(userTeam.teamJpaEntity.adminId) ?: throw BusinessLogicException.USER_NOT_FOUND
             SimpleTeamResponse(
-                teamId = userTeam.team.id!!,
-                teamType = userTeam.team.teamType,
-                teamNameKo = userTeam.team.teamNameKo,
-                teamNameEn = userTeam.team.teamNameEn,
+                teamId = userTeam.teamJpaEntity.id!!,
+                teamType = userTeam.teamJpaEntity.teamType,
+                teamNameKo = userTeam.teamJpaEntity.teamNameKo,
+                teamNameEn = userTeam.teamJpaEntity.teamNameEn,
                 administratorName = admin.name,
                 deployList = deploys.map { it.deployName }
 

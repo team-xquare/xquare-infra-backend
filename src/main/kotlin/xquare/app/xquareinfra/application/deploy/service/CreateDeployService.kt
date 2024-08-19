@@ -59,7 +59,7 @@ class CreateDeployService(
                     repository = repository,
                     projectRootDir = projectRootDir,
                     oneLineDescription = oneLineDescription,
-                    team = team,
+                    teamJpaEntity = team,
                     secretKey = null,
                     deployStatus = DeployStatus.WAIT_FOR_APPROVE,
                     deployType = deployType,

@@ -7,7 +7,7 @@ import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.adapter.out.persistence.deploy.repository.DeployRepository
 import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
-import xquare.app.xquareinfra.domain.team.domain.Team
+import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import java.util.*
 
 @Component
@@ -17,6 +17,6 @@ class DeployPersistenceAdapter(
     override fun saveDeploy(deployJpaEntity: DeployJpaEntity): DeployJpaEntity = deployRepository.save(deployJpaEntity)
     override fun existByDeployName(deployName: String): Boolean = deployRepository.existsByDeployName(deployName)
     override fun findByDeployName(deployName: String): DeployJpaEntity? = deployRepository.findByDeployName(deployName)
-    override fun findAllByTeam(team: Team): List<DeployJpaEntity> = deployRepository.findAllByTeam(team)
+    override fun findAllByTeam(teamJpaEntity: TeamJpaEntity): List<DeployJpaEntity> = deployRepository.findAllByTeam(teamJpaEntity)
     override fun findById(deployId: UUID): DeployJpaEntity? = deployRepository.findByIdOrNull(deployId)
 }
