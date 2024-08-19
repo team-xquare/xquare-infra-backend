@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.application.deploy.port.`in`.MigrationDeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
-import xquare.app.xquareinfra.application.deploy.port.out.saveDeployPort
+import xquare.app.xquareinfra.application.deploy.port.out.SaveDeployPort
 import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 import xquare.app.xquareinfra.domain.deploy.model.DeployType
@@ -18,7 +18,7 @@ import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 class MigrationDeployService(
     private val readCurrentUserPort: ReadCurrentUserPort,
     private val findTeamPort: xquare.app.xquareinfra.application.team.port.out.FindTeamPort,
-    private val saveDeployPort: saveDeployPort,
+    private val saveDeployPort: SaveDeployPort,
     private val existDeployPort: ExistDeployPort,
     private val deployClient: DeployClient,
     private val existsUserTeamPort: xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
