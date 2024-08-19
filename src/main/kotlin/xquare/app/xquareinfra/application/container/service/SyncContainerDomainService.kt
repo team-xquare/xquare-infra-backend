@@ -8,6 +8,7 @@ import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.CloudflareClient
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request.CreateDnsRecordRequest
+import xquare.app.xquareinfra.application.container.port.`in`.SyncContainerDomainUseCase
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.infrastructure.env.cloudflare.CloudflareProperties
 import xquare.app.xquareinfra.infrastructure.env.kubernetes.XquareProperties
@@ -20,7 +21,7 @@ class SyncContainerDomainService(
     private val cloudflareClient: CloudflareClient,
     private val cloudflareProperties: CloudflareProperties,
     private val xquareProperties: XquareProperties
-) : xquare.app.xquareinfra.application.container.port.`in`.SyncContainerDomainUseCase {
+) : SyncContainerDomainUseCase {
     override fun syncContainerDomain(
         deployName: String,
         containerEnvironment: ContainerEnvironment,

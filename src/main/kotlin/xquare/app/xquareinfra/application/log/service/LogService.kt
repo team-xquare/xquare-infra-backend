@@ -57,8 +57,6 @@ class LogService(
         val fromMillis = currentTimeMillis - durationMillis
 
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-        val container = findContainerPort.findByDeployAndEnvironment(deploy, if (environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag)
-            ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         val request = QueryRequest(
             queries = listOf(
