@@ -29,7 +29,7 @@ class SyncContainerService(
             syncContainerRequest.run {
                 ContainerJpaEntity(
                     id = containerId,
-                    deploy = deploy,
+                    deployJpaEntity = deploy,
                     containerEnvironment = containerEnvironment,
                     lastDeploy = LocalDateTime.now(),
                     subDomain = syncContainerRequest.subDomain,

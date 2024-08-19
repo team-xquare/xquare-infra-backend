@@ -1,13 +1,15 @@
-package xquare.app.xquareinfra.domain.deploy.domain
+package xquare.app.xquareinfra.infrastructure.persistence.deploy
 
 import org.hibernate.annotations.ColumnDefault
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
+import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
+import xquare.app.xquareinfra.domain.deploy.model.DeployType
 import xquare.app.xquareinfra.domain.team.domain.Team
 import java.util.*
 import javax.persistence.*
 
 @Entity(name = "tbl_deploy")
-class Deploy(
+class DeployJpaEntity(
     id: UUID?,
     deployName: String,
     organization: String,
