@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.infrastructure.persistence.user
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
 import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
-import xquare.app.xquareinfra.domain.team.model.UserTeam
+import xquare.app.xquareinfra.infrastructure.persistence.team.UserTeamJpaEntity
 import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
 import xquare.app.xquareinfra.domain.user.model.Role
 import xquare.app.xquareinfra.domain.user.model.converter.RoleConverter
@@ -46,19 +46,19 @@ class UserJpaEntity(
         protected set
 
     @OneToMany(mappedBy = "userJpaEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
-    val teams: MutableSet<UserTeam> = HashSet()
+    val teams: MutableSet<UserTeamJpaEntity> = HashSet()
 
     @Column(name = "email", nullable = false)
     var email: String = email
         protected set
 
     fun addTeam(teamJpaEntity: TeamJpaEntity, teamMemberRole: TeamMemberRole) {
-        val userTeam = UserTeam(userJpaEntity = this, teamJpaEntity = teamJpaEntity, teamMemberRole = teamMemberRole)
-        teams.add(userTeam)
-        teamJpaEntity.members.add(userTeam)
+        val userTeamJpaEntity = UserTeamJpaEntity(userJpaEntity = this, teamJpaEntity = teamJpaEntity, teamMemberRole = teamMemberRole)
+        teams.add(userTeamJpaEntity)
+        teamJpaEntity.members.add(userTeamJpaEntity)
     }
 
-    fun deleteTeam(userTeam: UserTeam) {
-        teams.remove(userTeam)
+    fun deleteTeam(userTeamJpaEntity: UserTeamJpaEntity) {
+        teams.remove(userTeamJpaEntity)
     }
 }
