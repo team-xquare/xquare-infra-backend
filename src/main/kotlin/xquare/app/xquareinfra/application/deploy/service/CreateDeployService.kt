@@ -6,7 +6,7 @@ import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.CreateDeployRequest
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.CreateDeployResponse
 import xquare.app.xquareinfra.application.deploy.port.`in`.CreateDeployUseCase
-import xquare.app.xquareinfra.application.deploy.port.out.saveDeployPort
+import xquare.app.xquareinfra.application.deploy.port.out.SaveDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
 import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
@@ -19,7 +19,7 @@ import java.util.*
 @Service
 class CreateDeployService(
     private val findTeamPort: xquare.app.xquareinfra.application.team.port.out.FindTeamPort,
-    private val saveDeployPort: saveDeployPort,
+    private val saveDeployPort: SaveDeployPort,
     private val existDeployPort: ExistDeployPort,
     private val deployClient: DeployClient,
     private val readCurrentUserPort: ReadCurrentUserPort
