@@ -3,7 +3,7 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import xquare.app.xquareinfra.domain.log.service.LogService
+import xquare.app.xquareinfra.application.log.service.LogService
 import java.net.URI
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
