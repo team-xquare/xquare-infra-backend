@@ -40,7 +40,6 @@ class CreateTeamService(
 
         val userTeams = mutableListOf<UserTeam>()
 
-        // 현재 사용자를 관리자로 추가
         userTeams.add(UserTeam(
             id = null,
             user = currentUser,
@@ -48,7 +47,6 @@ class CreateTeamService(
             role = TeamMemberRole.ADMINISTRATOR
         ))
 
-        // 팀 멤버 추가
         req.teamMemberList.forEach { memberId ->
             val member = findUserPort.findById(memberId) ?: throw BusinessLogicException.USER_NOT_FOUND
             if (existsUserTeamPort.existsByTeamAndUser(team, member)) {
@@ -62,7 +60,6 @@ class CreateTeamService(
             ))
         }
 
-        // 팀과 UserTeam 관계를 함께 저장
         saveTeamPort.saveTeamWithMembers(team, userTeams)
     }
 }
