@@ -16,13 +16,13 @@ class ContainerPersistenceAdapter(
     private val containerMapper: ContainerMapper,
     private val deployMapper: DeployMapper
 ): FindContainerPort, SaveContainerPort {
-    override fun findByDeployAndEnvironment(deploy: Deploy, containerEnvironment: ContainerEnvironment): ContainerJpaEntity? =
-        containerRepository.findByContainerEnvironmentAndDeploy(containerEnvironment, deployMapper.toEntity(deploy))
+    override fun findByDeployAndEnvironment(deploy: Deploy, containerEnvironment: ContainerEnvironment): Container? =
+        containerRepository.findByContainerEnvironmentAndDeploy(containerEnvironment, deployMapper.toEntity(deploy))?.let { containerMapper.toModel(it) }
 
     override fun findAllByDeploy(deploy: Deploy): List<Container> =
         containerRepository.findAllByDeploy(deployMapper.toEntity(deploy)).map { containerMapper.toModel(it) }
 
     override fun findAll(): List<Container> = containerRepository.findAll().map { containerMapper.toModel(it) }
 
-    override fun save(containerJpaEntity: ContainerJpaEntity): ContainerJpaEntity = containerRepository.save(containerJpaEntity)
+    override fun save(container: Container): Container = containerMapper.toModel(containerRepository.save(containerMapper.toEntity(container)))
 }

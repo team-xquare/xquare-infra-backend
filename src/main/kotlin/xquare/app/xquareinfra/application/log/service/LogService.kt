@@ -65,7 +65,7 @@ class LogService(
                 QueryDto(
                     expr = DataUtil.makeLogQuery(
                         containerEnvironment = if (environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag,
-                        deployJpaEntity = deploy
+                        deploy = deploy
                     ),
                     refId = "A",
                     datasource = "loki",

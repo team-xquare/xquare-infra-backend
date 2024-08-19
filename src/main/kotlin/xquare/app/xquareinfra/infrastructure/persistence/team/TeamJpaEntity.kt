@@ -31,9 +31,6 @@ class TeamJpaEntity(
     var teamType: TeamType = teamType
         protected set
 
-    @OneToMany(mappedBy = "teamJpaEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
-    val members: MutableSet<UserTeamJpaEntity> = HashSet()
-
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime? = LocalDateTime.now()
 }

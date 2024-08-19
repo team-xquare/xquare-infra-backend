@@ -13,6 +13,7 @@ import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
+import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import java.util.*
 
 @Transactional
@@ -52,14 +53,14 @@ class CreateDeployService(
 
         val deployJpaEntity = req.run {
             saveDeployPort.saveDeploy(
-                DeployJpaEntity(
+                Deploy(
                     id = null,
                     deployName = deployName,
                     organization = organization,
                     repository = repository,
                     projectRootDir = projectRootDir,
                     oneLineDescription = oneLineDescription,
-                    teamJpaEntity = team,
+                    team = team,
                     secretKey = null,
                     deployStatus = DeployStatus.WAIT_FOR_APPROVE,
                     deployType = deployType,

@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.infrastructure.persistence.container.ContainerJpaEntity
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
+import xquare.app.xquareinfra.domain.container.model.Container
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.LocalDateTime
 import java.util.UUID
@@ -27,9 +28,9 @@ class SyncContainerService(
 
         saveContainerPort.save(
             syncContainerRequest.run {
-                ContainerJpaEntity(
+                Container(
                     id = containerId,
-                    deployJpaEntity = deploy,
+                    deploy = deploy,
                     containerEnvironment = containerEnvironment,
                     lastDeploy = LocalDateTime.now(),
                     subDomain = syncContainerRequest.subDomain,

@@ -21,13 +21,13 @@ class GetDeployDetailsService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val user = readCurrentUserPort.readCurrentUser()
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.teamJpaEntity, user)) {
+        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
 
         return DeployDetailsResponse(
-            teamNameKo = deploy.teamJpaEntity.teamNameKo,
-            teamNameEn = deploy.teamJpaEntity.teamNameEn,
+            teamNameKo = deploy.team.teamNameKo,
+            teamNameEn = deploy.team.teamNameEn,
             oneLineDescription = deploy.oneLineDescription,
             repository = deploy.repository,
             projectRootDir = deploy.projectRootDir,

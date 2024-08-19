@@ -12,7 +12,6 @@ internal class ReadCurrentUserAdapter(
     private val userMapper: UserMapper
 ): ReadCurrentUserPort {
     override fun readCurrentUser(): User {
-        val userJpaEntity = (SecurityContextHolder.getContext().authentication.principal as CustomUserDetails).userJpaEntity
-        return userMapper.toDomain(userJpaEntity)
+        return (SecurityContextHolder.getContext().authentication.principal as CustomUserDetails).user
     }
 }

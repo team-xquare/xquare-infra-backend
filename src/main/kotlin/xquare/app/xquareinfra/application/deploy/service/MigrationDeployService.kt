@@ -12,6 +12,7 @@ import xquare.app.xquareinfra.domain.deploy.model.DeployType
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
+import xquare.app.xquareinfra.domain.deploy.model.Deploy
 
 @Transactional
 @Service
@@ -39,14 +40,14 @@ class MigrationDeployService(
             }
 
             saveDeployPort.saveDeploy(
-                DeployJpaEntity(
+                Deploy(
                     id = null,
                     deployName = it.nameEn,
                     organization = it.organization,
                     repository = it.repository.split("/")[1],
                     projectRootDir = "/",
                     oneLineDescription = "한줄설명을 적어주세요.",
-                    teamJpaEntity = team,
+                    team = team,
                     secretKey = null,
                     deployStatus = if (it.isApproved) DeployStatus.AVAILABLE else DeployStatus.WAIT_FOR_APPROVE,
                     deployType = if (it.type == "be") DeployType.be else DeployType.fe,
