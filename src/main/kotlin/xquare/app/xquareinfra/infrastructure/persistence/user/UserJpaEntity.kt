@@ -1,15 +1,16 @@
-package xquare.app.xquareinfra.domain.user.domain
+package xquare.app.xquareinfra.infrastructure.persistence.user
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
 import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
-import xquare.app.xquareinfra.domain.model.domain.UserTeam
-import xquare.app.xquareinfra.domain.model.domain.role.TeamMemberRole
-import xquare.app.xquareinfra.domain.user.domain.converter.RoleConverter
+import xquare.app.xquareinfra.domain.team.model.UserTeam
+import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
+import xquare.app.xquareinfra.domain.user.model.Role
+import xquare.app.xquareinfra.domain.user.model.converter.RoleConverter
 import java.util.UUID
 import javax.persistence.*
 
 @Entity(name = "tbl_user")
-class User(
+class UserJpaEntity(
     id: UUID?,
     name: String,
     accountId: String,
@@ -44,7 +45,7 @@ class User(
     var roles: MutableList<Role> = roles
         protected set
 
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userJpaEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
     val teams: MutableSet<UserTeam> = HashSet()
 
     @Column(name = "email", nullable = false)
@@ -52,7 +53,7 @@ class User(
         protected set
 
     fun addTeam(teamJpaEntity: TeamJpaEntity, teamMemberRole: TeamMemberRole) {
-        val userTeam = UserTeam(user = this, teamJpaEntity = teamJpaEntity, teamMemberRole = teamMemberRole)
+        val userTeam = UserTeam(userJpaEntity = this, teamJpaEntity = teamJpaEntity, teamMemberRole = teamMemberRole)
         teams.add(userTeam)
         teamJpaEntity.members.add(userTeam)
     }

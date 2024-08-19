@@ -1,6 +1,6 @@
-package xquare.app.xquareinfra.domain.user.domain.converter
+package xquare.app.xquareinfra.domain.user.model.converter
 
-import xquare.app.xquareinfra.domain.user.domain.Role
+import xquare.app.xquareinfra.domain.user.model.Role
 import xquare.app.xquareinfra.infrastructure.exception.CriticalException
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter

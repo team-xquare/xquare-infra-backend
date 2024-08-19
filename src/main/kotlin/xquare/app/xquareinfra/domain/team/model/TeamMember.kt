@@ -1,7 +1,7 @@
-package xquare.app.xquareinfra.domain.model.domain
+package xquare.app.xquareinfra.domain.team.model
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
-import xquare.app.xquareinfra.domain.model.domain.role.TeamMemberRole
+import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
 import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import java.util.UUID
 import javax.persistence.*

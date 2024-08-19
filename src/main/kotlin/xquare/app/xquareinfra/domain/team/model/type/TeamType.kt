@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.domain.model.domain.type
+package xquare.app.xquareinfra.domain.team.model.type
 
 enum class TeamType {
     CLUB,

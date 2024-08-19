@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
 import xquare.app.xquareinfra.adapter.`in`.team.dto.request.AddTeamMemberRequest
-import xquare.app.xquareinfra.domain.model.domain.role.TeamMemberRole
+import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.util.UUID
