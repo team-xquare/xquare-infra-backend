@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.infrastructure.telemtry.alert
 
 import io.opentelemetry.proto.trace.v1.Span
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.container.domain.WebhookType
+import xquare.app.xquareinfra.domain.container.model.WebhookType
 import xquare.app.xquareinfra.infrastructure.telemtry.analyze.AnalysisResult
 import xquare.app.xquareinfra.infrastructure.webhook.discord.DiscordMessageSender
 import xquare.app.xquareinfra.infrastructure.webhook.slack.SlackMessageSender

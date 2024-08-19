@@ -2,11 +2,8 @@ package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
-import xquare.app.xquareinfra.application.container.port.`in`.GetEnvironmentVariableUseCase
-import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
-import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import java.util.UUID

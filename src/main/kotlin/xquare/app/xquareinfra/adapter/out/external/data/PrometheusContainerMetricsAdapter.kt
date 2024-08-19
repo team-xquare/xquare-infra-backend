@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.adapter.out.external.data
 
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.adapter.out.external.data.client.DataClient
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse

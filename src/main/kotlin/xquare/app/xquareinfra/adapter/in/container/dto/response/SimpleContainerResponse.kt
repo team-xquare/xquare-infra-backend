@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.adapter.`in`.container.dto.response
 
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
-import xquare.app.xquareinfra.domain.container.domain.ContainerStatus
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerStatus
 import java.time.LocalDateTime
 
 data class SimpleContainerResponse(

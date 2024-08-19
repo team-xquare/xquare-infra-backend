@@ -6,7 +6,7 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerLogResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.LogEntry
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.adapter.out.external.data.client.DataClient
 import xquare.app.xquareinfra.adapter.out.external.data.util.DataUtil

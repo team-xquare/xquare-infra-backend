@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.container.dto.request
 
-import xquare.app.xquareinfra.domain.container.domain.Language
+import xquare.app.xquareinfra.domain.container.model.Language
 
 data class SetContainerConfigRequest(
     val stag: ContainerConfigDetails?,

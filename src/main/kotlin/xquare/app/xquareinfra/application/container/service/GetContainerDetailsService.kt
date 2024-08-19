@@ -2,8 +2,8 @@ package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
-import xquare.app.xquareinfra.domain.container.domain.ContainerStatus
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerStatus
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
