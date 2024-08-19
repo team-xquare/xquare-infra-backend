@@ -3,7 +3,7 @@ package xquare.app.xquareinfra.infrastructure.security.principle
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import xquare.app.xquareinfra.domain.user.domain.User
+import xquare.app.xquareinfra.domain.user.model.User
 
 class CustomUserDetails(
     val user: User

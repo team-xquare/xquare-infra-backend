@@ -3,7 +3,7 @@ package xquare.app.xquareinfra.infrastructure.security.principle
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.user.application.port.out.FindUserPort
+import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import java.util.*
 
 @Component
