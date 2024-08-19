@@ -21,6 +21,7 @@ class PrometheusContainerMetricsAdapter(
             deploy = deploy,
             containerEnvironment = environment
         )
+        println(query)
         val queryResponse = executeQuery(query, duration, 2000)
         return formatCpuUsageData(queryResponse)
     }

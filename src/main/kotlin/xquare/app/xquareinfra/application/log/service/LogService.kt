@@ -1,6 +1,7 @@
 package xquare.app.xquareinfra.application.log.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
@@ -21,6 +22,7 @@ import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
+@Transactional
 @Service
 class LogService(
     private val dataClient: DataClient,
