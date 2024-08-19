@@ -11,6 +11,7 @@ import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.adapter.out.external.dsm.client.DsmLoginClient
 import xquare.app.xquareinfra.adapter.out.external.dsm.client.DsmLoginRequest
+import xquare.app.xquareinfra.domain.user.model.User
 
 @Transactional
 @Service
@@ -33,7 +34,7 @@ class SignupService(
 
         userInfo.run {
             saveUserPort.saveUser(
-                UserJpaEntity(
+                User(
                     id = null,
                     name = name,
                     accountId = accountId,
