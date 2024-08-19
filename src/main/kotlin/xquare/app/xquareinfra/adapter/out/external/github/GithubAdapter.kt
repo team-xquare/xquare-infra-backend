@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.adapter.out.external.github
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
 import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DockerfileRequest

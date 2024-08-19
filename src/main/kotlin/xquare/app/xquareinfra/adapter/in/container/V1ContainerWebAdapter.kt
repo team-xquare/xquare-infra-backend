@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.*
 
 @RequestMapping("/v1/container")

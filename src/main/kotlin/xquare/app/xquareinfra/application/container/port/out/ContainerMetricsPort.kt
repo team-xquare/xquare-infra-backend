@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.application.container.port.out
 
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 
 interface ContainerMetricsPort {

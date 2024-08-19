@@ -3,7 +3,7 @@ package xquare.app.xquareinfra.adapter.`in`.container
 import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDeployHistoryResponse
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.*
 
 @RequestMapping("/v2/container")

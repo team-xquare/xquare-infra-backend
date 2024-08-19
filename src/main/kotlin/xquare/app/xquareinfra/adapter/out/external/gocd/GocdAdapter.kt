@@ -3,7 +3,7 @@ package xquare.app.xquareinfra.adapter.out.external.gocd
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.DeployHistoryResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.StageStatus
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.adapter.out.external.gocd.client.GocdClient
 
 @Component

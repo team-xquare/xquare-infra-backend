@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.ContainerConfigDetails
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SetContainerConfigRequest
-import xquare.app.xquareinfra.domain.container.domain.Container
-import xquare.app.xquareinfra.domain.container.domain.ContainerEnvironment
-import xquare.app.xquareinfra.domain.container.domain.Language
+import xquare.app.xquareinfra.infrastructure.persistence.container.ContainerJpaEntity
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.Language
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
@@ -45,7 +45,7 @@ class SetContainerConfigService(
         }
 
         container = saveContainerPort.save(
-            Container(
+            ContainerJpaEntity(
                 id = containerId,
                 deploy = deploy,
                 containerEnvironment = environment,

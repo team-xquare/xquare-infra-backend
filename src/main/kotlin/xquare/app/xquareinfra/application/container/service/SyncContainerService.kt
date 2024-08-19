@@ -3,7 +3,7 @@ package xquare.app.xquareinfra.application.container.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
-import xquare.app.xquareinfra.domain.container.domain.Container
+import xquare.app.xquareinfra.infrastructure.persistence.container.ContainerJpaEntity
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.LocalDateTime
@@ -27,7 +27,7 @@ class SyncContainerService(
 
         saveContainerPort.save(
             syncContainerRequest.run {
-                Container(
+                ContainerJpaEntity(
                     id = containerId,
                     deploy = deploy,
                     containerEnvironment = containerEnvironment,

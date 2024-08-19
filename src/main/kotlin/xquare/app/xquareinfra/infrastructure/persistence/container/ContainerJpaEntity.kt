@@ -1,13 +1,16 @@
-package xquare.app.xquareinfra.domain.container.domain
+package xquare.app.xquareinfra.infrastructure.persistence.container
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
+import xquare.app.xquareinfra.domain.container.model.WebhookInfo
+import xquare.app.xquareinfra.domain.container.model.WebhookType
 import xquare.app.xquareinfra.domain.deploy.domain.Deploy
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
 @Entity(name = "tbl_container")
-class Container(
+class ContainerJpaEntity(
     id: UUID?,
     deploy: Deploy,
     containerEnvironment: ContainerEnvironment,

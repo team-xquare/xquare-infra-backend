@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.domain.container.domain
+package xquare.app.xquareinfra.domain.container.model
 
 import javax.persistence.Embeddable
 import javax.persistence.EnumType
