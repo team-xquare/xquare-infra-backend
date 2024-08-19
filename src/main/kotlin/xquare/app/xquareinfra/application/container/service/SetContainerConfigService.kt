@@ -63,7 +63,7 @@ class SetContainerConfigService(
             request = DispatchEventRequest(
                 event_type = "write-values",
                 client_payload = mapOf(
-                    "club" to deployJpaEntity.team.teamNameEn.lowercase(Locale.getDefault()),
+                    "club" to deployJpaEntity.teamJpaEntity.teamNameEn.lowercase(Locale.getDefault()),
                     "name" to deployJpaEntity.deployName,
                     "organization" to deployJpaEntity.organization,
                     "repository" to deployJpaEntity.repository,

@@ -4,7 +4,7 @@ import org.hibernate.annotations.ColumnDefault
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
 import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 import xquare.app.xquareinfra.domain.deploy.model.DeployType
-import xquare.app.xquareinfra.domain.team.domain.Team
+import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import java.util.*
 import javax.persistence.*
 
@@ -16,7 +16,7 @@ class DeployJpaEntity(
     repository: String,
     projectRootDir: String,
     oneLineDescription: String,
-    team: Team,
+    teamJpaEntity: TeamJpaEntity,
     secretKey: String?,
     deployStatus: DeployStatus,
     deployType: DeployType,
@@ -46,7 +46,7 @@ class DeployJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", columnDefinition = "BINARY(16)")
-    var team: Team = team
+    var teamJpaEntity: TeamJpaEntity = teamJpaEntity
         protected set
 
     @Column(name = "secret_key", nullable = true)

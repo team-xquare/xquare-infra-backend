@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.team.dto.request
 
-import xquare.app.xquareinfra.domain.team.domain.type.TeamType
+import xquare.app.xquareinfra.domain.model.domain.type.TeamType
 import java.util.UUID
 
 data class CreateTeamRequest(

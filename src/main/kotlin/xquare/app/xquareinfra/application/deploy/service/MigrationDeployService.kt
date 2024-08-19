@@ -46,7 +46,7 @@ class MigrationDeployService(
                     repository = it.repository.split("/")[1],
                     projectRootDir = "/",
                     oneLineDescription = "한줄설명을 적어주세요.",
-                    team = team,
+                    teamJpaEntity = team,
                     secretKey = null,
                     deployStatus = if (it.isApproved) DeployStatus.AVAILABLE else DeployStatus.WAIT_FOR_APPROVE,
                     deployType = if (it.type == "be") DeployType.be else DeployType.fe,

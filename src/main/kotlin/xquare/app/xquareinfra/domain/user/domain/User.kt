@@ -1,9 +1,9 @@
 package xquare.app.xquareinfra.domain.user.domain
 
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
-import xquare.app.xquareinfra.domain.team.domain.Team
-import xquare.app.xquareinfra.domain.team.domain.UserTeam
-import xquare.app.xquareinfra.domain.team.domain.role.TeamMemberRole
+import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
+import xquare.app.xquareinfra.domain.model.domain.UserTeam
+import xquare.app.xquareinfra.domain.model.domain.role.TeamMemberRole
 import xquare.app.xquareinfra.domain.user.domain.converter.RoleConverter
 import java.util.UUID
 import javax.persistence.*
@@ -51,10 +51,10 @@ class User(
     var email: String = email
         protected set
 
-    fun addTeam(team: Team, teamMemberRole: TeamMemberRole) {
-        val userTeam = UserTeam(user = this, team = team, teamMemberRole = teamMemberRole)
+    fun addTeam(teamJpaEntity: TeamJpaEntity, teamMemberRole: TeamMemberRole) {
+        val userTeam = UserTeam(user = this, teamJpaEntity = teamJpaEntity, teamMemberRole = teamMemberRole)
         teams.add(userTeam)
-        team.members.add(userTeam)
+        teamJpaEntity.members.add(userTeam)
     }
 
     fun deleteTeam(userTeam: UserTeam) {

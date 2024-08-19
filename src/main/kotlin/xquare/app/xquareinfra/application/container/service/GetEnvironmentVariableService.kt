@@ -19,7 +19,7 @@ class GetEnvironmentVariableService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         val user = readCurrentUserPort.readCurrentUser()
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if(!existsUserTeamPort.existsByTeamAndUser(deploy.teamJpaEntity, user)) {
             throw XquareException.FORBIDDEN
         }
 

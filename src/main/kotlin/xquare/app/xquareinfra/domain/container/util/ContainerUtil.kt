@@ -31,6 +31,6 @@ object ContainerUtil {
     }
 
     fun getNamespaceName(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
-        return "${deployJpaEntity.team.teamNameEn}-$containerEnvironment"
+        return "${deployJpaEntity.teamJpaEntity.teamNameEn}-$containerEnvironment"
     }
 }
