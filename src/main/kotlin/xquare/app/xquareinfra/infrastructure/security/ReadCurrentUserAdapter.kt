@@ -2,12 +2,17 @@ package xquare.app.xquareinfra.infrastructure.security
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
+import xquare.app.xquareinfra.adapter.out.persistence.user.UserMapper
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
-import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
+import xquare.app.xquareinfra.domain.user.model.User
 import xquare.app.xquareinfra.infrastructure.security.principle.CustomUserDetails
 
 @Component
-internal class ReadCurrentUserAdapter : ReadCurrentUserPort {
-    override fun readCurrentUser(): UserJpaEntity =
-        (SecurityContextHolder.getContext().authentication.principal as CustomUserDetails).userJpaEntity
+internal class ReadCurrentUserAdapter(
+    private val userMapper: UserMapper
+): ReadCurrentUserPort {
+    override fun readCurrentUser(): User {
+        val userJpaEntity = (SecurityContextHolder.getContext().authentication.principal as CustomUserDetails).userJpaEntity
+        return userMapper.toDomain(userJpaEntity)
+    }
 }

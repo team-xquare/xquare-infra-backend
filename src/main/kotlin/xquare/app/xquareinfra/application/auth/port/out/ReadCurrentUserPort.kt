@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.application.auth.port.out
 
-import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
+import xquare.app.xquareinfra.domain.user.model.User
 
 interface ReadCurrentUserPort {
-    fun readCurrentUser(): UserJpaEntity
+    fun readCurrentUser(): User
 }
