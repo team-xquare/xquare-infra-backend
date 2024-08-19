@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.infrastructure.security.jwt
 
 import xquare.app.xquareinfra.infrastructure.exception.AuthenticationException
-import xquare.app.xquareinfra.infrastructure.security.jwt.env.JwtProperties
+import xquare.app.xquareinfra.infrastructure.env.jwt.JwtProperties
 import xquare.app.xquareinfra.infrastructure.security.jwt.entity.AccessTokenRedisEntity
 import xquare.app.xquareinfra.infrastructure.security.jwt.entity.RefreshTokenRedisEntity
 import xquare.app.xquareinfra.infrastructure.security.jwt.repository.AccessTokenRepository
@@ -14,10 +14,10 @@ import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.domain.auth.application.port.out.GenerateJwtPort
-import xquare.app.xquareinfra.domain.auth.application.port.out.GetJwtBodyPort
-import xquare.app.xquareinfra.domain.auth.application.port.out.ReissuePort
-import xquare.app.xquareinfra.domain.auth.application.port.out.RevokeTokensPort
+import xquare.app.xquareinfra.application.auth.port.out.GenerateJwtPort
+import xquare.app.xquareinfra.application.auth.port.out.GetJwtBodyPort
+import xquare.app.xquareinfra.application.auth.port.out.ReissuePort
+import xquare.app.xquareinfra.application.auth.port.out.RevokeTokensPort
 import java.security.PublicKey
 import java.util.*
 
