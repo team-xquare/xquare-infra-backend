@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.application.user.port.out
 
-import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
+import xquare.app.xquareinfra.domain.user.model.User
 
 interface SaveUserPort {
-    fun saveUser(userJpaEntity: UserJpaEntity): UserJpaEntity
+    fun saveUser(user: User): User
 }

@@ -22,6 +22,6 @@ class UserTeamPersistenceAdapter(
     }
 
 
-    override fun findByUserAndTeam(userJpaEntity: UserJpaEntity, teamJpaEntity: TeamJpaEntity): UserTeamJpaEntity? =
-        userTeamRepository.findByTeamAndUser(teamJpaEntity, userJpaEntity)
+    override fun findByUserAndTeam(user: UserJpaEntity, teamJpaEntity: TeamJpaEntity): UserTeamJpaEntity? =
+        userTeamRepository.findByTeamAndUser(teamJpaEntity, user)
 }
