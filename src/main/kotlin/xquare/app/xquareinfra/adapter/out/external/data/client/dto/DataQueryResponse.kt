@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.external.data.client.dto
+package xquare.app.xquareinfra.adapter.out.external.data.client.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
