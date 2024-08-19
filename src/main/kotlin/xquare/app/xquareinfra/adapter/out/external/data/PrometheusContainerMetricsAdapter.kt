@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.adapter.out.external.data
 
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
-import xquare.app.xquareinfra.domain.deploy.domain.Deploy
+import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.adapter.out.external.data.client.DataClient
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
 import xquare.app.xquareinfra.adapter.out.external.data.util.DataUtil
@@ -15,43 +15,43 @@ class PrometheusContainerMetricsAdapter(
     private val dataClient: DataClient
 ) : xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort {
 
-    override fun getCpuUsage(deploy: Deploy, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>> {
+    override fun getCpuUsage(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeCpuUsageQuery(
-            deploy = deploy,
+            deployJpaEntity = deployJpaEntity,
             containerEnvironment = environment
         )
         val queryResponse = executeQuery(query, duration, 2000)
         return formatCpuUsageData(queryResponse)
     }
 
-    override fun getMemoryUsage(deploy: Deploy, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>> {
+    override fun getMemoryUsage(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeMemoryUsageQuery(
-            deploy = deploy,
+            deployJpaEntity = deployJpaEntity,
             containerEnvironment = environment
         )
         val queryResponse = executeQuery(query, duration, 2000)
         return formatMemoryUsageData(queryResponse)
     }
 
-    override fun getHttpRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, timeRange: Int): Map<String, Map<String, String>> {
-        val query = DataUtil.makeRequestPerMinuteQuery(deploy, environment)
+    override fun getHttpRequestsPerMinute(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, timeRange: Int): Map<String, Map<String, String>> {
+        val query = DataUtil.makeRequestPerMinuteQuery(deployJpaEntity, environment)
         val queryResponse = executeQuery(query, timeRange, 2000)
         return formatHttpRequestsData(queryResponse)
     }
 
-    override fun getHttpStatusRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, timeRange: Int, statusCode: Int): Map<String, Map<String, String>> {
-        val query = DataUtil.makeHttpStatusRequestPerMinuteQuery(deploy, environment, statusCode)
+    override fun getHttpStatusRequestsPerMinute(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, timeRange: Int, statusCode: Int): Map<String, Map<String, String>> {
+        val query = DataUtil.makeHttpStatusRequestPerMinuteQuery(deployJpaEntity, environment, statusCode)
         val queryResponse = executeQuery(query, timeRange, 2000)
         return formatHttpRequestsData(queryResponse)
     }
 
     override fun getContainerLatency(
-        deploy: Deploy,
+        deployJpaEntity: DeployJpaEntity,
         environment: ContainerEnvironment,
         percent: Double,
         timeRange: Int
     ): Map<String, Map<String, String>> {
-        val query = DataUtil.makeGetLatencyPerMinuteQuery(deploy, environment, percent)
+        val query = DataUtil.makeGetLatencyPerMinuteQuery(deployJpaEntity, environment, percent)
         val queryResponse = executeQuery(query, timeRange, 20000)
         return formatLatencyData(queryResponse)
     }

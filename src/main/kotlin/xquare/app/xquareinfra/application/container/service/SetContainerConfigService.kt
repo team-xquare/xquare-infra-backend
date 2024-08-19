@@ -8,7 +8,7 @@ import xquare.app.xquareinfra.infrastructure.persistence.container.ContainerJpaE
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.model.Language
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
-import xquare.app.xquareinfra.domain.deploy.domain.Deploy
+import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
@@ -37,8 +37,8 @@ class SetContainerConfigService(
         }
     }
 
-    private fun processContainerConfig(deploy: Deploy, config: ContainerConfigDetails, environment: ContainerEnvironment, language: Language, criticalService: Boolean) {
-        var container = findContainerPort.findByDeployAndEnvironment(deploy, environment)
+    private fun processContainerConfig(deployJpaEntity: DeployJpaEntity, config: ContainerConfigDetails, environment: ContainerEnvironment, language: Language, criticalService: Boolean) {
+        var container = findContainerPort.findByDeployAndEnvironment(deployJpaEntity, environment)
         var containerId: UUID? = null
         if (container != null) {
             containerId = container.id
@@ -47,7 +47,7 @@ class SetContainerConfigService(
         container = saveContainerPort.save(
             ContainerJpaEntity(
                 id = containerId,
-                deploy = deploy,
+                deployJpaEntity = deployJpaEntity,
                 containerEnvironment = environment,
                 lastDeploy = LocalDateTime.now(),
                 subDomain = config.domain,
@@ -63,10 +63,10 @@ class SetContainerConfigService(
             request = DispatchEventRequest(
                 event_type = "write-values",
                 client_payload = mapOf(
-                    "club" to deploy.team.teamNameEn.lowercase(Locale.getDefault()),
-                    "name" to deploy.deployName,
-                    "organization" to deploy.organization,
-                    "repository" to deploy.repository,
+                    "club" to deployJpaEntity.team.teamNameEn.lowercase(Locale.getDefault()),
+                    "name" to deployJpaEntity.deployName,
+                    "organization" to deployJpaEntity.organization,
+                    "repository" to deployJpaEntity.repository,
                     "branch" to container.githubBranch!!,
                     "environment" to container.containerEnvironment.name,
                     "containerPort" to container.containerPort!!,
@@ -77,6 +77,6 @@ class SetContainerConfigService(
             )
         )
 
-        deploy.migrationToV2()
+        deployJpaEntity.migrationToV2()
     }
 }

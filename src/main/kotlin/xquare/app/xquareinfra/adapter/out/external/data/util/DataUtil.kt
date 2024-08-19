@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.adapter.out.external.data.util
 
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
-import xquare.app.xquareinfra.domain.deploy.domain.Deploy
+import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.Frame
 import java.time.Instant
@@ -50,18 +50,18 @@ object DataUtil {
     }
 
     fun makeLogQuery(
-        deploy: Deploy,
+        deployJpaEntity: DeployJpaEntity,
         containerEnvironment: ContainerEnvironment
     ): String {
-        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
-        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(deployJpaEntity, containerEnvironment)
+        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
         val response = "{job=\"$namespace/$fullName}\", container=~\"${fullName}\"} |~ \"(?i)\" \n"
         return response
     }
 
-    fun makeCpuUsageQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
-        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
-        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
+    fun makeCpuUsageQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
+        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(deployJpaEntity, containerEnvironment)
 
         return """
             sum(
@@ -81,9 +81,9 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeMemoryUsageQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
-        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
-        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
+    fun makeMemoryUsageQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
+        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(deployJpaEntity, containerEnvironment)
 
         return """
             sum(
@@ -105,8 +105,8 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeRequestPerMinuteQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
-        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
+    fun makeRequestPerMinuteQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment): String {
+        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
         val response = """
             sum(
                 rate(
@@ -120,8 +120,8 @@ object DataUtil {
         return response
     }
 
-    fun makeGetLatencyPerMinuteQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment, percent: Double): String {
-        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
+    fun makeGetLatencyPerMinuteQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment, percent: Double): String {
+        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
 
         return """
             histogram_quantile(
@@ -137,8 +137,8 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeHttpStatusRequestPerMinuteQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment, statusCode: Int): String {
-        val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
+    fun makeHttpStatusRequestPerMinuteQuery(deployJpaEntity: DeployJpaEntity, containerEnvironment: ContainerEnvironment, statusCode: Int): String {
+        val fullName = ContainerUtil.getContainerName(deployJpaEntity, containerEnvironment)
 
         return """
             sum(

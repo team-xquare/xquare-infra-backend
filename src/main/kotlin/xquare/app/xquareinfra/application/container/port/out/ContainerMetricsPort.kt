@@ -1,15 +1,15 @@
 package xquare.app.xquareinfra.application.container.port.out
 
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
-import xquare.app.xquareinfra.domain.deploy.domain.Deploy
+import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 
 interface ContainerMetricsPort {
-    fun getCpuUsage(deploy: Deploy, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>>
-    fun getMemoryUsage(deploy: Deploy, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>>
-    fun getHttpRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, timeRange: Int): Map<String, Map<String, String>>
-    fun getHttpStatusRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, timeRange: Int, statusCode: Int): Map<String, Map<String, String>>
+    fun getCpuUsage(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>>
+    fun getMemoryUsage(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, duration: Int): Map<String, Map<String, String>>
+    fun getHttpRequestsPerMinute(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, timeRange: Int): Map<String, Map<String, String>>
+    fun getHttpStatusRequestsPerMinute(deployJpaEntity: DeployJpaEntity, environment: ContainerEnvironment, timeRange: Int, statusCode: Int): Map<String, Map<String, String>>
     fun getContainerLatency(
-        deploy: Deploy,
+        deployJpaEntity: DeployJpaEntity,
         environment: ContainerEnvironment,
         percent: Double,
         timeRange: Int

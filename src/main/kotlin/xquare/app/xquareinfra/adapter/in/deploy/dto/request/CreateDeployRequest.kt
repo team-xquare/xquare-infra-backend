@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.deploy.dto.request
 
-import xquare.app.xquareinfra.domain.deploy.domain.DeployType
+import xquare.app.xquareinfra.domain.deploy.model.DeployType
 
 data class CreateDeployRequest(
     val deployName: String,

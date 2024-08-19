@@ -17,8 +17,8 @@ class OpenTelemetryAlertManager(
         val containers = findContainerPort.findAll()
         val service = containers.find { container ->
             listOf(
-                "${container.deploy.deployName}-${container.deploy.deployType}-${container.containerEnvironment}",
-                "${container.deploy.deployName}-${container.containerEnvironment}"
+                "${container.deployJpaEntity.deployName}-${container.deployJpaEntity.deployType}-${container.containerEnvironment}",
+                "${container.deployJpaEntity.deployName}-${container.containerEnvironment}"
             ).any { it == serviceName }
         }
 

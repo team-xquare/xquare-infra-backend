@@ -8,8 +8,8 @@ import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.CreateDeployRespo
 import xquare.app.xquareinfra.application.deploy.port.`in`.CreateDeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.saveDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
-import xquare.app.xquareinfra.domain.deploy.domain.Deploy
-import xquare.app.xquareinfra.domain.deploy.domain.DeployStatus
+import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
+import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
@@ -50,9 +50,9 @@ class CreateDeployService(
             throw BusinessLogicException.CREATE_DEPLOY_BAD_REQUEST
         }
 
-        val deploy = req.run {
+        val deployJpaEntity = req.run {
             saveDeployPort.saveDeploy(
-                Deploy(
+                DeployJpaEntity(
                     id = null,
                     deployName = deployName,
                     organization = organization,
@@ -68,6 +68,6 @@ class CreateDeployService(
                 )
             )
         }
-        return CreateDeployResponse(deployId = deploy.id!!, teamId = team.id!!)
+        return CreateDeployResponse(deployId = deployJpaEntity.id!!, teamId = team.id!!)
     }
 }

@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.deploy.dto.response
 
-import xquare.app.xquareinfra.domain.deploy.domain.DeployStatus
+import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 
 data class DeployDetailsResponse(
     val deployName: String,
