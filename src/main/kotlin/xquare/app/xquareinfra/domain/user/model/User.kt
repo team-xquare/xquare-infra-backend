@@ -12,7 +12,7 @@ data class User(
     val number: Int,
     val roles: List<Role>,
     val email: String,
-    val teams: Set<UserTeam> = emptySet()
+    var teams: Set<UserTeam> = emptySet()
 ) {
     fun addTeam(team: UserTeam): User {
         return copy(teams = teams + team)

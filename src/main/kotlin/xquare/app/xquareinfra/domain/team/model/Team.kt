@@ -10,7 +10,7 @@ data class Team(
     val teamNameKo: String,
     val teamNameEn: String,
     val teamType: TeamType,
-    val members: Set<UserTeam> = emptySet(),
+    var members: Set<UserTeam> = emptySet(),
     val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
     fun addMember(userTeam: UserTeam): Team {

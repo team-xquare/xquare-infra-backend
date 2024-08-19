@@ -18,7 +18,7 @@ abstract class BaseUUIDEntity(
         columnDefinition = "BINARY(16)",
         nullable = false
     )
-    val id: UUID?
+    var id: UUID?
 ) : Persistable<UUID> {
 
     override fun getId(): UUID? = this.id

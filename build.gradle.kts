@@ -5,6 +5,7 @@ plugins {
     kotlin("plugin.jpa") version PluginVersions.JPA_PLUGIN_VERSION
     kotlin("jvm") version PluginVersions.JVM_VERSION
     kotlin("plugin.serialization") version "1.9.22"
+    kotlin("kapt") version PluginVersions.KAPT_VERSION
 }
 
 val snippetsDir by extra { file("build/generated-snippets")}
@@ -81,6 +82,9 @@ dependencies {
     implementation("io.grpc:grpc-stub:${project.ext["grpcVersion"]}")
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
     implementation("io.micrometer:micrometer-core")
+
+    implementation("org.mapstruct:mapstruct:1.5.3.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.5.3.Final")
 }
 
 dependencyManagement {
