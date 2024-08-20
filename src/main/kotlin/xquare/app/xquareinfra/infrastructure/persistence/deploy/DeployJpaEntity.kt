@@ -1,6 +1,5 @@
 package xquare.app.xquareinfra.infrastructure.persistence.deploy
 
-import org.hibernate.annotations.ColumnDefault
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
 import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 import xquare.app.xquareinfra.domain.deploy.model.DeployType
@@ -22,7 +21,7 @@ class DeployJpaEntity(
     deployType: DeployType,
     useMysql: Boolean,
     useRedis: Boolean,
-    isV2: Boolean = false
+    isV2: Boolean
 ) : BaseUUIDEntity(id) {
     @Column(name = "deploy_name", nullable = false, unique = true)
     var deployName: String = deployName
