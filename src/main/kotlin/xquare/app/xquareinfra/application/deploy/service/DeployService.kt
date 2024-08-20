@@ -47,8 +47,8 @@ class DeployService(
             throw XquareException.FORBIDDEN
         }
         val deploy = findDeployPort.findByDeployName(deployNameEn) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-        deploy.updateSecret(req.secretKey)
-        deploy.approveDeploy()
+
+        saveDeployPort.saveDeploy(deploy.updateSecret(req.secretKey).approveDeploy())
 
         val path = vaultService.getPath(deploy)
         path.forEach {

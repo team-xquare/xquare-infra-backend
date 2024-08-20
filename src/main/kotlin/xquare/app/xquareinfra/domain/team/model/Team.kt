@@ -12,5 +12,4 @@ data class Team(
     val teamNameEn: String,
     val teamType: TeamType,
     val createdAt: LocalDateTime = LocalDateTime.now()
-) {
-}
+)
