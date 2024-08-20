@@ -72,7 +72,6 @@ class DeployJpaEntity(
         protected set
 
     @Column(name = "is_v2", nullable = false)
-    @ColumnDefault("false")
     var isV2 = isV2
         protected set
 }
