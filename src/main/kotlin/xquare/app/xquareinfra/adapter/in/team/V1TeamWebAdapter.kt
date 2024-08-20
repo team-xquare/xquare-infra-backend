@@ -15,16 +15,13 @@ import xquare.app.xquareinfra.adapter.`in`.team.dto.request.CreateTeamRequest
 import xquare.app.xquareinfra.adapter.`in`.team.dto.request.DeleteTeamMemberRequest
 import xquare.app.xquareinfra.adapter.`in`.team.dto.response.DetailTeamResponse
 import xquare.app.xquareinfra.adapter.`in`.team.dto.response.SimpleTeamResponseList
+import xquare.app.xquareinfra.application.team.port.`in`.TeamUseCase
 import java.util.UUID
 
 @RequestMapping("/v1/team")
 @RestController
 class V1TeamWebAdapter(
-    private val teamUseCase: xquare.app.xquareinfra.application.team.port.`in`.TeamUseCase,
-    private val getMyTeamUseCase: xquare.app.xquareinfra.application.team.port.`in`.GetMyTeamUseCase,
-    private val getTeamDetailUseCase: xquare.app.xquareinfra.application.team.port.`in`.GetTeamDetailUseCase,
-    private val addTeamMemberUseCase: xquare.app.xquareinfra.application.team.port.`in`.AddTeamMemberUseCase,
-    private val deleteTeamMemberUseCase: xquare.app.xquareinfra.application.team.port.`in`.DeleteTeamMemberUseCase
+    private val teamUseCase: TeamUseCase,
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -34,21 +31,21 @@ class V1TeamWebAdapter(
     ) = teamUseCase.create(req)
 
     @GetMapping("/my-team")
-    fun getMyTeams(): SimpleTeamResponseList = getMyTeamUseCase.getMyTeam()
+    fun getMyTeams(): SimpleTeamResponseList = teamUseCase.getMyTeam()
 
     @GetMapping("/detail/{teamId}")
     fun getTeamDetail(@PathVariable("teamId") teamId: UUID): DetailTeamResponse =
-        getTeamDetailUseCase.getTeamDetail(teamId)
+        teamUseCase.getTeamDetail(teamId)
 
     @PutMapping("/{teamId}/members")
     fun addTeamMember(
         @RequestBody addTeamMemberRequest: AddTeamMemberRequest,
         @PathVariable("teamId") teamId: UUID
-    ) = addTeamMemberUseCase.addTeamMember(addTeamMemberRequest, teamId)
+    ) = teamUseCase.addTeamMember(addTeamMemberRequest, teamId)
 
     @DeleteMapping("/{teamId}/members")
     fun deleteTeamMember(
         @RequestBody deleteTeamMemberRequest: DeleteTeamMemberRequest,
         @PathVariable("teamId") teamId: UUID
-    ) = deleteTeamMemberUseCase.deleteTeamMember(deleteTeamMemberRequest, teamId)
+    ) = teamUseCase.deleteTeamMember(deleteTeamMemberRequest, teamId)
 }
