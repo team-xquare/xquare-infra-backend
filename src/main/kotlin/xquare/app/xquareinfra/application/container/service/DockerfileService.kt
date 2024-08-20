@@ -5,6 +5,8 @@ import xquare.app.xquareinfra.adapter.`in`.container.dto.request.CreateGradleDoc
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.CreateNodeDockerfileRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.CreateNodeWithNginxDockerfileRequest
 import xquare.app.xquareinfra.application.container.port.`in`.DockerfileUseCase
+import xquare.app.xquareinfra.application.container.port.out.CreateDockerfilePort
+import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
@@ -13,8 +15,8 @@ import java.util.*
 @Service
 class DockerfileService(
     private val findDeployPort: FindDeployPort,
-    private val findContainerPort: xquare.app.xquareinfra.application.container.port.out.FindContainerPort,
-    private val createDockerfilePort: xquare.app.xquareinfra.application.container.port.out.CreateDockerfilePort
+    private val findContainerPort: FindContainerPort,
+    private val createDockerfilePort: CreateDockerfilePort
 ) : DockerfileUseCase {
     override fun createGradleDockerfile(
         deployId: UUID,
