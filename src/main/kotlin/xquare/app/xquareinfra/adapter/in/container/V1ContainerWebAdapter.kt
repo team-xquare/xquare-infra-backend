@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
@@ -12,6 +13,7 @@ import java.util.*
 @RequestMapping("/v1/container")
 @RestController
 class V1ContainerWebAdapter(
+    private val securityPort: SecurityPort,
     private val containerUseCase: ContainerUseCase,
     private val containerMetricUseCase: ContainerMetricUseCase,
 ) {
@@ -60,7 +62,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerCpuUsage(deployId, environment)
+        containerMetricUseCase.getContainerCpuUsage(deployId, environment, securityPort.readCurrentUser())
 
     @GetMapping("/memory")
     fun getContainerMemoryUsage(
@@ -69,7 +71,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerMemoryUsageUseCase(deployId, environment)
+        containerMetricUseCase.getContainerMemoryUsageUseCase(deployId, environment, securityPort.readCurrentUser())
 
     @GetMapping("/details")
     fun getContainerDetails(

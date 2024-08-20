@@ -1,28 +1,27 @@
 package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
 import xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort
-import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
+import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
+import xquare.app.xquareinfra.domain.user.model.User
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
-import java.util.UUID
+import java.util.*
 
 @Service
 class ContainerMetricService(
     private val findDeployPort: FindDeployPort,
-    private val readCurrentUserPort: ReadCurrentUserPort,
     private val existsUserTeamPort: ExistsUserTeamPort,
     private val containerMetricsPort: ContainerMetricsPort
 ) : ContainerMetricUseCase {
-    override fun getContainerCpuUsage(deployId: UUID, environment: ContainerEnvironment): Map<String, Map<String, String>> {
+    override fun getContainerCpuUsage(deployId: UUID, environment: ContainerEnvironment, user: User): Map<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
         if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -34,12 +33,12 @@ class ContainerMetricService(
         deployId: UUID,
         environment: ContainerEnvironment,
         timeRange: Int,
-        statusCode: Int
+        statusCode: Int,
+        user: User
     ): Map<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
         if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -50,12 +49,12 @@ class ContainerMetricService(
     override fun getContainerHttpRequestPerMinute(
         deployId: UUID,
         environment: ContainerEnvironment,
-        timeRange: Int
+        timeRange: Int,
+        user: User
     ): Map<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
         if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -67,12 +66,12 @@ class ContainerMetricService(
         deployId: UUID,
         environment: ContainerEnvironment,
         percent: Int,
-        timeRange: Int
+        timeRange: Int,
+        user: User
     ): Map<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
         if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -80,11 +79,10 @@ class ContainerMetricService(
         return containerMetricsPort.getContainerLatency(deploy, environment, percent / 100.0, timeRange)
     }
 
-    override fun getContainerMemoryUsageUseCase(deployId: UUID, environment: ContainerEnvironment): Map<String, Map<String, String>> {
+    override fun getContainerMemoryUsageUseCase(deployId: UUID, environment: ContainerEnvironment, user: User): Map<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
         if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }

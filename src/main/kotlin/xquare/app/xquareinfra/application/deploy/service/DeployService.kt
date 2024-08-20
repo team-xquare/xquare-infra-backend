@@ -11,7 +11,7 @@ import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployListR
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployResponse
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
-import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.`in`.DeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
@@ -37,7 +37,7 @@ class DeployService(
     private val saveDeployPort: SaveDeployPort,
     private val deployClient: DeployClient,
     private val findTeamPort: FindTeamPort,
-    private val readCurrentUserPort: ReadCurrentUserPort,
+    private val securityPort: SecurityPort,
     private val existDeployPort: ExistDeployPort,
     private val findContainerPort: FindContainerPort,
     private val existsUserTeamPort: ExistsUserTeamPort
@@ -59,7 +59,7 @@ class DeployService(
 
     override fun createDeploy(teamId: UUID, req: CreateDeployRequest): CreateDeployResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
-        val user = readCurrentUserPort.readCurrentUser()
+        val user = securityPort.readCurrentUser()
 
         if(existDeployPort.existByDeployName(req.deployName)) {
             throw BusinessLogicException.ALREADY_EXISTS_DEPLOY
@@ -138,7 +138,7 @@ class DeployService(
     override fun getDeployDetails(deployId: UUID): DeployDetailsResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
+        val user = securityPort.readCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -157,7 +157,7 @@ class DeployService(
     }
 
     override fun migrationDeploy() {
-        val user = readCurrentUserPort.readCurrentUser()
+        val user = securityPort.readCurrentUser()
 
         val deployList = deployClient.getAllDeploy(user.email)
         deployList.map {
