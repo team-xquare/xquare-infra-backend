@@ -20,7 +20,7 @@ import java.util.UUID
 @RequestMapping("/v1/team")
 @RestController
 class V1TeamWebAdapter(
-    private val createTeamUseCase: xquare.app.xquareinfra.application.team.port.`in`.CreateTeamUseCase,
+    private val teamUseCase: xquare.app.xquareinfra.application.team.port.`in`.TeamUseCase,
     private val getMyTeamUseCase: xquare.app.xquareinfra.application.team.port.`in`.GetMyTeamUseCase,
     private val getTeamDetailUseCase: xquare.app.xquareinfra.application.team.port.`in`.GetTeamDetailUseCase,
     private val addTeamMemberUseCase: xquare.app.xquareinfra.application.team.port.`in`.AddTeamMemberUseCase,
@@ -31,7 +31,7 @@ class V1TeamWebAdapter(
     fun createTeam(
         @RequestBody
         req: CreateTeamRequest
-    ) = createTeamUseCase.create(req)
+    ) = teamUseCase.create(req)
 
     @GetMapping("/my-team")
     fun getMyTeams(): SimpleTeamResponseList = getMyTeamUseCase.getMyTeam()
