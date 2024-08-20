@@ -14,7 +14,7 @@ class V1ContainerWebAdapter(
     private val getEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetEnvironmentVariableUseCase,
     private val updateEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.UpdateEnvironmentVariableUseCase,
     private val containerUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase,
-    private val getContainerCpuUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerCpuUsageUseCase,
+    private val containerMetricUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase,
     private val getContainerMemoryUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerMemoryUsageUseCase,
     private val getContainerDetailsUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDetailsUseCase
 ) {
@@ -63,7 +63,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        getContainerCpuUsageUseCase.getContainerCpuUsage(deployId, environment)
+        containerMetricUseCase.getContainerCpuUsage(deployId, environment)
 
     @GetMapping("/memory")
     fun getContainerMemoryUsage(
