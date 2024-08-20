@@ -150,6 +150,20 @@ class ContainerService(
         )
     }
 
+    override fun getEnvironmentVariable(deployId: UUID, environment: ContainerEnvironment): Map<String, String> {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+
+        val user = readCurrentUserPort.readCurrentUser()
+        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+            throw XquareException.FORBIDDEN
+        }
+
+        val container = findContainerPort.findByDeployAndEnvironment(deploy, environment)
+            ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
+
+        return container.environmentVariable
+    }
+
     override fun updateEnvironmentVariable(
         deployId: UUID,
         environment: ContainerEnvironment,
