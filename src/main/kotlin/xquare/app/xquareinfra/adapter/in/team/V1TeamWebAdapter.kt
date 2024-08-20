@@ -15,6 +15,7 @@ import xquare.app.xquareinfra.adapter.`in`.team.dto.request.CreateTeamRequest
 import xquare.app.xquareinfra.adapter.`in`.team.dto.request.DeleteTeamMemberRequest
 import xquare.app.xquareinfra.adapter.`in`.team.dto.response.DetailTeamResponse
 import xquare.app.xquareinfra.adapter.`in`.team.dto.response.SimpleTeamResponseList
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.team.port.`in`.TeamUseCase
 import java.util.UUID
 
@@ -22,30 +23,31 @@ import java.util.UUID
 @RestController
 class V1TeamWebAdapter(
     private val teamUseCase: TeamUseCase,
+    private val securityPort: SecurityPort
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun createTeam(
         @RequestBody
         req: CreateTeamRequest
-    ) = teamUseCase.create(req)
+    ) = teamUseCase.create(req, securityPort.getCurrentUser())
 
     @GetMapping("/my-team")
     fun getMyTeams(): SimpleTeamResponseList = teamUseCase.getMyTeam()
 
     @GetMapping("/detail/{teamId}")
     fun getTeamDetail(@PathVariable("teamId") teamId: UUID): DetailTeamResponse =
-        teamUseCase.getTeamDetail(teamId)
+        teamUseCase.getTeamDetail(teamId, securityPort.getCurrentUser())
 
     @PutMapping("/{teamId}/members")
     fun addTeamMember(
         @RequestBody addTeamMemberRequest: AddTeamMemberRequest,
         @PathVariable("teamId") teamId: UUID
-    ) = teamUseCase.addTeamMember(addTeamMemberRequest, teamId)
+    ) = teamUseCase.addTeamMember(addTeamMemberRequest, teamId, securityPort.getCurrentUser())
 
     @DeleteMapping("/{teamId}/members")
     fun deleteTeamMember(
         @RequestBody deleteTeamMemberRequest: DeleteTeamMemberRequest,
         @PathVariable("teamId") teamId: UUID
-    ) = teamUseCase.deleteTeamMember(deleteTeamMemberRequest, teamId)
+    ) = teamUseCase.deleteTeamMember(deleteTeamMemberRequest, teamId, securityPort.getCurrentUser())
 }

@@ -3,7 +3,6 @@ package xquare.app.xquareinfra.application.team.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.team.dto.request.AddTeamMemberRequest
-import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.adapter.`in`.team.dto.request.CreateTeamRequest
 import xquare.app.xquareinfra.adapter.`in`.team.dto.request.DeleteTeamMemberRequest
 import xquare.app.xquareinfra.adapter.`in`.team.dto.response.DetailTeamResponse
@@ -13,10 +12,11 @@ import xquare.app.xquareinfra.adapter.`in`.team.dto.response.TeamMemberResponse
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.team.port.`in`.TeamUseCase
 import xquare.app.xquareinfra.application.team.port.out.*
-import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 import xquare.app.xquareinfra.domain.team.model.Team
 import xquare.app.xquareinfra.domain.team.model.UserTeam
+import xquare.app.xquareinfra.domain.team.model.role.TeamMemberRole
+import xquare.app.xquareinfra.domain.user.model.User
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import java.util.*
@@ -26,7 +26,6 @@ import java.util.*
 class TeamService(
     private val saveTeamPort: SaveTeamPort,
     private val existsTeamPort: ExistsTeamPort,
-    private val securityPort: SecurityPort,
     private val findUserPort: FindUserPort,
     private val existsUserTeamPort: ExistsUserTeamPort,
     private val findTeamPort: FindTeamPort,
@@ -35,26 +34,24 @@ class TeamService(
     private val deleteUserTeamPort: DeleteUserTeamPort,
     private val findDeployPort: FindDeployPort
 ) : TeamUseCase {
-    override fun create(req: CreateTeamRequest) {
+    override fun create(req: CreateTeamRequest, user: User) {
         if (existsTeamPort.existsByTeamNameEn(req.teamNameEn)) {
             throw BusinessLogicException.ALREADY_EXISTS_TEAM
         }
-
-        val currentUser = securityPort.readCurrentUser()
 
         val team = Team(
             id = null,
             teamNameEn = req.teamNameEn,
             teamNameKo = req.teamNameKo,
             teamType = req.teamType,
-            adminId = currentUser.id!!
+            adminId = user.id!!
         )
 
         val userTeams = mutableListOf<UserTeam>()
 
         userTeams.add(UserTeam(
             id = null,
-            user = currentUser,
+            user = user,
             team = team,
             role = TeamMemberRole.ADMINISTRATOR
         ))
@@ -75,8 +72,7 @@ class TeamService(
         saveTeamPort.saveTeamWithMembers(team, userTeams)
     }
 
-    override fun addTeamMember(req: AddTeamMemberRequest, teamId: UUID) {
-        val user = securityPort.readCurrentUser()
+    override fun addTeamMember(req: AddTeamMemberRequest, teamId: UUID, user: User) {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
 
         if(user.id != team.adminId) {
@@ -92,11 +88,16 @@ class TeamService(
         }
     }
 
-    override fun deleteTeamMember(req: DeleteTeamMemberRequest, teamId: UUID) {
+    override fun deleteTeamMember(req: DeleteTeamMemberRequest, teamId: UUID, user: User) {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val user = findUserPort.findById(req.userId) ?: throw BusinessLogicException.USER_NOT_FOUND
 
-        val userTeam = findUserTeamPort.findByUserAndTeam(user, team) ?: throw BusinessLogicException.USER_TEAM_NOT_FOUND
+        val userTeam =
+            findUserTeamPort.findByUserAndTeam(user, team) ?: throw BusinessLogicException.USER_TEAM_NOT_FOUND
+
+        if(userTeam.team.adminId != user.id) {
+            throw BusinessLogicException.DELETE_TEAM_PERMISSION_DENIED
+        }
 
         if(userTeam.role == TeamMemberRole.ADMINISTRATOR) {
             throw BusinessLogicException.USER_TEAM_BAD_REQUEST
@@ -104,9 +105,7 @@ class TeamService(
         deleteUserTeamPort.deleteByUserAndTeam(user, team)
     }
 
-    override fun getMyTeam(): SimpleTeamResponseList {
-        val user = securityPort.readCurrentUser()
-
+    override fun getMyTeam(user: User): SimpleTeamResponseList {
         val userTeams = findUserTeamPort.findAllByUser(user)
         val teamList = userTeams.map { userTeam ->
             val deploys = findDeployPort.findAllByTeam(userTeam.team)
@@ -125,9 +124,8 @@ class TeamService(
         return SimpleTeamResponseList(teamList)
     }
 
-    override fun getTeamDetail(teamId: UUID): DetailTeamResponse {
+    override fun getTeamDetail(teamId: UUID, user: User): DetailTeamResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
-        val user = securityPort.readCurrentUser()
 
         if(!existsUserTeamPort.existsByTeamAndUser(team, user)) {
             throw XquareException.FORBIDDEN
