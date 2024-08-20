@@ -21,7 +21,6 @@ class PrometheusContainerMetricsAdapter(
             deploy = deploy,
             containerEnvironment = environment
         )
-        println(query)
         val queryResponse = executeQuery(query, duration, 2000)
         return formatCpuUsageData(queryResponse)
     }
@@ -37,13 +36,13 @@ class PrometheusContainerMetricsAdapter(
 
     override fun getHttpRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, timeRange: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeRequestPerMinuteQuery(deploy, environment)
-        val queryResponse = executeQuery(query, timeRange, 2000)
+        val queryResponse = executeQuery(query, timeRange, 20000)
         return formatHttpRequestsData(queryResponse)
     }
 
     override fun getHttpStatusRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, timeRange: Int, statusCode: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeHttpStatusRequestPerMinuteQuery(deploy, environment, statusCode)
-        val queryResponse = executeQuery(query, timeRange, 2000)
+        val queryResponse = executeQuery(query, timeRange, 20000)
         return formatHttpRequestsData(queryResponse)
     }
 
