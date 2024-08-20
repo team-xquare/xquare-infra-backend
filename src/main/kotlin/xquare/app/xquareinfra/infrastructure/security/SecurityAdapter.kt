@@ -11,7 +11,7 @@ import xquare.app.xquareinfra.infrastructure.security.principle.CustomUserDetail
 internal class SecurityAdapter(
     private val userMapper: UserMapper
 ): SecurityPort {
-    override fun readCurrentUser(): User {
+    override fun getCurrentUser(): User {
         return (SecurityContextHolder.getContext().authentication.principal as CustomUserDetails).user
     }
 }

@@ -62,7 +62,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerCpuUsage(deployId, environment, securityPort.readCurrentUser())
+        containerMetricUseCase.getContainerCpuUsage(deployId, environment, securityPort.getCurrentUser())
 
     @GetMapping("/memory")
     fun getContainerMemoryUsage(
@@ -71,7 +71,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerMemoryUsageUseCase(deployId, environment, securityPort.readCurrentUser())
+        containerMetricUseCase.getContainerMemoryUsageUseCase(deployId, environment, securityPort.getCurrentUser())
 
     @GetMapping("/details")
     fun getContainerDetails(

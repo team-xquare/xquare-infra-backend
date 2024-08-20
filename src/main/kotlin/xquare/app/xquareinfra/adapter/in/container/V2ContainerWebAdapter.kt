@@ -100,7 +100,7 @@ class V2ContainerWebAdapter(
             deployId,
             environment,
             timeRange,
-            securityPort.readCurrentUser()
+            securityPort.getCurrentUser()
         )
 
     @GetMapping("/metrics/http-errors/{statusCode}/rate")
@@ -118,7 +118,7 @@ class V2ContainerWebAdapter(
             environment,
             timeRange,
             statusCode,
-            securityPort.readCurrentUser()
+            securityPort.getCurrentUser()
         )
 
     @GetMapping("/metrics/latency/{percent}")
@@ -136,7 +136,7 @@ class V2ContainerWebAdapter(
             environment,
             percent,
             timeRange,
-            securityPort.readCurrentUser()
+            securityPort.getCurrentUser()
         )
 
     @PostMapping("/webhook")

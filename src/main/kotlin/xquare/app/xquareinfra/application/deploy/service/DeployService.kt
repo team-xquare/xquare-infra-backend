@@ -59,7 +59,7 @@ class DeployService(
 
     override fun createDeploy(teamId: UUID, req: CreateDeployRequest): CreateDeployResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
-        val user = securityPort.readCurrentUser()
+        val user = securityPort.getCurrentUser()
 
         if(existDeployPort.existByDeployName(req.deployName)) {
             throw BusinessLogicException.ALREADY_EXISTS_DEPLOY
@@ -138,7 +138,7 @@ class DeployService(
     override fun getDeployDetails(deployId: UUID): DeployDetailsResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = securityPort.readCurrentUser()
+        val user = securityPort.getCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -157,7 +157,7 @@ class DeployService(
     }
 
     override fun migrationDeploy() {
-        val user = securityPort.readCurrentUser()
+        val user = securityPort.getCurrentUser()
 
         val deployList = deployClient.getAllDeploy(user.email)
         deployList.map {
