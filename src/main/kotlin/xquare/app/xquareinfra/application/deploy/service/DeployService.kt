@@ -11,7 +11,6 @@ import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployListR
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployResponse
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
-import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.`in`.DeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
@@ -22,6 +21,7 @@ import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 import xquare.app.xquareinfra.domain.deploy.model.DeployType
+import xquare.app.xquareinfra.domain.user.model.User
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
@@ -37,7 +37,6 @@ class DeployService(
     private val saveDeployPort: SaveDeployPort,
     private val deployClient: DeployClient,
     private val findTeamPort: FindTeamPort,
-    private val securityPort: SecurityPort,
     private val existDeployPort: ExistDeployPort,
     private val findContainerPort: FindContainerPort,
     private val existsUserTeamPort: ExistsUserTeamPort
@@ -57,9 +56,8 @@ class DeployService(
         }
     }
 
-    override fun createDeploy(teamId: UUID, req: CreateDeployRequest): CreateDeployResponse {
+    override fun createDeploy(teamId: UUID, req: CreateDeployRequest, user: User): CreateDeployResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
-        val user = securityPort.getCurrentUser()
 
         if(existDeployPort.existByDeployName(req.deployName)) {
             throw BusinessLogicException.ALREADY_EXISTS_DEPLOY
@@ -135,10 +133,9 @@ class DeployService(
         )
     }
 
-    override fun getDeployDetails(deployId: UUID): DeployDetailsResponse {
+    override fun getDeployDetails(deployId: UUID, user: User): DeployDetailsResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = securityPort.getCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -156,9 +153,7 @@ class DeployService(
         )
     }
 
-    override fun migrationDeploy() {
-        val user = securityPort.getCurrentUser()
-
+    override fun migrationDeploy(user: User) {
         val deployList = deployClient.getAllDeploy(user.email)
         deployList.map {
             val team = findTeamPort.findByName(it.team) ?: throw BusinessLogicException.TEAM_NOT_FOUND
