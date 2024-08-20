@@ -15,7 +15,7 @@ import java.util.*
 class V1ContainerWebAdapter(
     private val securityPort: SecurityPort,
     private val containerUseCase: ContainerUseCase,
-    private val containerMetricUseCase: ContainerMetricUseCase,
+    private val containerMetricUseCase: ContainerMetricUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -34,7 +34,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, String> {
-        return containerUseCase.getEnvironmentVariable(deployId, environment)
+        return containerUseCase.getEnvironmentVariable(deployId, environment, securityPort.getCurrentUser())
     }
 
     @PatchMapping("/environment-variable")
@@ -46,14 +46,14 @@ class V1ContainerWebAdapter(
         @RequestBody
         environmentVariable: Map<String, String>
     ) {
-        containerUseCase.updateEnvironmentVariable(deployId, environment, environmentVariable)
+        containerUseCase.updateEnvironmentVariable(deployId, environment, environmentVariable, securityPort.getCurrentUser())
     }
 
     @GetMapping
     fun getContainerByDeployId(
         @RequestParam("deployId")
         deployId: UUID
-    ): List<SimpleContainerResponse> = containerUseCase.getContainerByDeploy(deployId)
+    ): List<SimpleContainerResponse> = containerUseCase.getContainerByDeploy(deployId, securityPort.getCurrentUser())
 
     @GetMapping("/cpu")
     fun getContainerCpuUsage(
