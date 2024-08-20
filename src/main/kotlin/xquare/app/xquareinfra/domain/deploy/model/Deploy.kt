@@ -16,7 +16,7 @@ data class Deploy(
     val deployType: DeployType,
     val useMysql: Boolean,
     val useRedis: Boolean,
-    val isV2: Boolean = false
+    val isV2: Boolean
 ) {
     fun updateSecret(secretKey: String) = copy(secretKey = secretKey)
 
