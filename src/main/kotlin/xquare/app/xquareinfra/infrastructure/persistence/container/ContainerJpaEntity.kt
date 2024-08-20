@@ -54,24 +54,4 @@ class ContainerJpaEntity(
     @Embedded
     var webhookInfo: WebhookInfo? = webhookInfo
         protected set
-
-    fun updateEnvironmentVariable(environmentVariable: Map<String, String>) {
-        this.environmentVariable = environmentVariable
-    }
-
-    fun updateGithubBranch(githubBranch: String) {
-        this.githubBranch = githubBranch
-    }
-
-    fun updateContainerPort(containerPort: Int) {
-        this.containerPort = containerPort
-    }
-
-    fun updateDomain(domain: String) {
-        this.subDomain = domain
-    }
-
-    fun updateWebhookUrl(webhookUrl: String, webhookType: WebhookType) {
-        this.webhookInfo = WebhookInfo(webhookType, webhookUrl)
-    }
 }

@@ -75,16 +75,4 @@ class DeployJpaEntity(
     @ColumnDefault("false")
     var isV2 = isV2
         protected set
-
-    fun updateSecret(secretKey: String) {
-        this.secretKey = secretKey
-    }
-
-    fun approveDeploy() {
-        this.deployStatus = DeployStatus.AVAILABLE
-    }
-
-    fun migrationToV2() {
-        this.isV2 = true
-    }
 }
