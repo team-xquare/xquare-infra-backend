@@ -13,7 +13,7 @@ class V2ContainerWebAdapter(
     private val dockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.DockerfileUseCase,
     private val createNodeWithNginxDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeWithNginxDockerfileUseCase,
     private val createNodeDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeDockerfileUseCase,
-    private val getContainerDeployHistoryUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDeployHistoryUseCase,
+    private val containerPipelineUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerPipelineUseCase,
     private val syncContainerDomainUseCase: xquare.app.xquareinfra.application.container.port.`in`.SyncContainerDomainUseCase,
     private val getStageLogUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetStageLogUseCase,
     private val getContainerHttpRequestPerMinuteUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerHttpRequestPerMinuteUseCase,
@@ -65,7 +65,7 @@ class V2ContainerWebAdapter(
         deployId: UUID,
         @RequestParam(name = "environment", required = true)
         containerEnvironment: ContainerEnvironment,
-    ): GetContainerDeployHistoryResponse = getContainerDeployHistoryUseCase.getContainerDeployHistory(deployId, containerEnvironment)
+    ): GetContainerDeployHistoryResponse = containerPipelineUseCase.getContainerDeployHistory(deployId, containerEnvironment)
 
     @PutMapping("/{deployName}/{containerEnvironment}/sync-domain")
     fun syncContainerDomain(
