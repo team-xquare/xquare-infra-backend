@@ -4,19 +4,18 @@ import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
+import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
+import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.*
 
 @RequestMapping("/v1/container")
 @RestController
 class V1ContainerWebAdapter(
-    private val syncContainerUseCase: xquare.app.xquareinfra.application.container.port.`in`.SyncContainerUseCase,
-    private val getEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetEnvironmentVariableUseCase,
-    private val updateEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.UpdateEnvironmentVariableUseCase,
-    private val getContainerByDeployIdUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerByDeployIdUseCase,
-    private val getContainerCpuUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerCpuUsageUseCase,
-    private val getContainerMemoryUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerMemoryUsageUseCase,
-    private val getContainerDetailsUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDetailsUseCase
+    private val securityPort: SecurityPort,
+    private val containerUseCase: ContainerUseCase,
+    private val containerMetricUseCase: ContainerMetricUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -26,7 +25,7 @@ class V1ContainerWebAdapter(
         environment: ContainerEnvironment,
         @RequestParam("domain", required = false)
         domain: String
-    ) = syncContainerUseCase.syncContainer(SyncContainerRequest(deployName, environment, domain))
+    ) = containerUseCase.syncContainer(SyncContainerRequest(deployName, environment, domain))
 
     @GetMapping("/environment-variable")
     fun getEnvironmentVariable(
@@ -35,7 +34,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, String> {
-        return getEnvironmentVariableUseCase.getEnvironmentVariable(deployId, environment)
+        return containerUseCase.getEnvironmentVariable(deployId, environment, securityPort.getCurrentUser())
     }
 
     @PatchMapping("/environment-variable")
@@ -47,14 +46,14 @@ class V1ContainerWebAdapter(
         @RequestBody
         environmentVariable: Map<String, String>
     ) {
-        updateEnvironmentVariableUseCase.updateEnvironmentVariable(deployId, environment, environmentVariable)
+        containerUseCase.updateEnvironmentVariable(deployId, environment, environmentVariable, securityPort.getCurrentUser())
     }
 
     @GetMapping
     fun getContainerByDeployId(
         @RequestParam("deployId")
         deployId: UUID
-    ): List<SimpleContainerResponse> = getContainerByDeployIdUseCase.getContainerByDeploy(deployId)
+    ): List<SimpleContainerResponse> = containerUseCase.getContainerByDeploy(deployId, securityPort.getCurrentUser())
 
     @GetMapping("/cpu")
     fun getContainerCpuUsage(
@@ -63,7 +62,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        getContainerCpuUsageUseCase.getContainerCpuUsage(deployId, environment)
+        containerMetricUseCase.getContainerCpuUsage(deployId, environment, securityPort.getCurrentUser())
 
     @GetMapping("/memory")
     fun getContainerMemoryUsage(
@@ -72,7 +71,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployId, environment)
+        containerMetricUseCase.getContainerMemoryUsageUseCase(deployId, environment, securityPort.getCurrentUser())
 
     @GetMapping("/details")
     fun getContainerDetails(
@@ -80,5 +79,5 @@ class V1ContainerWebAdapter(
         deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
-    ): GetContainerDetailsResponse = getContainerDetailsUseCase.getContainerDetails(deployId, environment)
+    ): GetContainerDetailsResponse = containerUseCase.getContainerDetails(deployId, environment)
 }
