@@ -78,7 +78,7 @@ class ContainerService(
         val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val container = findContainerPort.findByDeployAndEnvironment(deploy, containerEnvironment) ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
-        container.updateDomain(domain)
+        saveContainerPort.save(container.updateDomain(domain))
 
         val listResponse = cloudflareClient.listDnsRecords(
             cloudflareProperties.zoneId,
@@ -142,10 +142,10 @@ class ContainerService(
         val container = findContainerPort.findByDeployAndEnvironment(deploy, containerEnvironment)
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
-        container.updateWebhookUrl(
+        saveContainerPort.save(container.updateWebhookUrl(
             webhookUrl = updateContainerWebhookRequest.webhookUrl,
             webhookType = updateContainerWebhookRequest.webhookType
-        )
+        ))
     }
 
     override fun getEnvironmentVariable(deployId: UUID, environment: ContainerEnvironment, user: User): Map<String, String> {
@@ -176,7 +176,7 @@ class ContainerService(
         val container = findContainerPort.findByDeployAndEnvironment(deploy, environment)
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
-        container.updateEnvironmentVariable(environmentVariable)
+        saveContainerPort.save(container.updateEnvironmentVariable(environmentVariable))
 
         val path = vaultService.getPath(deploy, container)
         vaultService.addSecret(environmentVariable, path)
