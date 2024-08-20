@@ -2,13 +2,13 @@ package xquare.app.xquareinfra.application.user.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.user.dto.response.UserSearchResponse
-import xquare.app.xquareinfra.application.user.port.`in`.FindAllSearchUserUseCase
+import xquare.app.xquareinfra.application.user.port.`in`.UserUseCase
 import xquare.app.xquareinfra.application.user.port.out.FindUserPort
 
 @Service
-class FindAllSearchUserService(
+class UserService(
     private val findUserPort: FindUserPort
-): FindAllSearchUserUseCase {
+): UserUseCase {
     override fun findAllSearchUser(): List<UserSearchResponse> {
         val users = findUserPort.findAll()
         return users.map {
