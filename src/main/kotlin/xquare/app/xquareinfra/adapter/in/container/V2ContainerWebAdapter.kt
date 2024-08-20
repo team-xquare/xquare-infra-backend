@@ -3,6 +3,7 @@ package xquare.app.xquareinfra.adapter.`in`.container
 import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDeployHistoryResponse
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerPipelineUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
@@ -13,6 +14,7 @@ import java.util.*
 @RequestMapping("/v2/container")
 @RestController
 class V2ContainerWebAdapter(
+    private val securityPort: SecurityPort,
     private val dockerfileUseCase: DockerfileUseCase,
     private val containerPipelineUseCase: ContainerPipelineUseCase,
     private val containerUseCase: ContainerUseCase,
@@ -44,7 +46,8 @@ class V2ContainerWebAdapter(
         containerEnvironment: ContainerEnvironment,
         @RequestBody
         createNodeDockerfileRequest: CreateNodeDockerfileRequest
-    ) = dockerfileUseCase.createNodeDockerfile(deployId, containerEnvironment, createNodeDockerfileRequest)
+    ) =
+        dockerfileUseCase.createNodeDockerfile(deployId, containerEnvironment, createNodeDockerfileRequest)
 
     @PostMapping("/node-with-nginx")
     fun createNodeWithNginxDockerfile(
@@ -54,7 +57,11 @@ class V2ContainerWebAdapter(
         containerEnvironment: ContainerEnvironment,
         @RequestBody
         createNodeWithNginxDockerfileRequest: CreateNodeWithNginxDockerfileRequest
-    ) = dockerfileUseCase.createNodeWithNginxDockerfile(deployId, containerEnvironment, createNodeWithNginxDockerfileRequest)
+    ) = dockerfileUseCase.createNodeWithNginxDockerfile(
+        deployId,
+        containerEnvironment,
+        createNodeWithNginxDockerfileRequest
+    )
 
     @GetMapping("/history")
     fun getContainerDeployHistory(
@@ -62,14 +69,16 @@ class V2ContainerWebAdapter(
         deployId: UUID,
         @RequestParam(name = "environment", required = true)
         containerEnvironment: ContainerEnvironment,
-    ): GetContainerDeployHistoryResponse = containerPipelineUseCase.getContainerDeployHistory(deployId, containerEnvironment)
+    ): GetContainerDeployHistoryResponse =
+        containerPipelineUseCase.getContainerDeployHistory(deployId, containerEnvironment)
 
     @PutMapping("/{deployName}/{containerEnvironment}/sync-domain")
     fun syncContainerDomain(
         @PathVariable("deployName") deployName: String,
         @PathVariable("containerEnvironment") containerEnvironment: ContainerEnvironment,
         @RequestParam("domain") domain: String
-    ) = containerUseCase.syncContainerDomain(deployName , containerEnvironment, domain)
+    ) =
+        containerUseCase.syncContainerDomain(deployName , containerEnvironment, domain)
 
     @GetMapping("/{pipelineName}/{pipelineCounter}/stage/{stageName}")
     fun getStageLog(
@@ -86,7 +95,13 @@ class V2ContainerWebAdapter(
         environment: ContainerEnvironment,
         @RequestParam("timeRange", required = true)
         timeRange: Int
-    ): Map<String, Map<String, String>> = containerMetricUseCase.getContainerHttpRequestPerMinute(deployId, environment, timeRange)
+    ): Map<String, Map<String, String>> =
+        containerMetricUseCase.getContainerHttpRequestPerMinute(
+            deployId,
+            environment,
+            timeRange,
+            securityPort.readCurrentUser()
+        )
 
     @GetMapping("/metrics/http-errors/{statusCode}/rate")
     fun getHttpErrorRequestPerMinute(
@@ -97,7 +112,14 @@ class V2ContainerWebAdapter(
         @RequestParam("timeRange", required = true)
         timeRange: Int,
         @PathVariable("statusCode", required = true) statusCode: Int
-    ): Map<String, Map<String, String>> = containerMetricUseCase.getContainerHttpStatusRequestPerMinute(deployId, environment, timeRange, statusCode)
+    ): Map<String, Map<String, String>> =
+        containerMetricUseCase.getContainerHttpStatusRequestPerMinute(
+            deployId,
+            environment,
+            timeRange,
+            statusCode,
+            securityPort.readCurrentUser()
+        )
 
     @GetMapping("/metrics/latency/{percent}")
     fun getLatency(
@@ -109,7 +131,13 @@ class V2ContainerWebAdapter(
         @RequestParam("timeRange", required = true)
         timeRange: Int
     ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerLatency(deployId, environment, percent, timeRange)
+        containerMetricUseCase.getContainerLatency(
+            deployId,
+            environment,
+            percent,
+            timeRange,
+            securityPort.readCurrentUser()
+        )
 
     @PostMapping("/webhook")
     fun updateWebhook(

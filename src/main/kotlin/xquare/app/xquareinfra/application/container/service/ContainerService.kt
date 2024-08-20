@@ -6,7 +6,7 @@ import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SetContainerCon
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.UpdateContainerWebhookRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
-import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.CloudflareClient
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request.CreateDnsRecordRequest
@@ -40,7 +40,7 @@ class ContainerService(
     private val findDeployPort: FindDeployPort,
     private val findContainerPort: FindContainerPort,
     private val existsUserTeamPort: ExistsUserTeamPort,
-    private val readCurrentUserPort: ReadCurrentUserPort,
+    private val securityPort: SecurityPort,
     private val cloudflareClient: CloudflareClient,
     private val cloudflareProperties: CloudflareProperties,
     private val xquareProperties: XquareProperties,
@@ -55,7 +55,7 @@ class ContainerService(
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val containers = findContainerPort.findAllByDeploy(deploy)
 
-        val user = readCurrentUserPort.readCurrentUser()
+        val user = securityPort.readCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -153,7 +153,7 @@ class ContainerService(
     override fun getEnvironmentVariable(deployId: UUID, environment: ContainerEnvironment): Map<String, String> {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
+        val user = securityPort.readCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
@@ -171,7 +171,7 @@ class ContainerService(
     ) {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        val user = readCurrentUserPort.readCurrentUser()
+        val user = securityPort.readCurrentUser()
         if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
             throw XquareException.FORBIDDEN
         }
