@@ -1,7 +1,6 @@
 package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
 import xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
