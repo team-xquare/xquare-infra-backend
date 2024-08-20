@@ -56,7 +56,7 @@ object DataUtil {
     ): String {
         val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
         val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
-        val response = "{job=\"$namespace/$fullName}\", container=~\"${fullName}\"} |~ \"(?i)\" \n"
+        val response = "{job=\"$namespace/$fullName\", container=~\"${fullName}\"} |~ \"(?i)\" \n"
         return response
     }
 
