@@ -25,7 +25,7 @@ class ContainerMetricService(
             throw XquareException.FORBIDDEN
         }
 
-        return containerMetricsPort.getCpuUsage(deploy, environment, 3) // TODO :: Duration 사용자 커스텀 가능하도록
+        return containerMetricsPort.getCpuUsage(deploy, environment, 180) // TODO :: Duration 사용자 커스텀 가능하도록
     }
 
     override fun getContainerHttpStatusRequestPerMinute(
@@ -86,6 +86,6 @@ class ContainerMetricService(
             throw XquareException.FORBIDDEN
         }
 
-        return containerMetricsPort.getMemoryUsage(deploy, environment, 3) // TODO :: Duration 사용자 커스텀 가능하도록
+        return containerMetricsPort.getMemoryUsage(deploy, environment, 180) // TODO :: Duration 사용자 커스텀 가능하도록
     }
 }
