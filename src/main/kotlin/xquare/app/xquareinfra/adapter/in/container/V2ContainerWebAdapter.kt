@@ -3,23 +3,20 @@ package xquare.app.xquareinfra.adapter.`in`.container
 import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDeployHistoryResponse
+import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
+import xquare.app.xquareinfra.application.container.port.`in`.ContainerPipelineUseCase
+import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
+import xquare.app.xquareinfra.application.container.port.`in`.DockerfileUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.*
 
 @RequestMapping("/v2/container")
 @RestController
 class V2ContainerWebAdapter(
-    private val setContainerConfigUseCase: xquare.app.xquareinfra.application.container.port.`in`.SetContainerConfigUseCase,
-    private val dockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.DockerfileUseCase,
-    private val createNodeWithNginxDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeWithNginxDockerfileUseCase,
-    private val createNodeDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeDockerfileUseCase,
-    private val containerPipelineUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerPipelineUseCase,
-    private val syncContainerDomainUseCase: xquare.app.xquareinfra.application.container.port.`in`.SyncContainerDomainUseCase,
-    private val getStageLogUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetStageLogUseCase,
-    private val getContainerHttpRequestPerMinuteUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerHttpRequestPerMinuteUseCase,
-    private val getContainerHttpStatusRequestPerMinuteUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerHttpStatusRequestPerMinuteUseCase,
-    private val getContainerLatencyUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerLatencyUseCase,
-    private val updateContainerWebhookUseCase: xquare.app.xquareinfra.application.container.port.`in`.UpdateContainerWebhookUseCase
+    private val dockerfileUseCase: DockerfileUseCase,
+    private val containerPipelineUseCase: ContainerPipelineUseCase,
+    private val containerUseCase: ContainerUseCase,
+    private val containerMetricUseCase: ContainerMetricUseCase
 ) {
     @PostMapping("/config")
     fun setContainerConfig(
@@ -27,7 +24,7 @@ class V2ContainerWebAdapter(
         deployId: UUID,
         @RequestBody
         setContainerConfigRequest: SetContainerConfigRequest
-    ) = setContainerConfigUseCase.setContainerConfig(deployId, setContainerConfigRequest)
+    ) = containerUseCase.setContainerConfig(deployId, setContainerConfigRequest)
 
     @PostMapping("/gradle")
     fun createGradleDockerfile(
@@ -47,7 +44,7 @@ class V2ContainerWebAdapter(
         containerEnvironment: ContainerEnvironment,
         @RequestBody
         createNodeDockerfileRequest: CreateNodeDockerfileRequest
-    ) = createNodeDockerfileUseCase.createNodeDockerfile(deployId, containerEnvironment, createNodeDockerfileRequest)
+    ) = dockerfileUseCase.createNodeDockerfile(deployId, containerEnvironment, createNodeDockerfileRequest)
 
     @PostMapping("/node-with-nginx")
     fun createNodeWithNginxDockerfile(
@@ -57,7 +54,7 @@ class V2ContainerWebAdapter(
         containerEnvironment: ContainerEnvironment,
         @RequestBody
         createNodeWithNginxDockerfileRequest: CreateNodeWithNginxDockerfileRequest
-    ) = createNodeWithNginxDockerfileUseCase.createNodeWithNginxDockerfile(deployId, containerEnvironment, createNodeWithNginxDockerfileRequest)
+    ) = dockerfileUseCase.createNodeWithNginxDockerfile(deployId, containerEnvironment, createNodeWithNginxDockerfileRequest)
 
     @GetMapping("/history")
     fun getContainerDeployHistory(
@@ -72,14 +69,14 @@ class V2ContainerWebAdapter(
         @PathVariable("deployName") deployName: String,
         @PathVariable("containerEnvironment") containerEnvironment: ContainerEnvironment,
         @RequestParam("domain") domain: String
-    ) = syncContainerDomainUseCase.syncContainerDomain(deployName , containerEnvironment, domain)
+    ) = containerUseCase.syncContainerDomain(deployName , containerEnvironment, domain)
 
     @GetMapping("/{pipelineName}/{pipelineCounter}/stage/{stageName}")
     fun getStageLog(
         @PathVariable("stageName") stageName: String,
         @PathVariable("pipelineCounter") pipelineCounter: Int,
         @PathVariable("pipelineName") pipelineName: String,
-    ): String = getStageLogUseCase.getStageLog(pipelineCounter, stageName, pipelineName)
+    ): String = containerPipelineUseCase.getStageLog(pipelineCounter, stageName, pipelineName)
 
     @GetMapping("/metrics/requests/rate")
     fun getHttpRequestPerMinute(
@@ -89,7 +86,7 @@ class V2ContainerWebAdapter(
         environment: ContainerEnvironment,
         @RequestParam("timeRange", required = true)
         timeRange: Int
-    ): Map<String, Map<String, String>> = getContainerHttpRequestPerMinuteUseCase.getContainerHttpRequestPerMinute(deployId, environment, timeRange)
+    ): Map<String, Map<String, String>> = containerMetricUseCase.getContainerHttpRequestPerMinute(deployId, environment, timeRange)
 
     @GetMapping("/metrics/http-errors/{statusCode}/rate")
     fun getHttpErrorRequestPerMinute(
@@ -100,7 +97,7 @@ class V2ContainerWebAdapter(
         @RequestParam("timeRange", required = true)
         timeRange: Int,
         @PathVariable("statusCode", required = true) statusCode: Int
-    ): Map<String, Map<String, String>> = getContainerHttpStatusRequestPerMinuteUseCase.getContainerHttpStatusRequestPerMinute(deployId, environment, timeRange, statusCode)
+    ): Map<String, Map<String, String>> = containerMetricUseCase.getContainerHttpStatusRequestPerMinute(deployId, environment, timeRange, statusCode)
 
     @GetMapping("/metrics/latency/{percent}")
     fun getLatency(
@@ -112,7 +109,7 @@ class V2ContainerWebAdapter(
         @RequestParam("timeRange", required = true)
         timeRange: Int
     ): Map<String, Map<String, String>> =
-        getContainerLatencyUseCase.getContainerLatency(deployId, environment, percent, timeRange)
+        containerMetricUseCase.getContainerLatency(deployId, environment, percent, timeRange)
 
     @PostMapping("/webhook")
     fun updateWebhook(
@@ -122,5 +119,5 @@ class V2ContainerWebAdapter(
         environment: ContainerEnvironment,
         @RequestBody
         updateContainerWebhookRequest: UpdateContainerWebhookRequest
-    ) = updateContainerWebhookUseCase.updateContainerWebhook(updateContainerWebhookRequest, deployId, environment)
+    ) = containerUseCase.updateContainerWebhook(updateContainerWebhookRequest, deployId, environment)
 }

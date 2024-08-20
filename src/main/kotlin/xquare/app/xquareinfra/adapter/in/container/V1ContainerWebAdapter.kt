@@ -10,13 +10,8 @@ import java.util.*
 @RequestMapping("/v1/container")
 @RestController
 class V1ContainerWebAdapter(
-    private val syncContainerUseCase: xquare.app.xquareinfra.application.container.port.`in`.SyncContainerUseCase,
-    private val getEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetEnvironmentVariableUseCase,
-    private val updateEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.UpdateEnvironmentVariableUseCase,
     private val containerUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase,
     private val containerMetricUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase,
-    private val getContainerMemoryUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerMemoryUsageUseCase,
-    private val getContainerDetailsUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDetailsUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -26,7 +21,7 @@ class V1ContainerWebAdapter(
         environment: ContainerEnvironment,
         @RequestParam("domain", required = false)
         domain: String
-    ) = syncContainerUseCase.syncContainer(SyncContainerRequest(deployName, environment, domain))
+    ) = containerUseCase.syncContainer(SyncContainerRequest(deployName, environment, domain))
 
     @GetMapping("/environment-variable")
     fun getEnvironmentVariable(
@@ -35,7 +30,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, String> {
-        return getEnvironmentVariableUseCase.getEnvironmentVariable(deployId, environment)
+        return containerUseCase.getEnvironmentVariable(deployId, environment)
     }
 
     @PatchMapping("/environment-variable")
@@ -47,7 +42,7 @@ class V1ContainerWebAdapter(
         @RequestBody
         environmentVariable: Map<String, String>
     ) {
-        updateEnvironmentVariableUseCase.updateEnvironmentVariable(deployId, environment, environmentVariable)
+        containerUseCase.updateEnvironmentVariable(deployId, environment, environmentVariable)
     }
 
     @GetMapping
@@ -72,7 +67,7 @@ class V1ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
     ): Map<String, Map<String, String>> =
-        getContainerMemoryUsageUseCase.getContainerMemoryUsageUseCase(deployId, environment)
+        containerMetricUseCase.getContainerMemoryUsageUseCase(deployId, environment)
 
     @GetMapping("/details")
     fun getContainerDetails(
@@ -80,5 +75,5 @@ class V1ContainerWebAdapter(
         deployId: UUID,
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment
-    ): GetContainerDetailsResponse = getContainerDetailsUseCase.getContainerDetails(deployId, environment)
+    ): GetContainerDetailsResponse = containerUseCase.getContainerDetails(deployId, environment)
 }
