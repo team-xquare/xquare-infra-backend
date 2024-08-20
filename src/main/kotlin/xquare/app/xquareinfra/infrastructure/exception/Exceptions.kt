@@ -38,6 +38,7 @@ class BusinessLogicException(
         val ALREADY_EXISTS_USER_TEAM = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.USER_TEAM)
         val TEAM_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.TEAM)
         val ADD_TEAM_PERMISSION_DENIED = BusinessLogicException(ErrorCodePrefixSuffix.XXX_PERMISSION_DENIED, DomainNames.TEAM)
+        val DELETE_TEAM_PERMISSION_DENIED = BusinessLogicException(ErrorCodePrefixSuffix.XXX_PERMISSION_DENIED, DomainNames.TEAM)
         val USER_TEAM_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.USER_TEAM)
         val USER_TEAM_BAD_REQUEST = BusinessLogicException(ErrorCodePrefixSuffix.XXX_BAD_REQUEST, DomainNames.USER_TEAM)
         val ALREADY_EXISTS_DEPLOY = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.DEPLOY)

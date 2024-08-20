@@ -7,17 +7,14 @@ import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.CreateDeployReques
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.CreateDeployResponse
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.DeployDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployListResponse
+import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import java.util.*
 
 @RequestMapping("/v1/deploy")
 @RestController
 class V1DeployWebAdapter(
-    private val createDeployUseCase: CreateDeployUseCase,
-    private val approveDeployUseCase: ApproveDeployUseCase,
-    private val getAllDeployInTeamUseCase: GetAllDeployInTeamUseCase,
-    private val getDeployDetailsUseCase: GetDeployDetailsUseCase,
-    private val migrationDeployUseCase: MigrationDeployUseCase,
-    private val deployMigrationToV2PipelineUseCase: DeployMigrationToV2PipelineUseCase
+    private val deployUseCase: DeployUseCase,
+    private val securityPort: SecurityPort
 ) {
     @PostMapping
     fun createDeploy(
@@ -26,7 +23,7 @@ class V1DeployWebAdapter(
         @RequestBody
         createDeployRequest: CreateDeployRequest
     ): CreateDeployResponse {
-        return createDeployUseCase.createDeploy(teamId, createDeployRequest)
+        return deployUseCase.createDeploy(teamId, createDeployRequest, securityPort.getCurrentUser())
     }
 
     @PostMapping("/{deployNameEn}/approve")
@@ -36,27 +33,27 @@ class V1DeployWebAdapter(
         @RequestBody
         approveDeployRequest: ApproveDeployRequest
     ) {
-        approveDeployUseCase.approveDeploy(deployNameEn, approveDeployRequest)
+        deployUseCase.approveDeploy(deployNameEn, approveDeployRequest)
     }
 
     @GetMapping("/all")
     fun findAllInTeam(
         @RequestParam("teamId", required = true)
         teamId: UUID
-    ): SimpleDeployListResponse = getAllDeployInTeamUseCase.getAllDeployInTime(teamId)
+    ): SimpleDeployListResponse = deployUseCase.getAllDeployInTime(teamId)
 
     @GetMapping("/{deployId}")
     fun findDeployDetail(
         @PathVariable("deployId", required = true)
         deployId: UUID
-    ): DeployDetailsResponse = getDeployDetailsUseCase.getDeployDetails(deployId)
+    ): DeployDetailsResponse = deployUseCase.getDeployDetails(deployId, securityPort.getCurrentUser())
 
     @PostMapping("/migration")
-    fun migrationDeploy() = migrationDeployUseCase.migrationDeploy()
+    fun migrationDeploy() = deployUseCase.migrationDeploy(securityPort.getCurrentUser())
 
     @PutMapping("/migration/v2/{deployId}")
     fun migrateToV2(
         @PathVariable("deployId", required = true)
         deployId: UUID
-    ) = deployMigrationToV2PipelineUseCase.migrationDeploy(deployId)
+    ) = deployUseCase.migrationDeploy(deployId)
 }
