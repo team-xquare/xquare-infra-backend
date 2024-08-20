@@ -4,14 +4,16 @@ import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
+import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
+import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.*
 
 @RequestMapping("/v1/container")
 @RestController
 class V1ContainerWebAdapter(
-    private val containerUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase,
-    private val containerMetricUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase,
+    private val containerUseCase: ContainerUseCase,
+    private val containerMetricUseCase: ContainerMetricUseCase,
 ) {
     @PostMapping("/sync")
     fun syncContainer(
