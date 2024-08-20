@@ -33,7 +33,7 @@ class V1TeamWebAdapter(
     ) = teamUseCase.create(req, securityPort.getCurrentUser())
 
     @GetMapping("/my-team")
-    fun getMyTeams(): SimpleTeamResponseList = teamUseCase.getMyTeam()
+    fun getMyTeams(): SimpleTeamResponseList = teamUseCase.getMyTeam(securityPort.getCurrentUser())
 
     @GetMapping("/detail/{teamId}")
     fun getTeamDetail(@PathVariable("teamId") teamId: UUID): DetailTeamResponse =
