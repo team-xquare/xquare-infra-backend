@@ -13,7 +13,7 @@ class V1ContainerWebAdapter(
     private val syncContainerUseCase: xquare.app.xquareinfra.application.container.port.`in`.SyncContainerUseCase,
     private val getEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetEnvironmentVariableUseCase,
     private val updateEnvironmentVariableUseCase: xquare.app.xquareinfra.application.container.port.`in`.UpdateEnvironmentVariableUseCase,
-    private val getContainerByDeployIdUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerByDeployIdUseCase,
+    private val containerUseCase: xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase,
     private val getContainerCpuUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerCpuUsageUseCase,
     private val getContainerMemoryUsageUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerMemoryUsageUseCase,
     private val getContainerDetailsUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDetailsUseCase
@@ -54,7 +54,7 @@ class V1ContainerWebAdapter(
     fun getContainerByDeployId(
         @RequestParam("deployId")
         deployId: UUID
-    ): List<SimpleContainerResponse> = getContainerByDeployIdUseCase.getContainerByDeploy(deployId)
+    ): List<SimpleContainerResponse> = containerUseCase.getContainerByDeploy(deployId)
 
     @GetMapping("/cpu")
     fun getContainerCpuUsage(
