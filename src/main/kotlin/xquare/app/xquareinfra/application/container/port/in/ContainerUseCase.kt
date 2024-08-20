@@ -20,6 +20,9 @@ interface ContainerUseCase {
         environment: ContainerEnvironment,
         environmentVariable: Map<String, String>
     )
+
+    fun getEnvironmentVariable(deployId: UUID, environment: ContainerEnvironment): Map<String, String>
+
     fun updateContainerWebhook(
         updateContainerWebhookRequest: UpdateContainerWebhookRequest,
         deployId: UUID,
