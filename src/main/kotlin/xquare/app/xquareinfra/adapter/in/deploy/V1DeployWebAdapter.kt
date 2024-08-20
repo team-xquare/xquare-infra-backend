@@ -13,7 +13,7 @@ import java.util.*
 @RestController
 class V1DeployWebAdapter(
     private val createDeployUseCase: CreateDeployUseCase,
-    private val approveDeployUseCase: ApproveDeployUseCase,
+    private val deployUseCase: DeployUseCase,
     private val getAllDeployInTeamUseCase: GetAllDeployInTeamUseCase,
     private val getDeployDetailsUseCase: GetDeployDetailsUseCase,
     private val migrationDeployUseCase: MigrationDeployUseCase,
@@ -36,7 +36,7 @@ class V1DeployWebAdapter(
         @RequestBody
         approveDeployRequest: ApproveDeployRequest
     ) {
-        approveDeployUseCase.approveDeploy(deployNameEn, approveDeployRequest)
+        deployUseCase.approveDeploy(deployNameEn, approveDeployRequest)
     }
 
     @GetMapping("/all")
