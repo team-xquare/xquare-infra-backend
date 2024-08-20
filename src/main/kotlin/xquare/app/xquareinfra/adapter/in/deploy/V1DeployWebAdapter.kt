@@ -12,12 +12,7 @@ import java.util.*
 @RequestMapping("/v1/deploy")
 @RestController
 class V1DeployWebAdapter(
-    private val createDeployUseCase: CreateDeployUseCase,
     private val deployUseCase: DeployUseCase,
-    private val getAllDeployInTeamUseCase: GetAllDeployInTeamUseCase,
-    private val getDeployDetailsUseCase: GetDeployDetailsUseCase,
-    private val migrationDeployUseCase: MigrationDeployUseCase,
-    private val deployMigrationToV2PipelineUseCase: DeployMigrationToV2PipelineUseCase
 ) {
     @PostMapping
     fun createDeploy(
@@ -26,7 +21,7 @@ class V1DeployWebAdapter(
         @RequestBody
         createDeployRequest: CreateDeployRequest
     ): CreateDeployResponse {
-        return createDeployUseCase.createDeploy(teamId, createDeployRequest)
+        return deployUseCase.createDeploy(teamId, createDeployRequest)
     }
 
     @PostMapping("/{deployNameEn}/approve")
@@ -43,20 +38,20 @@ class V1DeployWebAdapter(
     fun findAllInTeam(
         @RequestParam("teamId", required = true)
         teamId: UUID
-    ): SimpleDeployListResponse = getAllDeployInTeamUseCase.getAllDeployInTime(teamId)
+    ): SimpleDeployListResponse = deployUseCase.getAllDeployInTime(teamId)
 
     @GetMapping("/{deployId}")
     fun findDeployDetail(
         @PathVariable("deployId", required = true)
         deployId: UUID
-    ): DeployDetailsResponse = getDeployDetailsUseCase.getDeployDetails(deployId)
+    ): DeployDetailsResponse = deployUseCase.getDeployDetails(deployId)
 
     @PostMapping("/migration")
-    fun migrationDeploy() = migrationDeployUseCase.migrationDeploy()
+    fun migrationDeploy() = deployUseCase.migrationDeploy()
 
     @PutMapping("/migration/v2/{deployId}")
     fun migrateToV2(
         @PathVariable("deployId", required = true)
         deployId: UUID
-    ) = deployMigrationToV2PipelineUseCase.migrationDeploy(deployId)
+    ) = deployUseCase.migrationDeploy(deployId)
 }
