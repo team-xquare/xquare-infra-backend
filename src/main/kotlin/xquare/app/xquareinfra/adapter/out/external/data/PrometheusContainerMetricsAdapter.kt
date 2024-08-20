@@ -36,14 +36,14 @@ class PrometheusContainerMetricsAdapter(
 
     override fun getHttpRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeRequestPerMinuteQuery(deploy, environment)
-        val queryResponse = executeQuery(query, durationMinute, 2000)
-        return formatHttpRequestsData(queryResponse, 2000)
+        val queryResponse = executeQuery(query, durationMinute, 20000)
+        return formatHttpRequestsData(queryResponse, 20000)
     }
 
     override fun getHttpStatusRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int, statusCode: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeHttpStatusRequestPerMinuteQuery(deploy, environment, statusCode)
-        val queryResponse = executeQuery(query, durationMinute, 2000)
-        return formatHttpRequestsData(queryResponse, 2000)
+        val queryResponse = executeQuery(query, durationMinute, 20000)
+        return formatHttpRequestsData(queryResponse, 20000)
     }
 
     override fun getContainerLatency(
@@ -53,8 +53,8 @@ class PrometheusContainerMetricsAdapter(
         durationMinute: Int
     ): Map<String, Map<String, String>> {
         val query = DataUtil.makeGetLatencyPerMinuteQuery(deploy, environment, percent)
-        val queryResponse = executeQuery(query, durationMinute, 2000)
-        return formatLatencyData(queryResponse, 2000)
+        val queryResponse = executeQuery(query, durationMinute, 20000)
+        return formatLatencyData(queryResponse, 20000)
     }
 
     private fun executeQuery(query: String, durationMinute: Int, intervalMs: Int): DataQueryResponse {
