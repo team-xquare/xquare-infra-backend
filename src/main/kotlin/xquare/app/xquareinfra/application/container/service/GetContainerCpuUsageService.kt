@@ -2,6 +2,7 @@ package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.application.auth.port.out.ReadCurrentUserPort
+import xquare.app.xquareinfra.application.container.port.`in`.GetContainerCpuUsageUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
@@ -14,7 +15,7 @@ class GetContainerCpuUsageService(
     private val readCurrentUserPort: ReadCurrentUserPort,
     private val existsUserTeamPort: xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort,
     private val containerMetricsPort: xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort
-) : xquare.app.xquareinfra.application.container.port.`in`.GetContainerCpuUsageUseCase {
+) : GetContainerCpuUsageUseCase {
     override fun getContainerCpuUsage(deployId: UUID, environment: ContainerEnvironment): Map<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND

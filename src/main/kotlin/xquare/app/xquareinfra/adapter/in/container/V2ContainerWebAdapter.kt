@@ -10,7 +10,7 @@ import java.util.*
 @RestController
 class V2ContainerWebAdapter(
     private val setContainerConfigUseCase: xquare.app.xquareinfra.application.container.port.`in`.SetContainerConfigUseCase,
-    private val createGradleDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateGradleDockerfileUseCase,
+    private val dockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.DockerfileUseCase,
     private val createNodeWithNginxDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeWithNginxDockerfileUseCase,
     private val createNodeDockerfileUseCase: xquare.app.xquareinfra.application.container.port.`in`.CreateNodeDockerfileUseCase,
     private val getContainerDeployHistoryUseCase: xquare.app.xquareinfra.application.container.port.`in`.GetContainerDeployHistoryUseCase,
@@ -37,7 +37,7 @@ class V2ContainerWebAdapter(
         containerEnvironment: ContainerEnvironment,
         @RequestBody
         createGradleDockerfileRequest: CreateGradleDockerfileRequest
-    ) = createGradleDockerfileUseCase.createGradleDockerfile(deployId, containerEnvironment, createGradleDockerfileRequest)
+    ) = dockerfileUseCase.createGradleDockerfile(deployId, containerEnvironment, createGradleDockerfileRequest)
 
     @PostMapping("/node")
     fun createNodeDockerfile(
