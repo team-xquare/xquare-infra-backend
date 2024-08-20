@@ -18,6 +18,7 @@ import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.container.port.out.SaveContainerPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
+import xquare.app.xquareinfra.application.deploy.port.out.SaveDeployPort
 import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
 import xquare.app.xquareinfra.domain.container.model.Container
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
@@ -48,7 +49,8 @@ class ContainerService(
     private val kubernetesOperationService: KubernetesOperationService,
     private val gocdClient: GocdClient,
     private val githubClient: GithubClient,
-    private val githubProperties: GithubProperties
+    private val githubProperties: GithubProperties,
+    private val saveDeployPort: SaveDeployPort
 ): ContainerUseCase {
     override fun getContainerByDeploy(deployId: UUID, user: User): List<SimpleContainerResponse> {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
@@ -259,7 +261,7 @@ class ContainerService(
             )
         )
 
-        deploy.migrationToV2()
+        saveDeployPort.saveDeploy(deploy.migrationToV2())
     }
 
     override fun getContainerDetails(deployId: UUID, environment: ContainerEnvironment): GetContainerDetailsResponse {
