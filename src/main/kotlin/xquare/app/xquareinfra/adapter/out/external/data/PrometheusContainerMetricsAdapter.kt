@@ -37,13 +37,13 @@ class PrometheusContainerMetricsAdapter(
     override fun getHttpRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeRequestPerMinuteQuery(deploy, environment)
         val queryResponse = executeQuery(query, durationMinute, 2000)
-        return formatHttpRequestsData(queryResponse)
+        return formatHttpRequestsData(queryResponse, 2000)
     }
 
     override fun getHttpStatusRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int, statusCode: Int): Map<String, Map<String, String>> {
         val query = DataUtil.makeHttpStatusRequestPerMinuteQuery(deploy, environment, statusCode)
         val queryResponse = executeQuery(query, durationMinute, 2000)
-        return formatHttpRequestsData(queryResponse)
+        return formatHttpRequestsData(queryResponse, 2000)
     }
 
     override fun getContainerLatency(
@@ -54,7 +54,7 @@ class PrometheusContainerMetricsAdapter(
     ): Map<String, Map<String, String>> {
         val query = DataUtil.makeGetLatencyPerMinuteQuery(deploy, environment, percent)
         val queryResponse = executeQuery(query, durationMinute, 2000)
-        return formatLatencyData(queryResponse)
+        return formatLatencyData(queryResponse, 2000)
     }
 
     private fun executeQuery(query: String, durationMinute: Int, intervalMs: Int): DataQueryResponse {
@@ -104,9 +104,9 @@ class PrometheusContainerMetricsAdapter(
         }
     }
 
-    private fun formatHttpRequestsData(queryResponse: DataQueryResponse): Map<String, Map<String, String>> {
+    private fun formatHttpRequestsData(queryResponse: DataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
-        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, 20)
+        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs / 1000)
         return aggregatedData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
                 usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
@@ -114,9 +114,9 @@ class PrometheusContainerMetricsAdapter(
         }
     }
 
-    private fun formatLatencyData(queryResponse: DataQueryResponse): Map<String, Map<String, String>> {
+    private fun formatLatencyData(queryResponse: DataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
-        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, 20)
+        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs / 1000)
         return aggregatedData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
                 usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
