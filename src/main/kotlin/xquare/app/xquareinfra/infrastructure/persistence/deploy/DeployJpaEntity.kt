@@ -20,8 +20,8 @@ class DeployJpaEntity(
     deployStatus: DeployStatus,
     deployType: DeployType,
     useMysql: Boolean,
+    v2: Boolean,
     useRedis: Boolean,
-    isV2: Boolean
 ) : BaseUUIDEntity(id) {
     @Column(name = "deploy_name", nullable = false, unique = true)
     var deployName: String = deployName
@@ -66,11 +66,11 @@ class DeployJpaEntity(
     var useRedis: Boolean = useRedis
         protected set
 
-    @Column(name = "use_mysql", nullable = false)
-    var useMysql = useMysql
+    @Column(name = "is_v2", nullable = false)
+    var v2 = v2
         protected set
 
-    @Column(name = "is_v2", nullable = false)
-    var isV2 = isV2
+    @Column(name = "use_mysql", nullable = false)
+    var useMysql = useMysql
         protected set
 }

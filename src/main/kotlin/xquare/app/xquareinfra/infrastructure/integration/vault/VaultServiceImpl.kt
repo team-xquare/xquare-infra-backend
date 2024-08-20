@@ -4,8 +4,6 @@ import com.bettercloud.vault.Vault
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.domain.container.model.Container
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
-import xquare.app.xquareinfra.infrastructure.persistence.container.ContainerJpaEntity
-import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.infrastructure.exception.CriticalException
 
 @Service
@@ -24,7 +22,7 @@ private class VaultServiceImpl(
     }
 
     override fun getPath(deploy: Deploy, container: Container): String {
-        if(deploy.isV2) {
+        if(deploy.v2) {
             return "${deploy.deployName}-${container.containerEnvironment.name}"
         }
         return "${deploy.deployName}-${deploy.deployType.name}-${container.containerEnvironment.name}"

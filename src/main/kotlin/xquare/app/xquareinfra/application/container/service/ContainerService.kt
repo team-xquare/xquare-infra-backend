@@ -184,7 +184,7 @@ class ContainerService(
         val namespace = "${deploy.team.teamNameEn}-${container.containerEnvironment.name}"
         kubernetesOperationService.deleteSecret(namespace, path)
 
-        if(deploy.isV2) {
+        if(deploy.v2) {
             val pipelineName = "build-${deploy.deployName}-${container.containerEnvironment.name}"
             val pipelinesHistory = gocdClient.getPipelinesHistory(
                 pipelineName,
@@ -276,7 +276,7 @@ class ContainerService(
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
             teamNameKo = deploy.team.teamNameKo,
             containerName = ContainerUtil.getContainerName(deploy, container),
-            isV2 = deploy.isV2
+            isV2 = deploy.v2
         )
     }
 }

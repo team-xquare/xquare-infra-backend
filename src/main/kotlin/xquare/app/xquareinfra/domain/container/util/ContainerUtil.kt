@@ -17,14 +17,14 @@ object ContainerUtil {
     }
 
     fun getContainerName(deploy: Deploy, container: Container): String {
-        if(deploy.isV2) {
+        if(deploy.v2) {
             return "${deploy.deployName}-${container.containerEnvironment}"
         }
         else return "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}"
     }
 
     fun getContainerName(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
-        if(deploy.isV2) {
+        if(deploy.v2) {
             return "${deploy.deployName}-${containerEnvironment}"
         }
         else return "${deploy.deployName}-${deploy.deployType}-${containerEnvironment}"
