@@ -21,7 +21,7 @@ class ContainerJpaEntity(
     containerPort: Int? = null,
     webhookInfo: WebhookInfo? = null,
 ) : BaseUUIDEntity(id) {
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deploy_id")
     var deploy: DeployJpaEntity = deployJpaEntity
         protected set

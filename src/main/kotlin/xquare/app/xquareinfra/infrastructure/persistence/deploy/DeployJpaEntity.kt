@@ -43,7 +43,7 @@ class DeployJpaEntity(
     var oneLineDescription: String = oneLineDescription
         protected set
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id", columnDefinition = "BINARY(16)")
     var team: TeamJpaEntity = team
         protected set
