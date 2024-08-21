@@ -3,22 +3,22 @@ package xquare.app.xquareinfra.adapter.out.persistence.team
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.team.repository.UserTeamRepository
 import xquare.app.xquareinfra.adapter.out.persistence.user.UserMapper
-import xquare.app.xquareinfra.application.team.port.out.DeleteUserTeamPort
-import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
-import xquare.app.xquareinfra.application.team.port.out.FindUserTeamPort
-import xquare.app.xquareinfra.application.team.port.out.SaveUserTeamPort
+import xquare.app.xquareinfra.application.team.port.out.*
 import xquare.app.xquareinfra.domain.team.model.Team
 import xquare.app.xquareinfra.domain.team.model.UserTeam
 import xquare.app.xquareinfra.domain.user.model.User
-import xquare.app.xquareinfra.infrastructure.persistence.team.UserTeamJpaEntity
+import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
+import java.util.*
 
 @Component
 class UserTeamPersistenceAdapter(
     private val userTeamRepository: UserTeamRepository,
     private val teamMapper: TeamMapper,
-    private val userMapper: UserMapper
+    private val userMapper: UserMapper,
+    private val findTeamPort: FindTeamPort
 ): ExistsUserTeamPort, FindUserTeamPort, SaveUserTeamPort, DeleteUserTeamPort {
-    override fun existsByTeamAndUser(team: Team, user: User): Boolean {
+    override fun existsByTeamIdAndUser(teamId: UUID, user: User): Boolean {
+        val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         return userTeamRepository.existsByTeamAndUser(teamMapper.toEntity(team), userMapper.toEntity(user))
     }
 

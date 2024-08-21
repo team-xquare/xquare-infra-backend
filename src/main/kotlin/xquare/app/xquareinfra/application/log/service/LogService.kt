@@ -13,6 +13,7 @@ import xquare.app.xquareinfra.adapter.out.external.data.client.DataClient
 import xquare.app.xquareinfra.adapter.out.external.data.util.DataUtil
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryRequest
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryDto
+import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.Instant
 import java.time.LocalDateTime
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit
 class LogService(
     private val dataClient: DataClient,
     private val findDeployPort: FindDeployPort,
-    private val findContainerPort: xquare.app.xquareinfra.application.container.port.out.FindContainerPort
+    private val findTeamPort: FindTeamPort
 ) {
     private val executor = Executors.newScheduledThreadPool(1)
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
@@ -59,11 +60,12 @@ class LogService(
         val fromMillis = currentTimeMillis - durationMillis
 
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val request = QueryRequest(
             queries = listOf(
                 QueryDto(
                     expr = DataUtil.makeLogQuery(
+                        team = team,
                         containerEnvironment = if (environment == "prod") ContainerEnvironment.prod else ContainerEnvironment.stag,
                         deploy = deploy
                     ),

@@ -6,6 +6,7 @@ import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.Frame
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
+import xquare.app.xquareinfra.domain.team.model.Team
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -51,18 +52,19 @@ object DataUtil {
     }
 
     fun makeLogQuery(
+        team: Team,
         deploy: Deploy,
         containerEnvironment: ContainerEnvironment
     ): String {
-        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(team, containerEnvironment)
         val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
         val response = "{job=\"$namespace/$fullName\", container=~\"${fullName}\"} |~ \"(?i)\" \n"
         return response
     }
 
-    fun makeCpuUsageQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
+    fun makeCpuUsageQuery(team: Team, deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
         val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
-        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(team, containerEnvironment)
 
         return """
             sum(
@@ -82,9 +84,9 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun makeMemoryUsageQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
+    fun makeMemoryUsageQuery(team: Team, deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
         val fullName = ContainerUtil.getContainerName(deploy, containerEnvironment)
-        val namespace = ContainerUtil.getNamespaceName(deploy, containerEnvironment)
+        val namespace = ContainerUtil.getNamespaceName(team, containerEnvironment)
 
         return """
             sum(

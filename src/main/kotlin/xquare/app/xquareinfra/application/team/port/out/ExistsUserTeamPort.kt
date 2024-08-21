@@ -2,8 +2,8 @@ package xquare.app.xquareinfra.application.team.port.out
 
 import xquare.app.xquareinfra.domain.team.model.Team
 import xquare.app.xquareinfra.domain.user.model.User
-import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
+import java.util.UUID
 
 interface ExistsUserTeamPort {
-    fun existsByTeamAndUser(team: Team, user: User): Boolean
+    fun existsByTeamIdAndUser(teamId: UUID, user: User): Boolean
 }
