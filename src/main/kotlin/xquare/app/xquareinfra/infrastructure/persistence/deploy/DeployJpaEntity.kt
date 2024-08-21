@@ -3,7 +3,6 @@ package xquare.app.xquareinfra.infrastructure.persistence.deploy
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
 import xquare.app.xquareinfra.domain.deploy.model.DeployStatus
 import xquare.app.xquareinfra.domain.deploy.model.DeployType
-import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import java.util.*
 import javax.persistence.*
 
@@ -15,7 +14,7 @@ class DeployJpaEntity(
     repository: String,
     projectRootDir: String,
     oneLineDescription: String,
-    team: TeamJpaEntity,
+    teamId: UUID,
     secretKey: String?,
     deployStatus: DeployStatus,
     deployType: DeployType,
@@ -43,9 +42,8 @@ class DeployJpaEntity(
     var oneLineDescription: String = oneLineDescription
         protected set
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "team_id", columnDefinition = "BINARY(16)")
-    var team: TeamJpaEntity = team
+    @Column(name = "team_id")
+    var teamId: UUID = teamId
         protected set
 
     @Column(name = "secret_key", nullable = true)

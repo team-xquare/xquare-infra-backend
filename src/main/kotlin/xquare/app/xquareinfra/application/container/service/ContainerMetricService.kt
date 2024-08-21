@@ -21,7 +21,7 @@ class ContainerMetricService(
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if (!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -38,7 +38,7 @@ class ContainerMetricService(
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if (!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -54,7 +54,7 @@ class ContainerMetricService(
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if (!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -71,7 +71,7 @@ class ContainerMetricService(
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if (!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -82,7 +82,7 @@ class ContainerMetricService(
         val deploy = findDeployPort.findById(deployId)
             ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if (!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if (!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 

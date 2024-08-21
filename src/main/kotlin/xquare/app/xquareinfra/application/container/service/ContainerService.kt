@@ -21,6 +21,7 @@ import xquare.app.xquareinfra.application.container.port.out.SaveContainerPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.SaveDeployPort
 import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
+import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.domain.container.model.Container
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.model.ContainerStatus
@@ -52,13 +53,14 @@ class ContainerService(
     private val gocdClient: GocdClient,
     private val githubClient: GithubClient,
     private val githubProperties: GithubProperties,
-    private val saveDeployPort: SaveDeployPort
+    private val saveDeployPort: SaveDeployPort,
+    private val findTeamPort: FindTeamPort
 ): ContainerUseCase {
     override fun getContainerByDeploy(deployId: UUID, user: User): List<SimpleContainerResponse> {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val containers = findContainerPort.findAllByDeploy(deploy)
 
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -155,7 +157,7 @@ class ContainerService(
     override fun getEnvironmentVariable(deployId: UUID, environment: ContainerEnvironment, user: User): Map<String, String> {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -173,7 +175,9 @@ class ContainerService(
     ) {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+
+        if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
@@ -185,7 +189,7 @@ class ContainerService(
         val path = vaultService.getPath(deploy, container)
         vaultService.addSecret(environmentVariable, path)
 
-        val namespace = "${deploy.team.teamNameEn}-${container.containerEnvironment.name}"
+        val namespace = "${team.teamNameEn}-${container.containerEnvironment.name}"
         kubernetesOperationService.deleteSecret(namespace, path)
 
         if(deploy.v2) {
@@ -230,6 +234,8 @@ class ContainerService(
             containerId = container.id
         }
 
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+
         container = saveContainerPort.save(
             Container(
                 id = containerId,
@@ -249,7 +255,7 @@ class ContainerService(
             request = DispatchEventRequest(
                 event_type = "write-values",
                 client_payload = mapOf(
-                    "club" to deploy.team.teamNameEn.lowercase(Locale.getDefault()),
+                    "club" to team.teamNameEn.lowercase(Locale.getDefault()),
                     "name" to deploy.deployName,
                     "organization" to deploy.organization,
                     "repository" to deploy.repository,
@@ -271,14 +277,16 @@ class ContainerService(
         val container = findContainerPort.findByDeployAndEnvironment(deploy, environment)
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+
         return GetContainerDetailsResponse(
-            teamNameEn = deploy.team.teamNameEn,
+            teamNameEn = team.teamNameEn,
             deployName = deploy.deployName,
             repository = "${deploy.organization}/${deploy.repository}",
             domain = ContainerUtil.generateDomain(container),
             lastDeploy = container.lastDeploy,
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
-            teamNameKo = deploy.team.teamNameKo,
+            teamNameKo = team.teamNameKo,
             containerName = ContainerUtil.getContainerName(deploy, container),
             isV2 = deploy.v2
         )

@@ -10,7 +10,7 @@ data class Deploy(
     val repository: String,
     val projectRootDir: String,
     val oneLineDescription: String,
-    val team: Team,
+    val teamId: UUID,
     val secretKey: String?,
     val deployStatus: DeployStatus,
     val deployType: DeployType,

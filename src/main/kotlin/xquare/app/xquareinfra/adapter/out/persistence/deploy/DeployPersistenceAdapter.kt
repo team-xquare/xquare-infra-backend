@@ -9,8 +9,6 @@ import xquare.app.xquareinfra.adapter.out.persistence.deploy.repository.DeployRe
 import xquare.app.xquareinfra.adapter.out.persistence.team.TeamMapper
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import xquare.app.xquareinfra.domain.team.model.Team
-import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
-import xquare.app.xquareinfra.infrastructure.persistence.team.TeamJpaEntity
 import java.util.*
 
 @Component
@@ -29,7 +27,7 @@ class DeployPersistenceAdapter(
         return deployRepository.findByDeployName(deployName)?.let { deployMapper.toModel(it) }
     }
     override fun findAllByTeam(team: Team): List<Deploy> {
-        return deployRepository.findAllByTeam(teamMapper.toEntity(team)).map { deployMapper.toModel(it) }
+        return deployRepository.findAllByTeamId(teamMapper.toEntity(team).id!!).map { deployMapper.toModel(it) }
     }
     override fun findById(deployId: UUID): Deploy? {
         return deployRepository.findByIdOrNull(deployId)?.let { deployMapper.toModel(it) }

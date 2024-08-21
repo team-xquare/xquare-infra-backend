@@ -58,7 +58,7 @@ class TeamService(
 
         req.teamMemberList.forEach { memberId ->
             val member = findUserPort.findById(memberId) ?: throw BusinessLogicException.USER_NOT_FOUND
-            if (existsUserTeamPort.existsByTeamAndUser(team, member)) {
+            if (existsUserTeamPort.existsByTeamIdAndUser(team.id!!, member)) {
                 throw BusinessLogicException.ALREADY_EXISTS_USER_TEAM
             }
             userTeams.add(UserTeam(
@@ -81,7 +81,7 @@ class TeamService(
 
         req.members.map {
             val addMember = findUserPort.findById(it) ?: throw BusinessLogicException.USER_NOT_FOUND
-            if(existsUserTeamPort.existsByTeamAndUser(team, addMember)) {
+            if(existsUserTeamPort.existsByTeamIdAndUser(team.id!!, addMember)) {
                 throw BusinessLogicException.ALREADY_EXISTS_USER_TEAM
             }
             saveUserTeamPort.saveUserTeam(UserTeam(user = addMember, team = team, role = TeamMemberRole.MEMBER ))
@@ -127,7 +127,7 @@ class TeamService(
     override fun getTeamDetail(teamId: UUID, user: User): DetailTeamResponse {
         val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
 
-        if(!existsUserTeamPort.existsByTeamAndUser(team, user)) {
+        if(!existsUserTeamPort.existsByTeamIdAndUser(team.id!!, user)) {
             throw XquareException.FORBIDDEN
         }
 

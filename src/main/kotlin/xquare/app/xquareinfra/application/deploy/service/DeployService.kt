@@ -90,7 +90,7 @@ class DeployService(
                     repository = repository,
                     projectRootDir = projectRootDir,
                     oneLineDescription = oneLineDescription,
-                    team = team,
+                    teamId = team.id!!,
                     secretKey = null,
                     deployStatus = DeployStatus.WAIT_FOR_APPROVE,
                     deployType = deployType,
@@ -134,14 +134,14 @@ class DeployService(
 
     override fun getDeployDetails(deployId: UUID, user: User): DeployDetailsResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-
-        if(!existsUserTeamPort.existsByTeamAndUser(deploy.team, user)) {
+        val team = findTeamPort.findById(deploy.id!!) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+        if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
 
         return DeployDetailsResponse(
-            teamNameKo = deploy.team.teamNameKo,
-            teamNameEn = deploy.team.teamNameEn,
+            teamNameKo = team.teamNameKo,
+            teamNameEn = team.teamNameEn,
             oneLineDescription = deploy.oneLineDescription,
             repository = deploy.repository,
             projectRootDir = deploy.projectRootDir,
@@ -157,7 +157,7 @@ class DeployService(
         deployList.map {
             val team = findTeamPort.findByName(it.team) ?: throw BusinessLogicException.TEAM_NOT_FOUND
 
-            if(!existsUserTeamPort.existsByTeamAndUser(team, user)) {
+            if(!existsUserTeamPort.existsByTeamIdAndUser(team.id!!, user)) {
                 throw XquareException.FORBIDDEN
             }
 
@@ -173,7 +173,7 @@ class DeployService(
                     repository = it.repository.split("/")[1],
                     projectRootDir = "/",
                     oneLineDescription = "한줄설명을 적어주세요.",
-                    team = team,
+                    teamId = team.id!!,
                     secretKey = null,
                     deployStatus = if (it.isApproved) DeployStatus.AVAILABLE else DeployStatus.WAIT_FOR_APPROVE,
                     deployType = if (it.type == "be") DeployType.be else DeployType.fe,

@@ -3,6 +3,7 @@ package xquare.app.xquareinfra.domain.container.util
 import xquare.app.xquareinfra.domain.container.model.Container
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
+import xquare.app.xquareinfra.domain.team.model.Team
 
 object ContainerUtil {
     fun generateDomain(container: Container): String {
@@ -30,7 +31,7 @@ object ContainerUtil {
         else return "${deploy.deployName}-${deploy.deployType}-${containerEnvironment}"
     }
 
-    fun getNamespaceName(deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
-        return "${deploy.team.teamNameEn}-$containerEnvironment"
+    fun getNamespaceName(team: Team, containerEnvironment: ContainerEnvironment): String {
+        return "${team.teamNameEn}-$containerEnvironment"
     }
 }

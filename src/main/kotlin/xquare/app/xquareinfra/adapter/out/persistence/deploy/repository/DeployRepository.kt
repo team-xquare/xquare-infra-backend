@@ -10,5 +10,5 @@ interface DeployRepository : JpaRepository<DeployJpaEntity, UUID> {
 
     fun findByDeployName(deployName: String): DeployJpaEntity?
 
-    fun findAllByTeam(teamJpaEntity: TeamJpaEntity): List<DeployJpaEntity>
+    fun findAllByTeamId(teamId: UUID): List<DeployJpaEntity>
 }

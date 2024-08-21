@@ -8,16 +8,25 @@ import xquare.app.xquareinfra.adapter.out.external.data.util.DataUtil
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryRequest
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryDto
 import xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort
+import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
+import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.Instant
 
 @Component
 class PrometheusContainerMetricsAdapter(
-    private val dataClient: DataClient
+    private val dataClient: DataClient,
+    private val findTeamPort: FindTeamPort
 ) : ContainerMetricsPort {
 
-    override fun getCpuUsage(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int): Map<String, Map<String, String>> {
+    override fun getCpuUsage(
+        deploy: Deploy,
+        environment: ContainerEnvironment,
+        durationMinute: Int
+    ): Map<String, Map<String, String>> {
+        val team = findTeamPort.findById(deploy.teamId!!) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val query = DataUtil.makeCpuUsageQuery(
+            team = team,
             deploy = deploy,
             containerEnvironment = environment
         )
@@ -25,8 +34,14 @@ class PrometheusContainerMetricsAdapter(
         return formatCpuUsageData(queryResponse)
     }
 
-    override fun getMemoryUsage(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int): Map<String, Map<String, String>> {
+    override fun getMemoryUsage(
+        deploy: Deploy,
+        environment: ContainerEnvironment,
+        durationMinute: Int
+    ): Map<String, Map<String, String>> {
+        val team = findTeamPort.findById(deploy.teamId!!) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val query = DataUtil.makeMemoryUsageQuery(
+            team = team,
             deploy = deploy,
             containerEnvironment = environment
         )
