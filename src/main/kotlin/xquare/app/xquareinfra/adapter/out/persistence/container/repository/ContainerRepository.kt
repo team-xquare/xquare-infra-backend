@@ -7,7 +7,7 @@ import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import java.util.UUID
 
 interface ContainerRepository : JpaRepository<ContainerJpaEntity, UUID> {
-    fun findByContainerEnvironmentAndDeploy(containerEnvironment: ContainerEnvironment, deployJpaEntity: DeployJpaEntity): ContainerJpaEntity?
+    fun findByContainerEnvironmentAndDeployId(containerEnvironment: ContainerEnvironment, deployId: UUID): ContainerJpaEntity?
 
-    fun findAllByDeploy(deployJpaEntity: DeployJpaEntity): List<ContainerJpaEntity>
+    fun findAllByDeployId(deployId: UUID): List<ContainerJpaEntity>
 }

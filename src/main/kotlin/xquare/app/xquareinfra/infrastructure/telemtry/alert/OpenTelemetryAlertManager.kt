@@ -2,7 +2,9 @@ package xquare.app.xquareinfra.infrastructure.telemtry.alert
 
 import io.opentelemetry.proto.trace.v1.Span
 import org.springframework.stereotype.Component
+import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.domain.container.model.WebhookType
+import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.telemtry.analyze.AnalysisResult
 import xquare.app.xquareinfra.infrastructure.webhook.discord.DiscordMessageSender
 import xquare.app.xquareinfra.infrastructure.webhook.slack.SlackMessageSender
@@ -11,14 +13,17 @@ import xquare.app.xquareinfra.infrastructure.webhook.slack.SlackMessageSender
 class OpenTelemetryAlertManager(
     private val findContainerPort: xquare.app.xquareinfra.application.container.port.out.FindContainerPort,
     private val discordMessageSender: DiscordMessageSender,
-    private val slackMessageSender: SlackMessageSender
+    private val slackMessageSender: SlackMessageSender,
+    private val findDeployPort: FindDeployPort
 ){
     fun notification(span: Span, analysisResult: AnalysisResult, serviceName: String?) {
         val containers = findContainerPort.findAll()
+
         val service = containers.find { container ->
+            val deploy = findDeployPort.findById(container.deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
             listOf(
-                "${container.deploy.deployName}-${container.deploy.deployType}-${container.containerEnvironment}",
-                "${container.deploy.deployName}-${container.containerEnvironment}"
+                "${deploy.deployName}-${deploy.deployType}-${container.containerEnvironment}",
+                "${deploy.deployName}-${container.containerEnvironment}"
             ).any { it == serviceName }
         }
 

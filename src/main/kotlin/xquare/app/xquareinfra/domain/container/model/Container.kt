@@ -1,13 +1,12 @@
 package xquare.app.xquareinfra.domain.container.model
 
 
-import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import java.time.LocalDateTime
 import java.util.*
 
 data class Container(
     val id: UUID?,
-    val deploy: Deploy,
+    val deployId: UUID,
     val containerEnvironment: ContainerEnvironment,
     val lastDeploy: LocalDateTime,
     val subDomain: String?,

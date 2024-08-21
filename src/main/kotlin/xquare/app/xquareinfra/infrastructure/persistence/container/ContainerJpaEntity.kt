@@ -3,8 +3,6 @@ package xquare.app.xquareinfra.infrastructure.persistence.container
 import xquare.app.xquareinfra.domain.BaseUUIDEntity
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.model.WebhookInfo
-import xquare.app.xquareinfra.domain.container.model.WebhookType
-import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -12,7 +10,7 @@ import javax.persistence.*
 @Entity(name = "tbl_container")
 class ContainerJpaEntity(
     id: UUID?,
-    deployJpaEntity: DeployJpaEntity,
+    deployId: UUID,
     containerEnvironment: ContainerEnvironment,
     lastDeploy: LocalDateTime,
     subDomain: String?,
@@ -21,9 +19,8 @@ class ContainerJpaEntity(
     containerPort: Int? = null,
     webhookInfo: WebhookInfo? = null,
 ) : BaseUUIDEntity(id) {
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "deploy_id")
-    var deploy: DeployJpaEntity = deployJpaEntity
+    @Column(name = "deploy_id")
+    var deployId: UUID = deployId
         protected set
 
     @Column(name = "container_environment", nullable = false)
