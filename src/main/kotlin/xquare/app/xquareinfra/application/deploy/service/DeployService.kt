@@ -111,7 +111,6 @@ class DeployService(
 
         containers.map {
             val path = vaultService.getPath(deploy, it)
-            println(path)
             vaultService.addSecret(it.environmentVariable, vaultService.getPath(deploy, it))
         }
     }

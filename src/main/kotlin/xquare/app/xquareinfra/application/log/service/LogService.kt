@@ -82,8 +82,6 @@ class LogService(
             to = currentTimeMillis.toString()
         )
 
-        println(request)
-
         val response = dataClient.query(request)
 
         val frames = response.results?.a?.frames
