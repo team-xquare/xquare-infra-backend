@@ -1,6 +1,7 @@
 package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.ContainerConfigDetails
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SetContainerConfigRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
@@ -36,6 +37,7 @@ import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
 import java.time.LocalDateTime
 import java.util.*
 
+@Transactional
 @Service
 class ContainerService(
     private val findDeployPort: FindDeployPort,
