@@ -6,13 +6,13 @@ import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import xquare.app.xquareinfra.domain.team.model.Team
 
 object ContainerUtil {
-    fun generateDomain(container: Container): String {
+    fun generateDomain(container: Container, deploy: Deploy): String {
         if(container.subDomain!!.isEmpty() || container.subDomain!! == "null") {
             val baseDomain = when (container.containerEnvironment) {
                 ContainerEnvironment.prod -> "prod-server.xquare.app"
                 else -> "stag-server.xquare.app"
             }
-            return "https://$baseDomain/${container.deploy.deployName}"
+            return "https://$baseDomain/${deploy.deployName}"
         }
         return container.subDomain!!
     }

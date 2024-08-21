@@ -70,7 +70,7 @@ class ContainerService(
                 containerEnvironment = it.containerEnvironment,
                 containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성
                 repository = "${deploy.organization}/${deploy.repository}",
-                domain = ContainerUtil.generateDomain(it),
+                domain = ContainerUtil.generateDomain(it, deploy),
                 lastDeploy = it.lastDeploy
             )
         }
@@ -129,7 +129,7 @@ class ContainerService(
             syncContainerRequest.run {
                 Container(
                     id = containerId,
-                    deploy = deploy,
+                    deployId = deploy.id!!,
                     containerEnvironment = containerEnvironment,
                     lastDeploy = LocalDateTime.now(),
                     subDomain = syncContainerRequest.subDomain,
@@ -239,7 +239,7 @@ class ContainerService(
         container = saveContainerPort.save(
             Container(
                 id = containerId,
-                deploy = deploy,
+                deployId = deploy.id!!,
                 containerEnvironment = environment,
                 lastDeploy = LocalDateTime.now(),
                 subDomain = config.domain,
@@ -283,7 +283,7 @@ class ContainerService(
             teamNameEn = team.teamNameEn,
             deployName = deploy.deployName,
             repository = "${deploy.organization}/${deploy.repository}",
-            domain = ContainerUtil.generateDomain(container),
+            domain = ContainerUtil.generateDomain(container, deploy),
             lastDeploy = container.lastDeploy,
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
             teamNameKo = team.teamNameKo,
