@@ -121,7 +121,6 @@ object DataUtil {
                 )
             ) * 60
         """.trimIndent()
-        println("request per minute query : $response" )
         return response
     }
 
