@@ -45,7 +45,7 @@ class ContainerJpaEntity(
     @Column(name = "container_port", nullable = true)
     var containerPort: Int? = containerPort
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyColumn(name="variable_key", length=100)
     @Column(name = "environment_variable", columnDefinition = "TEXT")
     var environmentVariable: Map<String, String> = environmentVariable
