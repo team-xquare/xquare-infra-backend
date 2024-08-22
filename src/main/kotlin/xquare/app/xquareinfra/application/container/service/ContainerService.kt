@@ -8,14 +8,14 @@ import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRe
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.UpdateContainerWebhookRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
-import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.CloudflareClient
-import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request.CreateDnsRecordRequest
+import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.DnsType
 import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
 import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import xquare.app.xquareinfra.adapter.out.external.gocd.client.GocdClient
 import xquare.app.xquareinfra.adapter.out.external.gocd.client.dto.request.RunSelectedJobRequest
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
+import xquare.app.xquareinfra.application.container.port.out.ContainerDnsPort
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.container.port.out.SaveContainerPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
@@ -29,8 +29,6 @@ import xquare.app.xquareinfra.domain.container.model.Language
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import xquare.app.xquareinfra.domain.user.model.User
-import xquare.app.xquareinfra.infrastructure.env.cloudflare.CloudflareProperties
-import xquare.app.xquareinfra.infrastructure.env.kubernetes.XquareProperties
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.integration.kubernetes.KubernetesOperationService
@@ -44,9 +42,7 @@ class ContainerService(
     private val findDeployPort: FindDeployPort,
     private val findContainerPort: FindContainerPort,
     private val existsUserTeamPort: ExistsUserTeamPort,
-    private val cloudflareClient: CloudflareClient,
-    private val cloudflareProperties: CloudflareProperties,
-    private val xquareProperties: XquareProperties,
+    private val containerDnsPort: ContainerDnsPort,
     private val saveContainerPort: SaveContainerPort,
     private val vaultService: VaultService,
     private val kubernetesOperationService: KubernetesOperationService,
@@ -86,33 +82,10 @@ class ContainerService(
 
         saveContainerPort.save(container.updateDomain(domain))
 
-        val listResponse = cloudflareClient.listDnsRecords(
-            cloudflareProperties.zoneId,
-            cloudflareProperties.xAuthEmail,
-            cloudflareProperties.xAuthKey
-        )
+        val records = containerDnsPort.listDnsRecords()
 
-        if(listResponse.statusCode.isError) {
-            throw XquareException.INTERNAL_SERVER_ERROR
-        }
-
-        val records = listResponse.body
-        if(!records!!.result.any { it.name == domain }) {
-            val createResponse = cloudflareClient.createDnsRecords(
-                cloudflareProperties.zoneId,
-                cloudflareProperties.xAuthEmail,
-                cloudflareProperties.xAuthKey,
-                CreateDnsRecordRequest(
-                    content = xquareProperties.gatewayDns,
-                    name = domain,
-                    proxied = false,
-                    type = "CNAME"
-                )
-            )
-
-            if(createResponse.statusCode.isError) {
-                throw XquareException.INTERNAL_SERVER_ERROR
-            }
+        if(!records.result.any { it.name == domain }) {
+            containerDnsPort.createGatewayDnsRecords(name = domain)
         }
     }
 
