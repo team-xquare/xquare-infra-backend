@@ -134,7 +134,7 @@ class DeployService(
 
     override fun getDeployDetails(deployId: UUID, user: User): DeployDetailsResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-        val team = findTeamPort.findById(deploy.id!!) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
