@@ -5,11 +5,12 @@ import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.CloudflareClient
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.DnsType
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.request.CreateDnsRecordRequest
-import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.response.ListDnsRecordsResponse
 import xquare.app.xquareinfra.application.container.port.out.ContainerDnsPort
+import xquare.app.xquareinfra.application.container.port.out.DnsRecord
 import xquare.app.xquareinfra.infrastructure.env.cloudflare.CloudflareProperties
 import xquare.app.xquareinfra.infrastructure.env.kubernetes.XquareProperties
 import xquare.app.xquareinfra.infrastructure.exception.FeignException
+import xquare.app.xquareinfra.adapter.out.external.Result
 
 @Component
 class CloudflareAdapter(
@@ -18,7 +19,7 @@ class CloudflareAdapter(
     private val cloudflareClient: CloudflareClient
 ) : ContainerDnsPort {
     override fun createGatewayDnsRecords(name: String) {
-        cloudflareClient.createDnsRecords(
+        val response = cloudflareClient.createDnsRecords(
             zoneId = cloudflareProperties.zoneId,
             xAuthEmail = cloudflareProperties.xAuthEmail,
             xAuthKey = cloudflareProperties.xAuthKey,
@@ -29,18 +30,16 @@ class CloudflareAdapter(
                 type = DnsType.CNAME.name
             )
         )
+
+        return response
     }
 
-    override fun listDnsRecords(): ListDnsRecordsResponse {
+    override fun listDnsRecords(): List<DnsRecord> {
         val response = cloudflareClient.listDnsRecords(
             zoneId = cloudflareProperties.zoneId,
             xAuthEmail = cloudflareProperties.xAuthEmail,
             xAuthKey = cloudflareProperties.xAuthKey,
         )
-
-        when(response.statusCode) {
-            HttpStatus.OK -> return response.body!!
-            else -> throw FeignException.FEIGN_BAD_REQUEST
-        }
+        return response.result.map { DnsRecord(name = it.name, content = it.content, type = it.type) }
     }
 }

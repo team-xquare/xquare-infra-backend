@@ -18,7 +18,7 @@ interface CloudflareClient {
         @PathVariable("zone_id") zoneId: String,
         @RequestHeader("X-Auth-Email") xAuthEmail: String,
         @RequestHeader("X-Auth-Key") xAuthKey: String,
-    ): ResponseEntity<ListDnsRecordsResponse>
+    ): ListDnsRecordsResponse
 
     @PostMapping("/zones/{zone_id}/dns_records")
     fun createDnsRecords(
@@ -26,5 +26,5 @@ interface CloudflareClient {
         @RequestHeader("X-Auth-Email") xAuthEmail: String,
         @RequestHeader("X-Auth-Key") xAuthKey: String,
         @RequestBody createDnsRecordRequest: CreateDnsRecordRequest
-    ): ResponseEntity<Any>
+    )
 }

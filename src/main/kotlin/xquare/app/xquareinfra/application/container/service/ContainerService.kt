@@ -8,7 +8,6 @@ import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRe
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.UpdateContainerWebhookRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
-import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.DnsType
 import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
 import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
@@ -35,6 +34,8 @@ import xquare.app.xquareinfra.infrastructure.integration.kubernetes.KubernetesOp
 import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
 import java.time.LocalDateTime
 import java.util.*
+import xquare.app.xquareinfra.adapter.out.external.Result
+import xquare.app.xquareinfra.application.container.port.out.DnsRecord
 
 @Transactional
 @Service
@@ -81,10 +82,8 @@ class ContainerService(
         val container = findContainerPort.findByDeployAndEnvironment(deploy, containerEnvironment) ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         saveContainerPort.save(container.updateDomain(domain))
-
         val records = containerDnsPort.listDnsRecords()
-
-        if(!records.result.any { it.name == domain }) {
+        if(!records.any { it.name == domain }) {
             containerDnsPort.createGatewayDnsRecords(name = domain)
         }
     }
