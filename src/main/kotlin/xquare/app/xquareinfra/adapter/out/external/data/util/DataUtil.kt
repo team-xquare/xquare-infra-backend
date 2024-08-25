@@ -157,14 +157,18 @@ object DataUtil {
         """.replace("\\s".toRegex(), "")
     }
 
-    fun formatData(queryResponse: PrometheusDataQueryResponse): MutableMap<String, Map<String, String>> {
-        val response = mutableMapOf<String, Map<String, String>>()
+    fun formatData(queryResponse: PrometheusDataQueryResponse): MutableMap<String, MutableMap<String, String>> {
+        val response = mutableMapOf<String, MutableMap<String, String>>()
         queryResponse.data.result.forEachIndexed { index, data ->
-            data.values.map{
-                it.map { value ->
-                    response[index.toString()] = mapOf(value.timeValue.toString() to value.value)
+            val metricData = mutableMapOf<String, String>()
+            for (value in data.values) {
+                if (value.size >= 2) {
+                    val timestamp = (value[0] as? Number)?.toDouble()?.toString() ?: continue
+                    val metricValue = value[1]?.toString() ?: continue
+                    metricData[timestamp] = metricValue
                 }
             }
+            response[index.toString()] = metricData
         }
         return response
     }
