@@ -22,13 +22,6 @@ object MessageGenerator {
         • **Trace ID:** \`${bytesToHex(span.traceId.toByteArray())}\`
         • **Span ID:** \`${bytesToHex(span.spanId.toByteArray())}\`
         • **Parent Span ID:** \`${if (span.parentSpanId.isEmpty) "N/A" else bytesToHex(span.parentSpanId.toByteArray())}\`
-        
-        ### 조치 사항
-        1. 스퀘어 인프라 웹사이트에서 자세한 내용을 확인하세요.
-        2. 에러를 분석하고 필요한 조치를 취해주세요.
-        
-        <@&DevOpsRoleID> <@&SRERoleID> <@&BackendRoleID>
-        
         ---
         """.trimIndent()
 
