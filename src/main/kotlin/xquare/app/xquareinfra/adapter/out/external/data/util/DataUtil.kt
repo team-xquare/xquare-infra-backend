@@ -161,7 +161,7 @@ object DataUtil {
         val response = mutableMapOf<String, Map<String, String>>()
         queryResponse.data.result.forEachIndexed { index, data ->
             data.values.map {
-                response[index.toString()] = mapOf(it[0].toString() to it[1].toString())
+                response[index.toString()] = mapOf(it.first.toString() to it.second)
             }
         }
         return response
