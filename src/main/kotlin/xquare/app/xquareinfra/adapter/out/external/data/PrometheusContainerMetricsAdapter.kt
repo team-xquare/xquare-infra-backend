@@ -121,7 +121,7 @@ class PrometheusContainerMetricsAdapter(
 
     private fun formatHttpRequestsData(queryResponse: DataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
-        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs / 1000)
+        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs)
         return aggregatedData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
                 usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
@@ -131,7 +131,7 @@ class PrometheusContainerMetricsAdapter(
 
     private fun formatLatencyData(queryResponse: DataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
-        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs / 1000)
+        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs)
         return aggregatedData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
                 usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
