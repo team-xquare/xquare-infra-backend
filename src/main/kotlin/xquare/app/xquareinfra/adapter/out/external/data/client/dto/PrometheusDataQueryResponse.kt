@@ -20,5 +20,10 @@ data class PrometheusResult(
     @JsonProperty("metric")
     val metric: Map<String, Any>,
     @JsonProperty("values")
-    val values: List<List<Any>>,
+    val values: List<List<JsonElement>>,
+)
+
+data class JsonElement(
+    @JsonProperty("value")
+    val value: Any
 )
