@@ -163,8 +163,8 @@ object DataUtil {
             val metricData = mutableMapOf<String, String>()
             for (value in data.values) {
                 if (value.size >= 2) {
-                    val timestamp = (value[0] as? Long)?.let { formatTime(it) } ?: continue
-                    val metricValue = value[1]?.toString() ?: continue
+                    val timestamp = (value[0] as? Double)?.let { formatTime(it.toLong()) } ?: continue
+                    val metricValue = value[1]?.toString()?.takeUnless { it == "NaN" } ?: "0.00"
                     metricData[timestamp] = metricValue
                 }
             }
