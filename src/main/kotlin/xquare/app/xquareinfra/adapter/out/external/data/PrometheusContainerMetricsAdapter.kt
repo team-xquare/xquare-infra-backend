@@ -84,8 +84,8 @@ class PrometheusContainerMetricsAdapter(
     }
 
     private fun createQueryRequest(query: String, durationMinute: Int, intervalMs: Int): QueryRequest {
-        val currentTimeMillis = Instant.now().toEpochMilli()
-        val durationHoursAgoMillis = currentTimeMillis - (durationMinute * 60 * 1000)
+        val currentTimeSeconds = Instant.now().epochSecond
+        val durationHoursAgoSeconds = currentTimeSeconds - (durationMinute * 60)
         return QueryRequest(
             queries = listOf(
                 QueryDto(
@@ -101,8 +101,8 @@ class PrometheusContainerMetricsAdapter(
                     datasourceId = 3
                 )
             ),
-            from = durationHoursAgoMillis.toString(),
-            to = currentTimeMillis.toString()
+            from = durationHoursAgoSeconds.toString(),
+            to = currentTimeSeconds.toString()
         )
     }
 
