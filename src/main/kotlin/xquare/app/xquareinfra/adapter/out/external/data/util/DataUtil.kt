@@ -164,7 +164,13 @@ object DataUtil {
             for (value in data.values) {
                 if (value.size >= 2) {
                     println("origin : ${value[0]}\n new : ${value[0] as? Double}")
-                    val timestamp = (value[0] as? Double)?.let { formatTime(it.toLong() * 1000) } ?: "건너뜀"
+                    fun Any.toMillis(): Long? = when (this) {
+                        is Long -> this * 1000
+                        is Double -> (this * 1000).toLong()
+                        is Int -> this.toLong() * 1000
+                        else -> null
+                    }
+                    val timestamp = value[0].toMillis()?.let { formatTime(it) } ?: "오류"
                     val metricValue = value[1]?.toString()?.takeUnless { it == "NaN" } ?: "0.00"
                     metricData[timestamp] = metricValue
                 }
