@@ -2,7 +2,6 @@ package xquare.app.xquareinfra.adapter.out.external.data.util
 
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
-import xquare.app.xquareinfra.infrastructure.persistence.deploy.DeployJpaEntity
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.Frame
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
@@ -32,9 +31,9 @@ object DataUtil {
         }
     }
 
-    fun aggregateDataToMinute(rawData: MutableMap<String, Map<String, String>>, intervalSeconds: Int): MutableMap<String, Map<String, String>> {
+    fun aggregateDataToMinute(rawData: MutableMap<String, Map<String, String>>, intervalMs: Int): MutableMap<String, Map<String, String>> {
         val aggregatedData = mutableMapOf<String, MutableMap<String, Double>>()
-        val entriesPerMinute = 60 / intervalSeconds
+        val entriesPerMinute = 60000 / intervalMs
 
         rawData.forEach { (key, timeToUsageMap) ->
             val aggregatedTimeToUsageMap = mutableMapOf<String, Double>()
