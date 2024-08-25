@@ -1,6 +1,5 @@
 package xquare.app.xquareinfra.adapter.out.external.cloudflare
 
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.CloudflareClient
 import xquare.app.xquareinfra.adapter.out.external.cloudflare.client.dto.DnsType
@@ -9,8 +8,6 @@ import xquare.app.xquareinfra.application.container.port.out.ContainerDnsPort
 import xquare.app.xquareinfra.application.container.port.out.DnsRecord
 import xquare.app.xquareinfra.infrastructure.env.cloudflare.CloudflareProperties
 import xquare.app.xquareinfra.infrastructure.env.kubernetes.XquareProperties
-import xquare.app.xquareinfra.infrastructure.exception.FeignException
-import xquare.app.xquareinfra.adapter.out.external.Result
 
 @Component
 class CloudflareAdapter(
