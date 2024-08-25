@@ -34,8 +34,6 @@ import xquare.app.xquareinfra.infrastructure.integration.kubernetes.KubernetesOp
 import xquare.app.xquareinfra.infrastructure.integration.vault.VaultService
 import java.time.LocalDateTime
 import java.util.*
-import xquare.app.xquareinfra.adapter.out.external.Result
-import xquare.app.xquareinfra.application.container.port.out.DnsRecord
 
 @Transactional
 @Service
