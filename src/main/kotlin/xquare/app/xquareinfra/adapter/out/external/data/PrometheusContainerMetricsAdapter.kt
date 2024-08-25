@@ -74,8 +74,8 @@ class PrometheusContainerMetricsAdapter(
 
     private fun executeQuery(query: String, durationMinute: Int, intervalMs: Int): PrometheusDataQueryResponse {
         val queryRequest = createQueryRequest(query, durationMinute, intervalMs)
-        return prometheusClient.
-        query(
+        println("query: ${queryRequest.queries[0].expr}\nstart : ${queryRequest.from}\nend : ${queryRequest.to}\nstep : ${(intervalMs / 1000)}")
+        return prometheusClient.query(
             query = queryRequest.queries[0].expr,
             start = queryRequest.from,
             end = queryRequest.to,
@@ -127,8 +127,7 @@ class PrometheusContainerMetricsAdapter(
 
     private fun formatHttpRequestsData(queryResponse: PrometheusDataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
-        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs)
-        return aggregatedData.mapValues { (_, timeToUsageMap) ->
+        return rawData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
                 usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
             }
@@ -137,8 +136,7 @@ class PrometheusContainerMetricsAdapter(
 
     private fun formatLatencyData(queryResponse: PrometheusDataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
-        val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs)
-        return aggregatedData.mapValues { (_, timeToUsageMap) ->
+        return rawData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
                 usage?.toDoubleOrNull()?.let { String.format("%.2f", it) } ?: "0.00"
             }
