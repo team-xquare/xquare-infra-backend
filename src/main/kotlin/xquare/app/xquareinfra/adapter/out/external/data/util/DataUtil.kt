@@ -163,7 +163,7 @@ object DataUtil {
             val metricData = mutableMapOf<String, String>()
             for (value in data.values) {
                 if (value.size >= 2) {
-                    val timestamp = (value[0] as? Number)?.toDouble()?.toString() ?: continue
+                    val timestamp = (value[0] as? Long)?.let { formatTime(it) } ?: continue
                     val metricValue = value[1]?.toString() ?: continue
                     metricData[timestamp] = metricValue
                 }
@@ -173,8 +173,8 @@ object DataUtil {
         return response
     }
 
-    private fun formatTime(time: String): String {
-        val timestamp = Instant.ofEpochMilli(time.toLong())
+    private fun formatTime(time: Long): String {
+        val timestamp = Instant.ofEpochMilli(time)
         val kstTime = ZonedDateTime.ofInstant(timestamp, ZoneId.of("Asia/Seoul"))
         return kstTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
     }
