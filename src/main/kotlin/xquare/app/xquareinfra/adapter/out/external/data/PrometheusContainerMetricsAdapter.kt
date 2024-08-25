@@ -2,8 +2,8 @@ package xquare.app.xquareinfra.adapter.out.external.data
 
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
-import xquare.app.xquareinfra.adapter.out.external.data.client.DataClient
-import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
+import xquare.app.xquareinfra.adapter.out.external.data.client.PrometheusClient
+import xquare.app.xquareinfra.adapter.out.external.data.client.dto.PrometheusDataQueryResponse
 import xquare.app.xquareinfra.adapter.out.external.data.util.DataUtil
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryRequest
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryDto
@@ -15,7 +15,7 @@ import java.time.Instant
 
 @Component
 class PrometheusContainerMetricsAdapter(
-    private val dataClient: DataClient,
+    private val prometheusClient: PrometheusClient,
     private val findTeamPort: FindTeamPort
 ) : ContainerMetricsPort {
 
@@ -72,9 +72,14 @@ class PrometheusContainerMetricsAdapter(
         return formatLatencyData(queryResponse, 60000)
     }
 
-    private fun executeQuery(query: String, durationMinute: Int, intervalMs: Int): DataQueryResponse {
+    private fun executeQuery(query: String, durationMinute: Int, intervalMs: Int): PrometheusDataQueryResponse {
         val queryRequest = createQueryRequest(query, durationMinute, intervalMs)
-        return dataClient.query(queryRequest)
+        return prometheusClient.query(
+            query = queryRequest.queries.toString(),
+            start = queryRequest.from,
+            end = queryRequest.to,
+            step = (intervalMs / 1000).toString()
+        )
     }
 
     private fun createQueryRequest(query: String, durationMinute: Int, intervalMs: Int): QueryRequest {
@@ -100,7 +105,7 @@ class PrometheusContainerMetricsAdapter(
         )
     }
 
-    private fun formatCpuUsageData(queryResponse: DataQueryResponse): Map<String, Map<String, String>> {
+    private fun formatCpuUsageData(queryResponse: PrometheusDataQueryResponse): Map<String, Map<String, String>> {
         val formattedData = DataUtil.formatData(queryResponse)
         return formattedData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
@@ -109,7 +114,7 @@ class PrometheusContainerMetricsAdapter(
         }
     }
 
-    private fun formatMemoryUsageData(queryResponse: DataQueryResponse): Map<String, Map<String, String>> {
+    private fun formatMemoryUsageData(queryResponse: PrometheusDataQueryResponse): Map<String, Map<String, String>> {
         val formattedData = DataUtil.formatData(queryResponse)
         return formattedData.mapValues { (_, timeToUsageMap) ->
             timeToUsageMap.mapValues { (_, usage) ->
@@ -119,7 +124,7 @@ class PrometheusContainerMetricsAdapter(
         }
     }
 
-    private fun formatHttpRequestsData(queryResponse: DataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
+    private fun formatHttpRequestsData(queryResponse: PrometheusDataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
         val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs)
         return aggregatedData.mapValues { (_, timeToUsageMap) ->
@@ -129,7 +134,7 @@ class PrometheusContainerMetricsAdapter(
         }
     }
 
-    private fun formatLatencyData(queryResponse: DataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
+    private fun formatLatencyData(queryResponse: PrometheusDataQueryResponse, intervalMs: Int): Map<String, Map<String, String>> {
         val rawData = DataUtil.formatData(queryResponse)
         val aggregatedData = DataUtil.aggregateDataToMinute(rawData, intervalMs)
         return aggregatedData.mapValues { (_, timeToUsageMap) ->

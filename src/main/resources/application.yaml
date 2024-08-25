@@ -64,6 +64,7 @@ url:
   log: ${LOG_URL}
   gocd: ${GOCD_URL}
   cloudflare: ${CLOUDFLARE_URL}
+  prometheus: ${PROMETHEUS_URL}
 
 secret:
   projectSecret: ${PROJECT_SECRET}

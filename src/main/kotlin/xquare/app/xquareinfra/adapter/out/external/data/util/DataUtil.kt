@@ -2,8 +2,8 @@ package xquare.app.xquareinfra.adapter.out.external.data.util
 
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
-import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DataQueryResponse
-import xquare.app.xquareinfra.adapter.out.external.data.client.dto.Frame
+import xquare.app.xquareinfra.adapter.out.external.data.client.dto.PrometheusDataQueryResponse
+import xquare.app.xquareinfra.adapter.out.external.data.client.dto.DsDataFrame
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import xquare.app.xquareinfra.domain.team.model.Team
 import java.time.Instant
@@ -157,24 +157,11 @@ object DataUtil {
         """.trimIndent()
     }
 
-    fun formatData(queryResponse: DataQueryResponse): MutableMap<String, Map<String, String>> {
-        var count = 0
+    fun formatData(queryResponse: PrometheusDataQueryResponse): MutableMap<String, Map<String, String>> {
         val response = mutableMapOf<String, Map<String, String>>()
-        queryResponse.results?.a?.frames?.forEach { frame ->
-            frame.data?.let { data ->
-                if (data.values.isNotEmpty()) {
-                    val times = data.values[0]
-                    val usages = data.values[1]
-
-                    val timeToUsageMap = mutableMapOf<String, String>()
-                    times.zip(usages).forEach { (time, usage) ->
-                        val formattedTime = formatTime(time.toString())
-                        val formattedUsage = usage?.toString() ?: "0.00"
-                        timeToUsageMap[formattedTime] = formattedUsage
-                    }
-                    count++
-                    response[count.toString()] = timeToUsageMap
-                }
+        queryResponse.data.result.forEachIndexed { index, data ->
+            data.values.map {
+                response[index.toString()] = mapOf(it.first.toString() to it.second)
             }
         }
         return response
@@ -188,7 +175,7 @@ object DataUtil {
 
     data class LogEntry(val timestamp: String, val body: String)
 
-    fun parseLogs(frames: List<Frame>?): List<LogEntry> {
+    fun parseLogs(frames: List<DsDataFrame>?): List<LogEntry> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         return frames?.flatMap { frame ->
             frame.data?.let { data ->
