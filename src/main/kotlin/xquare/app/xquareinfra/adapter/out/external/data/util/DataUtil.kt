@@ -80,7 +80,7 @@ object DataUtil {
                     workload_type=~"deployment"
                 }
             ) by (pod)
-        """.trimIndent()
+        """.replace("\\s".toRegex(), "")
     }
 
     fun makeMemoryUsageQuery(team: Team, deploy: Deploy, containerEnvironment: ContainerEnvironment): String {
@@ -104,7 +104,7 @@ object DataUtil {
                     workload_type=~"deployment"
                 }
             ) by (pod)
-        """.trimIndent()
+        """.replace("\\s".toRegex(), "")
     }
 
 
@@ -121,7 +121,7 @@ object DataUtil {
                     }[1m]
                 )
             ) * 60
-        """.trimIndent()
+        """.replace("\\s".toRegex(), "")
         return response
     }
 
@@ -139,7 +139,7 @@ object DataUtil {
                     )
                 ) by (le)
             )
-        """.trimIndent()
+        """.replace("\\s".toRegex(), "")
     }
 
     fun makeHttpStatusRequestPerMinuteQuery(deploy: Deploy, containerEnvironment: ContainerEnvironment, statusCode: Int): String {
@@ -154,7 +154,7 @@ object DataUtil {
                     }[1m]
                 )
             ) * 60
-        """.trimIndent()
+        """.replace("\\s".toRegex(), "")
     }
 
     fun formatData(queryResponse: PrometheusDataQueryResponse): MutableMap<String, Map<String, String>> {
