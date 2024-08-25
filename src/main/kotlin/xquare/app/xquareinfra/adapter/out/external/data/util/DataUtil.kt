@@ -163,7 +163,6 @@ object DataUtil {
             val metricData = mutableMapOf<String, String>()
             for (value in data.values) {
                 if (value.size >= 2) {
-                    println("origin : ${value[0]}\n new : ${value[0] as? Double}")
                     fun Any.toMillis(): Long? = when (this) {
                         is Long -> this * 1000
                         is Double -> (this * 1000).toLong()
