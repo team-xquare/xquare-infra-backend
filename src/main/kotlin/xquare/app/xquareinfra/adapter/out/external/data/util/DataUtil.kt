@@ -160,8 +160,10 @@ object DataUtil {
     fun formatData(queryResponse: PrometheusDataQueryResponse): MutableMap<String, Map<String, String>> {
         val response = mutableMapOf<String, Map<String, String>>()
         queryResponse.data.result.forEachIndexed { index, data ->
-            data.values.map {
-                response[index.toString()] = mapOf(it.first.toString() to it.second)
+            data.values.map{
+                it.map { value ->
+                    response[index.toString()] = mapOf(value.timeValue.toString() to value.value)
+                }
             }
         }
         return response
