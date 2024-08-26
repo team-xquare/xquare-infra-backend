@@ -74,7 +74,6 @@ class PrometheusContainerMetricsAdapter(
 
     private fun executeQuery(query: String, durationMinute: Int, intervalMs: Int): PrometheusDataQueryResponse {
         val queryRequest = createQueryRequest(query, durationMinute, intervalMs)
-        println("query: ${queryRequest.queries[0].expr}\nstart : ${queryRequest.from}\nend : ${queryRequest.to}\nstep : ${(intervalMs / 1000)}")
         return prometheusClient.query(
             query = queryRequest.queries[0].expr,
             start = queryRequest.from,
