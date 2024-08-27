@@ -2,9 +2,9 @@ package xquare.app.xquareinfra.adapter.out.persistence.span
 
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.span.repository.SpanRepository
-import xquare.app.xquareinfra.application.span.port.out.FindSpanPort
-import xquare.app.xquareinfra.application.span.port.out.SaveSpanPort
-import xquare.app.xquareinfra.domain.span.model.Span
+import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
+import xquare.app.xquareinfra.application.trace.port.out.SaveSpanPort
+import xquare.app.xquareinfra.domain.trace.model.Span
 
 @Component
 class SpanPersistenceAdapter(
