@@ -15,6 +15,10 @@ class SpanPersistenceAdapter(
         return spanMapper.toModel(spanRepository.save(spanMapper.toEntity(span)))
     }
 
+    override fun saveAll(spans: List<Span>) {
+        spanRepository.saveAll(spans.map { spanMapper.toEntity(it) })
+    }
+
     override fun findRootSpanListByServiceNameInTimeRange(
         serviceName: String,
         startTimeUnixNano: Long,
