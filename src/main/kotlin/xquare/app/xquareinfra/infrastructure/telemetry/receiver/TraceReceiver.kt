@@ -9,12 +9,15 @@ import io.opentelemetry.proto.trace.v1.Span
 import net.devh.boot.grpc.server.service.GrpcService
 import org.springframework.context.ApplicationEventPublisher
 import xquare.app.xquareinfra.application.trace.port.out.SaveSpanPort
+import xquare.app.xquareinfra.application.trace.port.out.SaveTracePort
+import xquare.app.xquareinfra.domain.trace.model.Trace
 import xquare.app.xquareinfra.infrastructure.telemetry.event.SpanReceivedEvent
 
 @GrpcService
 class TraceReceiver(
     private val eventPublisher: ApplicationEventPublisher,
-    private val saveSpanPort: SaveSpanPort
+    private val saveSpanPort: SaveSpanPort,
+    private val saveTracePort: SaveTracePort
 ) : TraceServiceGrpc.TraceServiceImplBase() {
     override fun export(request: ExportTraceServiceRequest, responseObserver: StreamObserver<ExportTraceServiceResponse>) {
         request.resourceSpansList.forEach { resourceSpans ->
@@ -27,11 +30,16 @@ class TraceReceiver(
             val rootSpan = findRootSpan(resourceSpans)
             val rootServiceName = rootSpan?.let { findServiceName(it) } ?: defaultServiceName
 
-            resourceSpans.scopeSpansList.flatMap { it.spansList }
-                .forEach { span ->
-                    saveSpanPort.save(xquare.app.xquareinfra.domain.trace.model.Span.createSpanFromOTel(span))
+            val spans = resourceSpans.scopeSpansList.flatMap { it.spansList }
+                .map { span ->
+                    val domainSpan = xquare.app.xquareinfra.domain.trace.model.Span.createSpanFromOTel(span)
+                    saveSpanPort.save(domainSpan)
                     eventPublisher.publishEvent(SpanReceivedEvent(this, span, rootServiceName))
+                    domainSpan
                 }
+
+            val trace = Trace.createTraceFromSpans(spans, rootServiceName)
+            saveTracePort.save(trace)
         }
 
         val response = ExportTraceServiceResponse.getDefaultInstance()
