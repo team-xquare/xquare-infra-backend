@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.Query
 import xquare.app.xquareinfra.infrastructure.persistence.span.SpanMongoEntity
 
 interface SpanRepository : MongoRepository<SpanMongoEntity, String> {
-    @Query("{'startTimeUnixNano': {\$gte: ?0, \$lte: ?1}, 'endTimeUnixNano': {\$gte: ?0, \$lte: ?1}, 'rootServiceName': ?2}")
+    @Query("{'startTimeUnixNano': {\$lte: ?1}, 'endTimeUnixNano': {\$gte: ?0}, 'rootServiceName': ?2}")
     fun findSpansBetweenTimesByRootServiceName(
         startTimeUnixNano: Long,
         endTimeUnixNano: Long,
