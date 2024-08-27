@@ -21,7 +21,7 @@ data class Span(
     companion object {
         fun createSpanFromOTel(otelSpan: io.opentelemetry.proto.trace.v1.Span, rootServiceName: String?): Span {
             return Span(
-                id = "${otelSpan.traceId}${otelSpan.spanId}",
+                id = "${otelSpan.traceId.toHexString()}${otelSpan.spanId.toHexString()}",
                 traceId = otelSpan.traceId.toHexString(),
                 spanId = otelSpan.spanId.toHexString(),
                 parentSpanId = if (otelSpan.parentSpanId.isEmpty()) null else otelSpan.parentSpanId.toHexString(),
