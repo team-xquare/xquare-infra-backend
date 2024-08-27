@@ -3,7 +3,6 @@ package xquare.app.xquareinfra.infrastructure.persistence.trace
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import xquare.app.xquareinfra.domain.trace.model.Span
-import java.time.Instant
 import javax.persistence.Id
 
 @Document(collection = "traces")

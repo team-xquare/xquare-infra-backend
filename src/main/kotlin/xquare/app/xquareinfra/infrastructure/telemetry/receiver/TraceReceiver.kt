@@ -20,6 +20,9 @@ class TraceReceiver(
     private val saveTracePort: SaveTracePort
 ) : TraceServiceGrpc.TraceServiceImplBase() {
     override fun export(request: ExportTraceServiceRequest, responseObserver: StreamObserver<ExportTraceServiceResponse>) {
+        val allSpans = mutableListOf<xquare.app.xquareinfra.domain.trace.model.Span>()
+        val traces = mutableListOf<Trace>()
+
         request.resourceSpansList.forEach { resourceSpans ->
             val resource = resourceSpans.resource
             val defaultServiceName = resource.attributesList
@@ -33,14 +36,18 @@ class TraceReceiver(
             val spans = resourceSpans.scopeSpansList.flatMap { it.spansList }
                 .map { span ->
                     val domainSpan = xquare.app.xquareinfra.domain.trace.model.Span.createSpanFromOTel(span)
-                    saveSpanPort.save(domainSpan)
                     eventPublisher.publishEvent(SpanReceivedEvent(this, span, rootServiceName))
                     domainSpan
                 }
 
+            allSpans.addAll(spans)
+
             val trace = Trace.createTraceFromSpans(spans, rootServiceName)
-            saveTracePort.save(trace)
+            traces.add(trace)
         }
+
+        saveSpanPort.saveAll(allSpans)
+        traces.forEach { saveTracePort.save(it) }
 
         val response = ExportTraceServiceResponse.getDefaultInstance()
         responseObserver.onNext(response)
