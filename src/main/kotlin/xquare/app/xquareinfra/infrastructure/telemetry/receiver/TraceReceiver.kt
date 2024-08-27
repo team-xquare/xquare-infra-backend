@@ -8,7 +8,7 @@ import io.opentelemetry.proto.trace.v1.ResourceSpans
 import io.opentelemetry.proto.trace.v1.Span
 import net.devh.boot.grpc.server.service.GrpcService
 import org.springframework.context.ApplicationEventPublisher
-import xquare.app.xquareinfra.application.span.port.out.SaveSpanPort
+import xquare.app.xquareinfra.application.trace.port.out.SaveSpanPort
 import xquare.app.xquareinfra.infrastructure.telemetry.event.SpanReceivedEvent
 
 @GrpcService
@@ -29,7 +29,7 @@ class TraceReceiver(
 
             resourceSpans.scopeSpansList.flatMap { it.spansList }
                 .forEach { span ->
-                    saveSpanPort.save(xquare.app.xquareinfra.domain.span.model.Span.createSpanFromOTel(span, rootServiceName))
+                    saveSpanPort.save(xquare.app.xquareinfra.domain.trace.model.Span.createSpanFromOTel(span))
                     eventPublisher.publishEvent(SpanReceivedEvent(this, span, rootServiceName))
                 }
         }
