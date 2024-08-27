@@ -12,7 +12,7 @@ spring:
     open-in-view: true
   data:
     mongodb:
-      uri: ${MONGO_URI:mongodb://mongodb.xquare.app/xquare_infra}
+      uri: ${MONGO_URL:mongodb://mongodb.xquare.app/xquare_infra}
       field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
 
   datasource:
