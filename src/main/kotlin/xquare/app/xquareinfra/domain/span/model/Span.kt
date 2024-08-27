@@ -1,5 +1,6 @@
 package xquare.app.xquareinfra.domain.span.model
 
+import com.google.protobuf.ByteString
 import io.opentelemetry.proto.common.v1.AnyValue
 
 data class Span(
@@ -21,9 +22,9 @@ data class Span(
         fun createSpanFromOTel(otelSpan: io.opentelemetry.proto.trace.v1.Span, rootServiceName: String?): Span {
             return Span(
                 id = "${otelSpan.traceId}${otelSpan.spanId}",
-                traceId = otelSpan.traceId.toStringUtf8(),
-                spanId = otelSpan.spanId.toStringUtf8(),
-                parentSpanId = if (otelSpan.parentSpanId.isEmpty()) null else otelSpan.parentSpanId.toStringUtf8(),
+                traceId = otelSpan.traceId.toHexString(),
+                spanId = otelSpan.spanId.toHexString(),
+                parentSpanId = if (otelSpan.parentSpanId.isEmpty()) null else otelSpan.parentSpanId.toHexString(),
                 name = otelSpan.name,
                 kind = otelSpan.kind.number,
                 startTimeUnixNano = otelSpan.startTimeUnixNano,
@@ -38,8 +39,8 @@ data class Span(
                 },
                 links = otelSpan.linksList.map { link ->
                     SpanLink(
-                        traceId = link.traceId.toStringUtf8(),
-                        spanId = link.spanId.toStringUtf8(),
+                        traceId = link.traceId.toHexString(),
+                        spanId = link.spanId.toHexString(),
                         attributes = link.attributesList.associate { it.key to it.value.toAttributeValue() }
                     )
                 },
@@ -60,6 +61,10 @@ data class Span(
                 hasArrayValue() -> AttributeValue(arrayValue = arrayValue.valuesList.map { it.toAttributeValue() })
                 else -> AttributeValue(stringValue = "")
             }
+        }
+
+        fun ByteString.toHexString(): String {
+            return this.toByteArray().joinToString("") { "%02x".format(it) }
         }
     }
 }
