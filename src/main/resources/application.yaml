@@ -13,6 +13,8 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_URL:mongodb://localhost:57831/xquare_infra}
+      field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/xquareinfra}
     username: ${DB_USERNAME:root}
