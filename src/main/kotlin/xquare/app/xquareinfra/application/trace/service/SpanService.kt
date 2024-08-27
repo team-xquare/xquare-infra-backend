@@ -1,11 +1,11 @@
-package xquare.app.xquareinfra.application.span.service
+package xquare.app.xquareinfra.application.trace.service
 
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.adapter.`in`.span.dto.response.GetRootSpanListResponse
-import xquare.app.xquareinfra.adapter.`in`.span.dto.response.RootSpan
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.RootSpan
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
-import xquare.app.xquareinfra.application.span.port.`in`.SpanUseCase
-import xquare.app.xquareinfra.application.span.port.out.FindSpanPort
+import xquare.app.xquareinfra.application.trace.port.`in`.SpanUseCase
+import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException

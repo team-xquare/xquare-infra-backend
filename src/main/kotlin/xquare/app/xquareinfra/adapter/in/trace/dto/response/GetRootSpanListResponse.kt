@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.adapter.`in`.span.dto.response
+package xquare.app.xquareinfra.adapter.`in`.trace.dto.response
 
 data class GetRootSpanListResponse(
     val spans: List<RootSpan>

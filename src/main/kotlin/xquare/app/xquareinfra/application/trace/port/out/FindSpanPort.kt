@@ -1,6 +1,6 @@
-package xquare.app.xquareinfra.application.span.port.out
+package xquare.app.xquareinfra.application.trace.port.out
 
-import xquare.app.xquareinfra.domain.span.model.Span
+import xquare.app.xquareinfra.domain.trace.model.Span
 
 interface FindSpanPort {
     fun findRootSpanListByServiceNameInTimeRange(serviceName: String, startTimeUnixNano: Long, endTimeUnixNano: Long): List<Span>
