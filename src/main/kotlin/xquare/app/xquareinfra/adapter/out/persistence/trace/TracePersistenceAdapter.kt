@@ -1,6 +1,5 @@
 package xquare.app.xquareinfra.adapter.out.persistence.trace
 
-import org.springframework.boot.actuate.trace.http.HttpTraceRepository
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.trace.repository.TraceRepository
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
@@ -21,6 +20,10 @@ class TracePersistenceAdapter(
         startTimeUnixNano: Long,
         endTimeUnixNano: Long
     ): List<Trace> {
-        TODO("Not yet implemented")
+        return traceRepository.findTraceListByServiceNameInTimeRange(
+            serviceName = serviceName,
+            startTime = startTimeUnixNano,
+            endTime = endTimeUnixNano
+        ).map { traceMapper.toModel(it) }
     }
 }
