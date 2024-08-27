@@ -8,10 +8,14 @@ import io.opentelemetry.proto.trace.v1.ResourceSpans
 import io.opentelemetry.proto.trace.v1.Span
 import net.devh.boot.grpc.server.service.GrpcService
 import org.springframework.context.ApplicationEventPublisher
+import xquare.app.xquareinfra.application.span.port.out.SaveSpanPort
 import xquare.app.xquareinfra.infrastructure.telemetry.event.SpanReceivedEvent
 
 @GrpcService
-class TraceReceiver(private val eventPublisher: ApplicationEventPublisher) : TraceServiceGrpc.TraceServiceImplBase() {
+class TraceReceiver(
+    private val eventPublisher: ApplicationEventPublisher,
+    private val saveSpanPort: SaveSpanPort
+) : TraceServiceGrpc.TraceServiceImplBase() {
     override fun export(request: ExportTraceServiceRequest, responseObserver: StreamObserver<ExportTraceServiceResponse>) {
         request.resourceSpansList.forEach { resourceSpans ->
             val resource = resourceSpans.resource
@@ -20,9 +24,12 @@ class TraceReceiver(private val eventPublisher: ApplicationEventPublisher) : Tra
                 ?.value
                 ?.stringValue
 
+            val rootSpan = findRootSpan(resourceSpans)
+            val rootServiceName = rootSpan?.let { findServiceName(it) } ?: defaultServiceName
+
             resourceSpans.scopeSpansList.flatMap { it.spansList }
                 .forEach { span ->
-                    val rootServiceName = findRootServiceName(span, resourceSpans) ?: defaultServiceName
+                    saveSpanPort.save(xquare.app.xquareinfra.domain.span.model.Span.createSpanFromOTel(span, rootServiceName))
                     eventPublisher.publishEvent(SpanReceivedEvent(this, span, rootServiceName))
                 }
         }
@@ -32,20 +39,15 @@ class TraceReceiver(private val eventPublisher: ApplicationEventPublisher) : Tra
         responseObserver.onCompleted()
     }
 
-    private fun findRootServiceName(span: Span, resourceSpans: ResourceSpans): String? {
-        if (span.parentSpanId.isEmpty()) {
-            return span.attributesList
-                .find { it.key == "service.name" }
-                ?.value
-                ?.stringValue
-        }
-
-        val rootSpan = resourceSpans.scopeSpansList
+    private fun findRootSpan(resourceSpans: ResourceSpans): Span? {
+        return resourceSpans.scopeSpansList
             .flatMap { it.spansList }
-            .find { it.parentSpanId.isEmpty() }
+            .find { it.parentSpanId.isEmpty }
+    }
 
-        return rootSpan?.attributesList
-            ?.find { it.key == "service.name" }
+    private fun findServiceName(span: Span): String? {
+        return span.attributesList
+            .find { it.key == "service.name" }
             ?.value
             ?.stringValue
     }
