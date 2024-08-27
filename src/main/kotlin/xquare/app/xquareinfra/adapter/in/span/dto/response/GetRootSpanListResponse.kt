@@ -9,5 +9,5 @@ data class RootSpan(
     val resource: String,
     val durationMs: Long,
     val method: String?,
-    val statusCode: Int?
+    val statusCode: Long?
 )
