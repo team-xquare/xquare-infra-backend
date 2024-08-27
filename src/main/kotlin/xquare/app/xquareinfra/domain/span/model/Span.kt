@@ -18,6 +18,10 @@ data class Span(
     val status: SpanStatus,
     val rootServiceName: String?
 ) {
+    fun getAttributeValue(attribute: String): AttributeValue? {
+        return attributes[attribute]
+    }
+
     companion object {
         fun createSpanFromOTel(otelSpan: io.opentelemetry.proto.trace.v1.Span, rootServiceName: String?): Span {
             return Span(
