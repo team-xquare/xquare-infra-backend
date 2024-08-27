@@ -10,11 +10,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         legacy_limit_handler: true
     open-in-view: true
-  data:
-    mongodb:
-      uri: ${MONGO_URL:mongodb://localhost:62120/xquare_infra}
-      field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
-      auto-index-creation: true
 
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/xquareinfra}
