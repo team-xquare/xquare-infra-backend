@@ -1,10 +1,10 @@
-package xquare.app.xquareinfra.infrastructure.telemtry.analyze.analyzer
+package xquare.app.xquareinfra.infrastructure.telemetry.analyze.analyzer
 
 import io.opentelemetry.proto.trace.v1.Span
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.infrastructure.telemtry.analyze.AnalysisResult
-import xquare.app.xquareinfra.infrastructure.telemtry.analyze.SpanAnalyzer
-import xquare.app.xquareinfra.infrastructure.telemtry.analyze.getAttributeValue
+import xquare.app.xquareinfra.infrastructure.telemetry.analyze.AnalysisResult
+import xquare.app.xquareinfra.infrastructure.telemetry.analyze.SpanAnalyzer
+import xquare.app.xquareinfra.infrastructure.telemetry.analyze.getAttributeValue
 
 @Component
 class SlowQueryAnalyzer : SpanAnalyzer {

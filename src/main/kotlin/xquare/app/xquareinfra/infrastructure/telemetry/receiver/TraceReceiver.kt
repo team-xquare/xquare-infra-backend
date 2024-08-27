@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.telemtry.receiver
+package xquare.app.xquareinfra.infrastructure.telemetry.receiver
 
 import io.grpc.stub.StreamObserver
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest
@@ -8,7 +8,7 @@ import io.opentelemetry.proto.trace.v1.ResourceSpans
 import io.opentelemetry.proto.trace.v1.Span
 import net.devh.boot.grpc.server.service.GrpcService
 import org.springframework.context.ApplicationEventPublisher
-import xquare.app.xquareinfra.infrastructure.telemtry.event.SpanReceivedEvent
+import xquare.app.xquareinfra.infrastructure.telemetry.event.SpanReceivedEvent
 
 @GrpcService
 class TraceReceiver(private val eventPublisher: ApplicationEventPublisher) : TraceServiceGrpc.TraceServiceImplBase() {
