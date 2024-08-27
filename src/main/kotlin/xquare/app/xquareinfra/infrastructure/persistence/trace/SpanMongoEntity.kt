@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.infrastructure.persistence.span
+package xquare.app.xquareinfra.infrastructure.persistence.trace
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.CompoundIndex
