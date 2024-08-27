@@ -11,6 +11,7 @@ class SpanPersistenceAdapter(
     private val spanMapper: SpanMapper
 ) : SaveSpanPort{
     override fun save(span: Span): Span {
+        println("저장됨 ㅇㅇ")
         return spanMapper.toModel(spanRepository.save(spanMapper.toEntity(span)))
     }
 }
