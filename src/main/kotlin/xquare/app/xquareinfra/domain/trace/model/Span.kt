@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.domain.span.model
+package xquare.app.xquareinfra.domain.trace.model
 
 import com.google.protobuf.ByteString
 import io.opentelemetry.proto.common.v1.AnyValue
@@ -15,15 +15,14 @@ data class Span(
     val attributes: Map<String, AttributeValue>,
     val events: List<SpanEvent>,
     val links: List<SpanLink>,
-    val status: SpanStatus,
-    val rootServiceName: String?
+    val status: SpanStatus
 ) {
     fun getAttributeValue(attribute: String): AttributeValue? {
         return attributes[attribute]
     }
 
     companion object {
-        fun createSpanFromOTel(otelSpan: io.opentelemetry.proto.trace.v1.Span, rootServiceName: String?): Span {
+        fun createSpanFromOTel(otelSpan: io.opentelemetry.proto.trace.v1.Span): Span {
             return Span(
                 id = "${otelSpan.traceId.toHexString()}${otelSpan.spanId.toHexString()}",
                 traceId = otelSpan.traceId.toHexString(),
@@ -51,8 +50,7 @@ data class Span(
                 status = SpanStatus(
                     code = otelSpan.status.code.number,
                     message = otelSpan.status.message
-                ),
-                rootServiceName = rootServiceName
+                )
             )
         }
 

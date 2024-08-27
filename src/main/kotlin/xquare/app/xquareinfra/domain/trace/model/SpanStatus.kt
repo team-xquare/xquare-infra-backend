@@ -1,4 +1,4 @@
-package xquare.app.xquareinfra.domain.span.model
+package xquare.app.xquareinfra.domain.trace.model
 
 data class SpanStatus(
     val code: Int,

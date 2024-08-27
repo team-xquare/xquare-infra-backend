@@ -1,20 +1,20 @@
-package xquare.app.xquareinfra.adapter.`in`.span
+package xquare.app.xquareinfra.adapter.`in`.trace
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import xquare.app.xquareinfra.adapter.`in`.span.dto.response.GetRootSpanListResponse
-import xquare.app.xquareinfra.application.span.port.`in`.SpanUseCase
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
+import xquare.app.xquareinfra.application.trace.port.`in`.SpanUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.UUID
 
-@RequestMapping("/span")
+@RequestMapping("/trace")
 @RestController
-class V1SpanWebAdapter(
+class V1TraceWebAdapter(
     private val spanUseCase: SpanUseCase
 ) {
-    @GetMapping("/root-span")
+    @GetMapping("/list")
     fun getRootSpan(
         @RequestParam("deployId") deployId: UUID,
         @RequestParam("environment") environment: ContainerEnvironment,
