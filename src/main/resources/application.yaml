@@ -31,6 +31,7 @@ management:
 grpc:
   server:
     port: 4317
+    max-inbound-message-size: 1500000
 
 redis:
   host: ${REDIS_HOST:localhost}
