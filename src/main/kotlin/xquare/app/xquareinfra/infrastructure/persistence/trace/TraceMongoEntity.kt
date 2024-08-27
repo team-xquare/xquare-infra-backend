@@ -13,6 +13,7 @@ data class TraceMongoEntity(
     val spans: List<Span>,
     @Indexed
     val serviceName: String?,
+    @Indexed
     val dateNano: Long,
     val durationNano: Long
 )
