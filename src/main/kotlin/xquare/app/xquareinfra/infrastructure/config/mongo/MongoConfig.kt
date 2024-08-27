@@ -2,22 +2,23 @@ package xquare.app.xquareinfra.infrastructure.config.mongo
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.convert.converter.Converter
-import org.springframework.data.mongodb.core.convert.MongoCustomConversions
+import org.springframework.data.mongodb.core.convert.DbRefResolver
+import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext
+import org.springframework.data.mongodb.MongoDatabaseFactory
 
 @Configuration
 class MongoConfig {
-    @Bean
-    fun customConversions(): MongoCustomConversions {
-        val converters = listOf(
-            StringToStringConverter()
-        )
-        return MongoCustomConversions(converters)
-    }
 
-    inner class StringToStringConverter : Converter<String, String> {
-        override fun convert(source: String): String {
-            return source.replace(".", "_")
-        }
+    @Bean
+    fun mongoConverter(
+        mongoDbFactory: MongoDatabaseFactory,
+        mongoMappingContext: MongoMappingContext
+    ): MappingMongoConverter {
+        val dbRefResolver: DbRefResolver = DefaultDbRefResolver(mongoDbFactory)
+        val mongoConverter = MappingMongoConverter(dbRefResolver, mongoMappingContext)
+        mongoConverter.setMapKeyDotReplacement("#DOT#")
+        return mongoConverter
     }
 }
