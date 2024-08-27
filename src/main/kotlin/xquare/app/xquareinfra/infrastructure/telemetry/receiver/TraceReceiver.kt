@@ -8,7 +8,6 @@ import io.opentelemetry.proto.trace.v1.ResourceSpans
 import io.opentelemetry.proto.trace.v1.Span
 import net.devh.boot.grpc.server.service.GrpcService
 import org.springframework.context.ApplicationEventPublisher
-import xquare.app.xquareinfra.domain.trace.model.Trace
 import xquare.app.xquareinfra.infrastructure.telemetry.event.SpanReceivedEvent
 
 @GrpcService
@@ -16,8 +15,6 @@ class TraceReceiver(
     private val eventPublisher: ApplicationEventPublisher,
 ) : TraceServiceGrpc.TraceServiceImplBase() {
     override fun export(request: ExportTraceServiceRequest, responseObserver: StreamObserver<ExportTraceServiceResponse>) {
-        val allSpans = mutableListOf<xquare.app.xquareinfra.domain.trace.model.Span>()
-        val traces = mutableListOf<Trace>()
 
         request.resourceSpansList.forEach { resourceSpans ->
             val resource = resourceSpans.resource
@@ -29,17 +26,10 @@ class TraceReceiver(
             val rootSpan = findRootSpan(resourceSpans)
             val rootServiceName = rootSpan?.let { findServiceName(it) } ?: defaultServiceName
 
-            val spans = resourceSpans.scopeSpansList.flatMap { it.spansList }
+            resourceSpans.scopeSpansList.flatMap { it.spansList }
                 .map { span ->
-                    val domainSpan = xquare.app.xquareinfra.domain.trace.model.Span.createSpanFromOTel(span)
                     eventPublisher.publishEvent(SpanReceivedEvent(this, span, rootServiceName))
-                    domainSpan
                 }
-
-            allSpans.addAll(spans)
-
-            val trace = Trace.createTraceFromSpans(spans, rootServiceName)
-            traces.add(trace)
         }
 
         val response = ExportTraceServiceResponse.getDefaultInstance()
