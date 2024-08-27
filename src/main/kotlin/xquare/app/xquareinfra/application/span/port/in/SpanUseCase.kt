@@ -5,5 +5,5 @@ import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.UUID
 
 interface SpanUseCase {
-    fun getRootSpanByDeployIdAndEnvironment(deployId: UUID, environment: ContainerEnvironment): GetRootSpanListResponse
+    fun getRootSpanByDeployIdAndEnvironment(deployId: UUID, environment: ContainerEnvironment, timeRangeMinute: Long): GetRootSpanListResponse
 }

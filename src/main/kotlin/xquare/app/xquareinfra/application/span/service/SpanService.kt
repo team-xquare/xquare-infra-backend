@@ -19,19 +19,26 @@ class SpanService(
 ) : SpanUseCase {
     override fun getRootSpanByDeployIdAndEnvironment(
         deployId: UUID,
-        environment: ContainerEnvironment
+        environment: ContainerEnvironment,
+        timeRangeMinute: Long
     ): GetRootSpanListResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val serviceName = ContainerUtil.getContainerName(deploy, environment)
 
-        val rootSpanList = findSpanPort.findRootSpanListByServiceName(serviceName)
+        val timeRangeInNanos = TimeUtil.getTimeRangeInNanos(timeRangeMinute)
+
+        val rootSpanList = findSpanPort.findRootSpanListByServiceNameInTimeRange(
+            serviceName = serviceName,
+            startTimeUnixNano = timeRangeInNanos.past,
+            endTimeUnixNano = timeRangeInNanos.now
+        )
 
         val rootSpanDtoList = rootSpanList.map {
             RootSpan(
                 date = TimeUtil.unixNanoToKoreanTime(it.startTimeUnixNano),
                 resource = it.name,
                 durationMs = TimeUtil.unixNanoToMilliseconds(it.endTimeUnixNano - it.startTimeUnixNano),
-                method = it.getAttributeValue("http.status_code")?.stringValue,
+                method = it.getAttributeValue("http.method")?.stringValue,
                 statusCode = it.getAttributeValue("http.status_code")?.intValue
             )
         }
