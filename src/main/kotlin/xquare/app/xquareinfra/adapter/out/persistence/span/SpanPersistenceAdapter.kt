@@ -2,6 +2,7 @@ package xquare.app.xquareinfra.adapter.out.persistence.span
 
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.span.repository.SpanRepository
+import xquare.app.xquareinfra.application.span.port.out.FindSpanPort
 import xquare.app.xquareinfra.application.span.port.out.SaveSpanPort
 import xquare.app.xquareinfra.domain.span.model.Span
 
@@ -9,9 +10,20 @@ import xquare.app.xquareinfra.domain.span.model.Span
 class SpanPersistenceAdapter(
     private val spanRepository: SpanRepository,
     private val spanMapper: SpanMapper
-) : SaveSpanPort{
+) : SaveSpanPort, FindSpanPort {
     override fun save(span: Span): Span {
-        println("저장됨 ㅇㅇ")
         return spanMapper.toModel(spanRepository.save(spanMapper.toEntity(span)))
+    }
+
+    override fun findRootSpanListByServiceNameInTimeRange(
+        serviceName: String,
+        startTimeUnixNano: Long,
+        endTimeUnixNano: Long
+    ): List<Span> {
+        return spanRepository.findSpansBetweenTimesByRootServiceName(
+            startTimeUnixNano,
+            endTimeUnixNano,
+            serviceName
+        ).map { spanMapper.toModel(it) }
     }
 }
