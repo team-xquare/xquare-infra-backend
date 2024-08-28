@@ -1,7 +1,6 @@
 package xquare.app.xquareinfra.domain.trace.model
 
-data class
-Trace(
+data class Trace(
     val traceId: String,
     val spans: List<Span>,
     val serviceName: String?,
