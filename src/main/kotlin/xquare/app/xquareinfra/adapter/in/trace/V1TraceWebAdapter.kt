@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
-import xquare.app.xquareinfra.application.trace.port.`in`.SpanUseCase
+import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.UUID
 
 @RequestMapping("/trace")
 @RestController
 class V1TraceWebAdapter(
-    private val spanUseCase: SpanUseCase
+    private val traceUseCase: TraceUseCase
 ) {
     @GetMapping("/list")
     fun getRootSpan(
@@ -20,7 +20,7 @@ class V1TraceWebAdapter(
         @RequestParam("environment") environment: ContainerEnvironment,
         @RequestParam("timeRange") timeRange: Long
     ): GetRootSpanListResponse {
-        return spanUseCase.getRootSpanByDeployIdAndEnvironment(
+        return traceUseCase.getRootSpanByDeployIdAndEnvironment(
             deployId = deployId,
             environment = environment,
             timeRangeMinute = timeRange
