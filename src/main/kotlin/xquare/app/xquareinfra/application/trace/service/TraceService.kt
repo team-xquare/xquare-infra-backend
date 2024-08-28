@@ -27,11 +27,16 @@ class TraceService(
 
         val timeRangeInNanos = TimeUtil.getTimeRangeInNanos(timeRangeMinute)
 
+        println("serviceName: $serviceName")
+        println("timeRangeInNanos: $timeRangeInNanos")
+
         val traceList = findTracePort.findTracesByServiceNameInTimeRange(
             serviceName = serviceName,
             startTimeNano = timeRangeInNanos.past,
             endTimeNano = timeRangeInNanos.now
         )
+
+        println(traceList)
 
         val rootSpanList = traceList.mapNotNull {
             it.getRootSpan()?.let { rootSpan ->
