@@ -10,13 +10,9 @@ data class TraceMongoEntity(
     @Id
     val traceId: String,
     val spans: List<Span>,
-<<<<<<< HEAD
     @Indexed
     val serviceName: String?,
     @Indexed
-=======
-    val serviceName: String?,
->>>>>>> trace
     val dateNano: Long,
     val durationNano: Long
 )
