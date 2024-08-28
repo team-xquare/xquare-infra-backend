@@ -1,8 +1,8 @@
 package xquare.app.xquareinfra.application.trace.service
 
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetTraceListResponse
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.Trace
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.RootSpan
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
@@ -21,34 +21,19 @@ class TraceService(
         deployId: UUID,
         environment: ContainerEnvironment,
         timeRangeMinute: Long
-    ): GetTraceListResponse {
+    ): GetRootSpanListResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val serviceName = ContainerUtil.getContainerName(deploy, environment)
 
         val timeRangeInNanos = TimeUtil.getTimeRangeInNanos(timeRangeMinute)
 
-<<<<<<< HEAD
-        val rootSpanList = findTracePort.findTraceListByServiceNameInTimeRange(
-=======
-        val rootSpanList = findTracePort.findTracesByServiceNameInTimeRange(
->>>>>>> trace
+        val traceList = findTracePort.findTracesByServiceNameInTimeRange(
             serviceName = serviceName,
             startTimeNano = timeRangeInNanos.past,
             endTimeNano = timeRangeInNanos.now
         )
 
-<<<<<<< HEAD
-        val traceDtoList = rootSpanList.map {
-            val rootSpan = it.findRootSpan()
-            Trace(
-                dateNano = it.dateNano,
-                resource = rootSpan?.name,
-                durationMs = TimeUtil.unixNanoToMilliseconds(it.durationNano),
-                method = rootSpan?.getAttributeValue("http.method")?.stringValue,
-                statusCode = rootSpan?.getAttributeValue("http.status_code")?.intValue
-            )
-=======
-        val rootSpanDtoList = rootSpanList.mapNotNull {
+        val rootSpanList = traceList.mapNotNull {
             it.getRootSpan()?.let { rootSpan ->
                 RootSpan(
                     date = TimeUtil.unixNanoToKoreanTime(rootSpan.startTimeUnixNano),
@@ -58,9 +43,8 @@ class TraceService(
                     statusCode = rootSpan.getAttributeValue("http.status_code")?.intValue
                 )
             }
->>>>>>> trace
         }
 
-        return GetTraceListResponse(traceDtoList)
+        return GetRootSpanListResponse(rootSpanList)
     }
 }
