@@ -12,7 +12,7 @@ spring:
     open-in-view: true
   data:
     mongodb:
-      uri: ${MONGO_URL:mongodb://localhost:62120/xquare_infra}
+      uri: ${MONGO_URL:mongodb://localhost:27017/xquare_infra}
       field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
       auto-index-creation: true
 

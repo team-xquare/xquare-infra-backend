@@ -9,5 +9,7 @@ data class TraceMongoEntity(
     @Id
     val traceId: String,
     val spans: List<Span>,
-    val serviceName: String?
+    val serviceName: String?,
+    val dateNano: Long,
+    val durationNano: Long
 )

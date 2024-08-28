@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.RootSpan
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
-import xquare.app.xquareinfra.application.trace.port.`in`.SpanUseCase
-import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
+import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
+import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
@@ -13,10 +13,10 @@ import xquare.app.xquareinfra.infrastructure.util.TimeUtil
 import java.util.*
 
 @Service
-class SpanService(
+class TraceService(
     private val findDeployPort: FindDeployPort,
-    private val findSpanPort: FindSpanPort
-) : SpanUseCase {
+    private val findTracePort: FindTracePort
+) : TraceUseCase {
     override fun getRootSpanByDeployIdAndEnvironment(
         deployId: UUID,
         environment: ContainerEnvironment,
@@ -27,20 +27,22 @@ class SpanService(
 
         val timeRangeInNanos = TimeUtil.getTimeRangeInNanos(timeRangeMinute)
 
-        val rootSpanList = findSpanPort.findRootSpanListByServiceNameInTimeRange(
+        val rootSpanList = findTracePort.findTracesByServiceNameInTimeRange(
             serviceName = serviceName,
-            startTimeUnixNano = timeRangeInNanos.past,
-            endTimeUnixNano = timeRangeInNanos.now
+            startTimeNano = timeRangeInNanos.past,
+            endTimeNano = timeRangeInNanos.now
         )
 
-        val rootSpanDtoList = rootSpanList.map {
-            RootSpan(
-                date = TimeUtil.unixNanoToKoreanTime(it.startTimeUnixNano),
-                resource = it.name,
-                durationMs = TimeUtil.unixNanoToMilliseconds(it.endTimeUnixNano - it.startTimeUnixNano),
-                method = it.getAttributeValue("http.method")?.stringValue,
-                statusCode = it.getAttributeValue("http.status_code")?.intValue
-            )
+        val rootSpanDtoList = rootSpanList.mapNotNull {
+            it.getRootSpan()?.let { rootSpan ->
+                RootSpan(
+                    date = TimeUtil.unixNanoToKoreanTime(rootSpan.startTimeUnixNano),
+                    resource = rootSpan.name,
+                    durationMs = TimeUtil.unixNanoToMilliseconds(rootSpan.endTimeUnixNano - rootSpan.startTimeUnixNano),
+                    method = rootSpan.getAttributeValue("http.method")?.stringValue,
+                    statusCode = rootSpan.getAttributeValue("http.status_code")?.intValue
+                )
+            }
         }
 
         return GetRootSpanListResponse(rootSpanDtoList)
