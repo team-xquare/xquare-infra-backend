@@ -7,6 +7,7 @@ data class Trace(
     val dateNano: Long,
     val durationNano: Long
 ) {
+<<<<<<< HEAD
     companion object {
         fun createTraceFromSpans(spans: List<Span>, serviceName: String?): Trace {
             require(spans.isNotEmpty()) { "Spans list cannot be empty" }
@@ -24,6 +25,10 @@ data class Trace(
                 durationNano = durationMs
             )
         }
+=======
+    fun getRootSpan(): Span? {
+        return spans.find { it.parentSpanId == null }
+>>>>>>> trace
     }
 
     fun findRootSpan(): Span? {
