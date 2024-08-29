@@ -2,7 +2,9 @@ package xquare.app.xquareinfra.application.trace.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetTraceDetailResponse
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.RootSpanResponse
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.SpanDetailResponse
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
@@ -47,5 +49,23 @@ class TraceService(
         }.sortedByDescending { it.date }
 
         return GetRootSpanListResponse(rootSpanList)
+    }
+
+    override fun getTraceDetail(traceId: String): GetTraceDetailResponse {
+        val trace = findTracePort.findTraceById(traceId)
+            ?: throw BusinessLogicException.TRACE_NOT_FOUND
+
+        val traceList = trace.sortedByDescendingDate().map {
+            SpanDetailResponse(
+                traceId = it.traceId,
+                spanId = it.spanId,
+                name = it.name,
+                startTimeUnixNano = it.startTimeUnixNano,
+                endTimeUnixNano = it.endTimeUnixNano,
+                attributes = it.attributes
+            )
+        }
+
+        return GetTraceDetailResponse(traceList)
     }
 }

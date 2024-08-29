@@ -4,4 +4,5 @@ import xquare.app.xquareinfra.domain.trace.model.Trace
 
 interface FindTracePort {
     fun findTracesByServiceNameInTimeRange(serviceName: String, startTimeNano: Long, endTimeNano: Long): List<Trace>
+    fun findTraceById(traceId: String): Trace?
 }
