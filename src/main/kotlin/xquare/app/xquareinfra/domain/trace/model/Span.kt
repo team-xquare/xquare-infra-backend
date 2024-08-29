@@ -30,13 +30,13 @@ data class Span(
     val endTimeUnixNano: Long,
 
     @Field("attributes")
-    val attributes: Map<String, Any>,
+    val attributes: Map<String, Any> = emptyMap(),
 
     @Field("events")
-    val events: List<SpanEvent>,
+    val events: List<SpanEvent> = emptyList(),
 
     @Field("links")
-    val links: List<SpanLink>,
+    val links: List<SpanLink> = emptyList(),
 
     @Field("status")
     val status: SpanStatus
