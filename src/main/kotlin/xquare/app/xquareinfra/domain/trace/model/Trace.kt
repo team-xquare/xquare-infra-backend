@@ -11,7 +11,7 @@ data class Trace(
         return spans.find { it.parentSpanId == null }
     }
 
-    fun sortedByDescendingDate(): List<Span> {
-        return spans.sortedByDescending { it.startTimeUnixNano }
+    fun sortedByAscendingDate(): List<Span> {
+        return spans.sortedBy { it.startTimeUnixNano }
     }
 }
