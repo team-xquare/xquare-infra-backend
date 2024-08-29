@@ -5,7 +5,6 @@ import xquare.app.xquareinfra.adapter.out.persistence.trace.repository.TraceMong
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.application.trace.port.out.SaveTracePort
 import xquare.app.xquareinfra.domain.trace.model.Trace
-import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
 
 @Component
 class TracePersistenceAdapter(
@@ -21,11 +20,14 @@ class TracePersistenceAdapter(
         startTimeNano: Long,
         endTimeNano: Long
     ): List<Trace> {
-        println("serviceName: $serviceName\nstartTimeNano: $startTimeNano\nendTimeNano: $endTimeNano")
         return traceMongoEntityRepository.findByServiceNameAndDateNanoBetween(
             serviceName = serviceName,
             startTimeUnix = startTimeNano,
             endTimeUnix = endTimeNano
         ).map { traceMapper.toModel(it) }
+    }
+
+    override fun findTraceById(traceId: String): Trace? {
+        return traceMongoEntityRepository.findById(traceId)?.let { traceMapper.toModel(it) }
     }
 }
