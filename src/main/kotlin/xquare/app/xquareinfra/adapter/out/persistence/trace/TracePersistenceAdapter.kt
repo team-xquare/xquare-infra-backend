@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.adapter.out.persistence.trace
 
 import org.springframework.stereotype.Component
-import xquare.app.xquareinfra.adapter.out.persistence.trace.repository.TraceRepository
+import xquare.app.xquareinfra.adapter.out.persistence.trace.repository.TraceMongoEntityRepository
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.application.trace.port.out.SaveTracePort
 import xquare.app.xquareinfra.domain.trace.model.Trace
@@ -9,10 +9,10 @@ import xquare.app.xquareinfra.domain.trace.model.Trace
 @Component
 class TracePersistenceAdapter(
     private val traceMapper: TraceMapper,
-    private val traceRepository: TraceRepository
+    private val traceMongoEntityRepository: TraceMongoEntityRepository
 ): SaveTracePort, FindTracePort {
     override fun save(trace: Trace): Trace {
-        return traceMapper.toModel(traceRepository.save(traceMapper.toEntity(trace)))
+        return traceMapper.toModel(traceMongoEntityRepository.save(traceMapper.toEntity(trace)))
     }
 
     override fun findTracesByServiceNameInTimeRange(
@@ -21,7 +21,7 @@ class TracePersistenceAdapter(
         endTimeNano: Long
     ): List<Trace> {
         println("serviceName: $serviceName\nstartTimeNano: $startTimeNano\nendTimeNano: $endTimeNano")
-        return traceRepository.findAllByServiceNameInTimeRange(
+        return traceMongoEntityRepository.findAllByServiceNameAndDateNanoBetween(
             serviceName = serviceName,
             startTimeUnix = startTimeNano,
             endTimeUnix = endTimeNano
