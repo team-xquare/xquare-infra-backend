@@ -44,7 +44,7 @@ class TraceService(
                     statusCode = span.getAttributeValue("http.status_code")?.toLong()
                 )
             }
-        }
+        }.sortedByDescending { it.date }
 
         return GetRootSpanListResponse(rootSpanList)
     }
