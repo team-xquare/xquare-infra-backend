@@ -18,12 +18,12 @@ class V1TraceWebAdapter(
     fun getRootSpan(
         @RequestParam("deployId") deployId: UUID,
         @RequestParam("environment") environment: ContainerEnvironment,
-        @RequestParam("timeRange") timeRange: Long
+        @RequestParam("timeRange") timeRangeSecond: Long
     ): GetRootSpanListResponse {
         return traceUseCase.getRootSpanByDeployIdAndEnvironment(
             deployId = deployId,
             environment = environment,
-            timeRangeMinute = timeRange
+            timeRangeSeconds = timeRangeSecond
         )
     }
 }

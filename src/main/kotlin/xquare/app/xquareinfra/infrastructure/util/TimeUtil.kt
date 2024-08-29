@@ -19,9 +19,19 @@ object TimeUtil {
     }
 
 
-    fun getTimeRangeInNanos(minutesAgo: Long): TimePair {
+    fun getTimeRangeInNanosMinutes(minutesAgo: Long): TimePair {
         val now = Instant.now()
         val past = now.minus(minutesAgo, ChronoUnit.MINUTES)
+
+        return TimePair(
+            past = past.toEpochMilli() * 1_000_000,
+            now = now.toEpochMilli() * 1_000_000
+        )
+    }
+
+    fun getTimeRangeInNanosSeconds(secondsAgo: Long): TimePair {
+        val now = Instant.now()
+        val past = now.minus(secondsAgo, ChronoUnit.SECONDS)
 
         return TimePair(
             past = past.toEpochMilli() * 1_000_000,
