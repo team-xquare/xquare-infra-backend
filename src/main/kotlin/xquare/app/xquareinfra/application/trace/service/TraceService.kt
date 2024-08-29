@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.application.trace.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.RootSpan
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.RootSpanResponse
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
@@ -20,12 +20,12 @@ class TraceService(
     override fun getRootSpanByDeployIdAndEnvironment(
         deployId: UUID,
         environment: ContainerEnvironment,
-        timeRangeMinute: Long
+        timeRangeSeconds: Long
     ): GetRootSpanListResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val serviceName = ContainerUtil.getContainerName(deploy, environment)
 
-        val timeRangeInNanos = TimeUtil.getTimeRangeInNanos(timeRangeMinute)
+        val timeRangeInNanos = TimeUtil.getTimeRangeInNanosSeconds(timeRangeSeconds)
 
         val traceList = findTracePort.findTracesByServiceNameInTimeRange(
             serviceName = serviceName,
@@ -34,13 +34,14 @@ class TraceService(
         )
 
         val rootSpanList = traceList.mapNotNull {
-            it.getRootSpan()?.let { rootSpan ->
-                RootSpan(
-                    date = TimeUtil.unixNanoToKoreanTime(rootSpan.startTimeUnixNano),
-                    resource = rootSpan.name,
-                    durationMs = TimeUtil.unixNanoToMilliseconds(rootSpan.endTimeUnixNano - rootSpan.startTimeUnixNano),
-                    method = rootSpan.getAttributeValue("http.method"),
-                    statusCode = rootSpan.getAttributeValue("http.status_code")?.toLong()
+            it.getRootSpan()?.let { span ->
+                RootSpanResponse(
+                    traceId = span.traceId,
+                    date = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano),
+                    resource = span.name,
+                    durationMs = TimeUtil.unixNanoToMilliseconds(span.endTimeUnixNano - span.startTimeUnixNano),
+                    method = span.getAttributeValue("http.method"),
+                    statusCode = span.getAttributeValue("http.status_code")?.toLong()
                 )
             }
         }
