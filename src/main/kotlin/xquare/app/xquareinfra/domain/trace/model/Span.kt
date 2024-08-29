@@ -2,21 +2,45 @@ package xquare.app.xquareinfra.domain.trace.model
 
 import com.google.protobuf.ByteString
 import io.opentelemetry.proto.common.v1.AnyValue
+import org.springframework.data.mongodb.core.mapping.Field
 
 data class Span(
+    @Field("id")
     val id: String,
+
+    @Field("traceId")
     val traceId: String,
+
+    @Field("spanId")
     val spanId: String,
+
+    @Field("parentSpanId")
     val parentSpanId: String?,
+
+    @Field("name")
     val name: String,
+
+    @Field("kind")
     val kind: Int,
+
+    @Field("startTimeUnixNano")
     val startTimeUnixNano: Long,
+
+    @Field("endTimeUnixNano")
     val endTimeUnixNano: Long,
+
+    @Field("attributes")
     val attributes: Map<String, AttributeValue>,
+
+    @Field("events")
     val events: List<SpanEvent>,
+
+    @Field("links")
     val links: List<SpanLink>,
+
+    @Field("status")
     val status: SpanStatus
-) {
+){
     fun getAttributeValue(attribute: String): AttributeValue? {
         return attributes[attribute]
     }
@@ -49,7 +73,7 @@ data class Span(
                 },
                 status = SpanStatus(
                     code = otelSpan.status.code.number,
-                    message = otelSpan.status.message
+                    description = otelSpan.status.message
                 )
             )
         }
