@@ -10,4 +10,8 @@ data class Trace(
     fun getRootSpan(): Span? {
         return spans.find { it.parentSpanId == null }
     }
+
+    fun sortedByDescendingDate(): List<Span> {
+        return spans.sortedByDescending { it.startTimeUnixNano }
+    }
 }
