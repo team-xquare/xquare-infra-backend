@@ -20,6 +20,7 @@ class TracePersistenceAdapter(
         startTimeNano: Long,
         endTimeNano: Long
     ): List<Trace> {
+        println("serviceName: $serviceName\nstartTimeNano: $startTimeNano\nendTimeNano: $endTimeNano")
         return traceRepository.findAllByServiceNameInTimeRange(
             serviceName = serviceName,
             startTimeUnix = startTimeNano,
