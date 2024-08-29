@@ -5,6 +5,7 @@ import xquare.app.xquareinfra.adapter.out.persistence.trace.repository.TraceMong
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.application.trace.port.out.SaveTracePort
 import xquare.app.xquareinfra.domain.trace.model.Trace
+import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
 
 @Component
 class TracePersistenceAdapter(

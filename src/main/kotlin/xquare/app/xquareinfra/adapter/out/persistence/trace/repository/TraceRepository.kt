@@ -24,4 +24,8 @@ class TraceMongoEntityRepository(
 
         return mongoTemplate.find(query, TraceMongoEntity::class.java)
     }
+
+    fun save(traceMongoEntity: TraceMongoEntity): TraceMongoEntity {
+        return mongoTemplate.save(traceMongoEntity)
+    }
 }
