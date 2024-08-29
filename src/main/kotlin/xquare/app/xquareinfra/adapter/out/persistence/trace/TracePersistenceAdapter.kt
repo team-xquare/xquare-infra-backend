@@ -21,7 +21,7 @@ class TracePersistenceAdapter(
         endTimeNano: Long
     ): List<Trace> {
         println("serviceName: $serviceName\nstartTimeNano: $startTimeNano\nendTimeNano: $endTimeNano")
-        return traceMongoEntityRepository.findAllByServiceNameAndDateNanoBetween(
+        return traceMongoEntityRepository.findByServiceNameAndDateNanoBetween(
             serviceName = serviceName,
             startTimeUnix = startTimeNano,
             endTimeUnix = endTimeNano
