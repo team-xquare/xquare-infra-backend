@@ -30,7 +30,7 @@ data class Span(
     val endTimeUnixNano: Long,
 
     @Field("attributes")
-    val attributes: Map<String, AttributeValue>,
+    val attributes: Map<String, Any>,
 
     @Field("events")
     val events: List<SpanEvent>,
@@ -41,8 +41,8 @@ data class Span(
     @Field("status")
     val status: SpanStatus
 ){
-    fun getAttributeValue(attribute: String): AttributeValue? {
-        return attributes[attribute]
+    fun getAttributeValue(attribute: String): String? {
+        return attributes[attribute].toString()
     }
 
     companion object {
