@@ -55,7 +55,7 @@ class TraceService(
         val trace = findTracePort.findTraceById(traceId)
             ?: throw BusinessLogicException.TRACE_NOT_FOUND
 
-        val traceList = trace.sortedByDescendingDate().map {
+        val traceList = trace.sortedByAscendingDate().map {
             SpanDetailResponse(
                 traceId = it.traceId,
                 spanId = it.spanId,
