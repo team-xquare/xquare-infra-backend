@@ -67,7 +67,7 @@ class TraceAnalysisService {
                 val index = ceil(sortedLatencies.size * (percentile / 100.0)).toInt() - 1
                 val percentileLatency = sortedLatencies[index.coerceIn(0, sortedLatencies.lastIndex)]
                 val percentileLatencyMs = TimeUtil.unixNanoToMilliseconds(percentileLatency)
-                String.format("%.2f", percentileLatencyMs)
+                percentileLatencyMs.toString()
             }
         }
     }
