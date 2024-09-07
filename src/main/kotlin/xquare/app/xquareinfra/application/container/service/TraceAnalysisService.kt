@@ -9,7 +9,7 @@ import kotlin.math.ceil
 
 @Service
 class TraceAnalysisService {
-    fun analyzeHttpRequestsPerMinute(traces: List<Trace>): Map<String, String> {
+    fun analyzeHttpRequestsPerMinute(traces: List<Trace>, startTime: Instant, endTime: Instant): Map<String, String> {
         val requestsPerMinute = mutableMapOf<String, Int>()
 
         traces.forEach { trace ->
@@ -23,10 +23,12 @@ class TraceAnalysisService {
             requestsPerMinute[minuteKey] = requestsPerMinute.getOrDefault(minuteKey, 0) + 1
         }
 
-        return requestsPerMinute.mapValues { (_, count) -> count.toString() }
+        return generateMinuteKeys(startTime, endTime).associateWith { key ->
+            requestsPerMinute[key]?.toString() ?: "0"
+        }
     }
 
-    fun analyzeHttpStatusCodes(traces: List<Trace>, statusCode: Int): Map<String, String> {
+    fun analyzeHttpStatusCodes(traces: List<Trace>, statusCode: Int, startTime: Instant, endTime: Instant): Map<String, String> {
         val statusCodeCountsPerMinute = mutableMapOf<String, Int>()
 
         traces.forEach { trace ->
@@ -42,10 +44,12 @@ class TraceAnalysisService {
             }
         }
 
-        return statusCodeCountsPerMinute.mapValues { (_, count) -> count.toString() }
+        return generateMinuteKeys(startTime, endTime).associateWith { key ->
+            statusCodeCountsPerMinute[key]?.toString() ?: "0"
+        }
     }
 
-    fun analyzeLatency(traces: List<Trace>, percentile: Int): Map<String, String> {
+    fun analyzeLatency(traces: List<Trace>, percentile: Int, startTime: Instant, endTime: Instant): Map<String, String> {
         val latenciesPerMinute = mutableMapOf<String, MutableList<Long>>()
 
         traces.forEach { trace ->
@@ -59,16 +63,28 @@ class TraceAnalysisService {
             latenciesPerMinute.getOrPut(minuteKey) { mutableListOf() }.add(trace.durationNano)
         }
 
-        return latenciesPerMinute.mapValues { (_, latencies) ->
-            if (latencies.isEmpty()) {
-                "0.00"
-            } else {
-                val sortedLatencies = latencies.sorted()
-                val index = ceil(sortedLatencies.size * (percentile / 100.0)).toInt() - 1
-                val percentileLatency = sortedLatencies[index.coerceIn(0, sortedLatencies.lastIndex)]
-                val percentileLatencyMs = TimeUtil.unixNanoToMilliseconds(percentileLatency)
-                percentileLatencyMs.toString()
-            }
+        return generateMinuteKeys(startTime, endTime).associateWith { key ->
+            latenciesPerMinute[key]?.let { latencies ->
+                if (latencies.isEmpty()) {
+                    "0"
+                } else {
+                    val sortedLatencies = latencies.sorted()
+                    val index = ceil(sortedLatencies.size * (percentile / 100.0)).toInt() - 1
+                    val percentileLatency = sortedLatencies[index.coerceIn(0, sortedLatencies.lastIndex)]
+                    val percentileLatencyMs = TimeUtil.unixNanoToMilliseconds(percentileLatency)
+                    percentileLatencyMs.toString()
+                }
+            } ?: "0"
         }
+    }
+
+    private fun generateMinuteKeys(startTime: Instant, endTime: Instant): List<String> {
+        val keys = mutableListOf<String>()
+        var currentTime = startTime.truncatedTo(ChronoUnit.MINUTES)
+        while (currentTime.isBefore(endTime) || currentTime == endTime) {
+            keys.add(currentTime.toString())
+            currentTime = currentTime.plus(1, ChronoUnit.MINUTES)
+        }
+        return keys
     }
 }
