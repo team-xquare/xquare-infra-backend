@@ -9,26 +9,24 @@ import kotlin.math.ceil
 
 @Service
 class TraceAnalysisService {
-    fun analyzeHttpRequestsPerMinute(traces: List<Trace>, startTime: Instant, endTime: Instant): Map<String, String> {
+    fun analyzeHttpRequestsPerMinute(traces: List<Trace>, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
         val requestsPerMinute = mutableMapOf<String, Int>()
 
         traces.forEach { trace ->
             val rootSpan = trace.getRootSpan() ?: return@forEach
             if (!rootSpan.isHttpRequest()) return@forEach
 
-            val minuteKey = Instant.ofEpochSecond(0, trace.dateNano)
-                .truncatedTo(ChronoUnit.MINUTES)
-                .toString()
+            val minuteKey = getMinuteKey(trace.dateNano)
 
             requestsPerMinute[minuteKey] = requestsPerMinute.getOrDefault(minuteKey, 0) + 1
         }
 
-        return generateMinuteKeys(startTime, endTime).associateWith { key ->
+        return generateMinuteKeys(startTimeNano, endTimeNano).associateWith { key ->
             requestsPerMinute[key]?.toString() ?: "0"
         }
     }
 
-    fun analyzeHttpStatusCodes(traces: List<Trace>, statusCode: Int, startTime: Instant, endTime: Instant): Map<String, String> {
+    fun analyzeHttpStatusCodes(traces: List<Trace>, statusCode: Int, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
         val statusCodeCountsPerMinute = mutableMapOf<String, Int>()
 
         traces.forEach { trace ->
@@ -36,34 +34,30 @@ class TraceAnalysisService {
             if (!rootSpan.isHttpRequest()) return@forEach
 
             if (rootSpan.getStatusCode() == statusCode) {
-                val minuteKey = Instant.ofEpochSecond(0, trace.dateNano)
-                    .truncatedTo(ChronoUnit.MINUTES)
-                    .toString()
+                val minuteKey = getMinuteKey(trace.dateNano)
 
                 statusCodeCountsPerMinute[minuteKey] = statusCodeCountsPerMinute.getOrDefault(minuteKey, 0) + 1
             }
         }
 
-        return generateMinuteKeys(startTime, endTime).associateWith { key ->
+        return generateMinuteKeys(startTimeNano, endTimeNano).associateWith { key ->
             statusCodeCountsPerMinute[key]?.toString() ?: "0"
         }
     }
 
-    fun analyzeLatency(traces: List<Trace>, percentile: Int, startTime: Instant, endTime: Instant): Map<String, String> {
+    fun analyzeLatency(traces: List<Trace>, percentile: Int, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
         val latenciesPerMinute = mutableMapOf<String, MutableList<Long>>()
 
         traces.forEach { trace ->
             val rootSpan = trace.getRootSpan() ?: return@forEach
             if (!rootSpan.isHttpRequest()) return@forEach
 
-            val minuteKey = Instant.ofEpochSecond(0, trace.dateNano)
-                .truncatedTo(ChronoUnit.MINUTES)
-                .toString()
+            val minuteKey = getMinuteKey(trace.dateNano)
 
             latenciesPerMinute.getOrPut(minuteKey) { mutableListOf() }.add(trace.durationNano)
         }
 
-        return generateMinuteKeys(startTime, endTime).associateWith { key ->
+        return generateMinuteKeys(startTimeNano, endTimeNano).associateWith { key ->
             latenciesPerMinute[key]?.let { latencies ->
                 if (latencies.isEmpty()) {
                     "0"
@@ -78,12 +72,18 @@ class TraceAnalysisService {
         }
     }
 
-    private fun generateMinuteKeys(startTime: Instant, endTime: Instant): List<String> {
+    private fun getMinuteKey(timeNano: Long): String {
+        return Instant.ofEpochSecond(0, timeNano)
+            .truncatedTo(ChronoUnit.MINUTES)
+            .toString()
+    }
+
+    private fun generateMinuteKeys(startTimeNano: Long, endTimeNano: Long): List<String> {
         val keys = mutableListOf<String>()
-        var currentTime = startTime.truncatedTo(ChronoUnit.MINUTES)
-        while (currentTime.isBefore(endTime) || currentTime == endTime) {
-            keys.add(currentTime.toString())
-            currentTime = currentTime.plus(1, ChronoUnit.MINUTES)
+        var currentTimeNano = startTimeNano - (startTimeNano % 60_000_000_000)  // Round down to the nearest minute
+        while (currentTimeNano <= endTimeNano) {
+            keys.add(getMinuteKey(currentTimeNano))
+            currentTimeNano += 60_000_000_000  // Add one minute in nanoseconds
         }
         return keys
     }
