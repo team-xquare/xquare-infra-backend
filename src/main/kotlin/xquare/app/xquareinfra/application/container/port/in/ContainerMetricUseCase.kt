@@ -10,14 +10,14 @@ interface ContainerMetricUseCase {
     fun getContainerHttpRequestPerMinute(
         deployId: UUID,
         environment: ContainerEnvironment,
-        timeRange: Int,
+        timeRange: Long,
         user: User
     ): Map<String, Map<String, String>>
 
     fun getContainerHttpStatusRequestPerMinute(
         deployId: UUID,
         environment: ContainerEnvironment,
-        timeRange: Int,
+        timeRange: Long,
         statusCode: Int,
         user: User
     ): Map<String, Map<String, String>>
@@ -26,7 +26,7 @@ interface ContainerMetricUseCase {
         deployId: UUID,
         environment: ContainerEnvironment,
         percent: Int,
-        timeRange: Int,
+        timeRange: Long,
         user: User
     ): Map<String, Map<String, String>>
 

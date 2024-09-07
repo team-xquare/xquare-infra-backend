@@ -1,11 +1,16 @@
 package xquare.app.xquareinfra.adapter.out.persistence.trace.repository
 
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.findOne
-import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
+import org.springframework.data.mongodb.core.aggregation.*
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
+import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+
+
 
 @Repository
 class TraceMongoEntityRepository(
