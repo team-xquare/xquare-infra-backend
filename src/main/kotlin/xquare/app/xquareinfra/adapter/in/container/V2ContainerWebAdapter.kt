@@ -94,7 +94,7 @@ class V2ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment,
         @RequestParam("timeRange", required = true)
-        timeRange: Int
+        timeRange: Long
     ): Map<String, Map<String, String>> =
         containerMetricUseCase.getContainerHttpRequestPerMinute(
             deployId,
@@ -110,7 +110,7 @@ class V2ContainerWebAdapter(
         @RequestParam("environment", required = true)
         environment: ContainerEnvironment,
         @RequestParam("timeRange", required = true)
-        timeRange: Int,
+        timeRange: Long,
         @PathVariable("statusCode", required = true) statusCode: Int
     ): Map<String, Map<String, String>> =
         containerMetricUseCase.getContainerHttpStatusRequestPerMinute(
@@ -129,7 +129,7 @@ class V2ContainerWebAdapter(
         environment: ContainerEnvironment,
         @PathVariable("percent", required = true) percent: Int,
         @RequestParam("timeRange", required = true)
-        timeRange: Int
+        timeRange: Long
     ): Map<String, Map<String, String>> =
         containerMetricUseCase.getContainerLatency(
             deployId,

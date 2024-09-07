@@ -7,17 +7,17 @@ import xquare.app.xquareinfra.adapter.out.external.data.client.dto.PrometheusDat
 import xquare.app.xquareinfra.adapter.out.external.data.util.DataUtil
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryRequest
 import xquare.app.xquareinfra.adapter.out.external.data.client.dto.QueryDto
-import xquare.app.xquareinfra.application.container.port.out.ContainerMetricsPort
+import xquare.app.xquareinfra.application.container.port.out.CpuMemoryMetricsPort
 import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.domain.deploy.model.Deploy
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import java.time.Instant
 
 @Component
-class PrometheusContainerMetricsAdapter(
+class PrometheusCpuMemoryMetricsAdapter(
     private val prometheusClient: PrometheusClient,
     private val findTeamPort: FindTeamPort
-) : ContainerMetricsPort {
+) : CpuMemoryMetricsPort {
 
     override fun getCpuUsage(
         deploy: Deploy,
@@ -47,29 +47,6 @@ class PrometheusContainerMetricsAdapter(
         )
         val queryResponse = executeQuery(query, durationMinute, 2000)
         return formatMemoryUsageData(queryResponse)
-    }
-
-    override fun getHttpRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int): Map<String, Map<String, String>> {
-        val query = DataUtil.makeRequestPerMinuteQuery(deploy, environment)
-        val queryResponse = executeQuery(query, durationMinute, 14000)
-        return formatHttpRequestsData(queryResponse, 14000)
-    }
-
-    override fun getHttpStatusRequestsPerMinute(deploy: Deploy, environment: ContainerEnvironment, durationMinute: Int, statusCode: Int): Map<String, Map<String, String>> {
-        val query = DataUtil.makeHttpStatusRequestPerMinuteQuery(deploy, environment, statusCode)
-        val queryResponse = executeQuery(query, durationMinute, 14000)
-        return formatHttpRequestsData(queryResponse, 14000)
-    }
-
-    override fun getContainerLatency(
-        deploy: Deploy,
-        environment: ContainerEnvironment,
-        percent: Double,
-        durationMinute: Int
-    ): Map<String, Map<String, String>> {
-        val query = DataUtil.makeGetLatencyPerMinuteQuery(deploy, environment, percent)
-        val queryResponse = executeQuery(query, durationMinute, 14000)
-        return formatLatencyData(queryResponse, 14000)
     }
 
     private fun executeQuery(query: String, durationMinute: Int, intervalMs: Int): PrometheusDataQueryResponse {
