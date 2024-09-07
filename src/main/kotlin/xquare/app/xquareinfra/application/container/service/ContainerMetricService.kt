@@ -55,7 +55,9 @@ class ContainerMetricService(
             endTimeNano = timeRangeInNanosMinutes.now
         )
 
-        return mapOf("0" to traceAnalysisService.analyzeHttpStatusCodes(traces, statusCode))
+        return mapOf("0" to traceAnalysisService.analyzeHttpStatusCodes(
+            traces, statusCode, timeRangeInNanosMinutes.past, timeRangeInNanosMinutes.now)
+        )
     }
 
     override fun getContainerHttpRequestPerMinute(
@@ -79,7 +81,12 @@ class ContainerMetricService(
             endTimeNano = timeRangeInNanosMinutes.now
         )
 
-        return mapOf("0" to traceAnalysisService.analyzeHttpRequestsPerMinute(traces))
+        return mapOf("0" to traceAnalysisService.analyzeHttpRequestsPerMinute(
+                traces = traces,
+                timeRangeInNanosMinutes.past,
+                timeRangeInNanosMinutes.now
+            )
+        )
     }
 
     override fun getContainerLatency(
@@ -104,7 +111,7 @@ class ContainerMetricService(
             endTimeNano = timeRangeInNanosMinutes.now
         )
 
-        return mapOf("0" to traceAnalysisService.analyzeLatency(traces, percent))
+        return mapOf("0" to traceAnalysisService.analyzeLatency(traces, percent, timeRangeInNanosMinutes.past, timeRangeInNanosMinutes.now))
     }
 
     override fun getContainerMemoryUsageUseCase(deployId: UUID, environment: ContainerEnvironment, user: User): Map<String, Map<String, String>> {
