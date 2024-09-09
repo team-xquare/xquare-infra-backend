@@ -258,7 +258,8 @@ class ContainerService(
             containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성,
             teamNameKo = team.teamNameKo,
             containerName = ContainerUtil.getContainerName(deploy, container),
-            isV2 = deploy.v2
+            isV2 = deploy.v2,
+            deployType = deploy.deployType
         )
     }
 }

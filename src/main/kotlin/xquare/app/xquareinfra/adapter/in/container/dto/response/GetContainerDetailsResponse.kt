@@ -1,6 +1,7 @@
 package xquare.app.xquareinfra.adapter.`in`.container.dto.response
 
 import xquare.app.xquareinfra.domain.container.model.ContainerStatus
+import xquare.app.xquareinfra.domain.deploy.model.DeployType
 import java.time.LocalDateTime
 
 data class GetContainerDetailsResponse(
@@ -12,5 +13,6 @@ data class GetContainerDetailsResponse(
     val lastDeploy: LocalDateTime,
     val containerStatus: ContainerStatus,
     val containerName: String,
-    val isV2: Boolean
+    val isV2: Boolean,
+    val deployType: DeployType
 )
