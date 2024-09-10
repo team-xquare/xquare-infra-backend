@@ -21,6 +21,10 @@ spring:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 400
+      minimum-idle: 100
+      connection-timeout: 2000
   jackson:
     property-naming-strategy: SNAKE_CASE
 
