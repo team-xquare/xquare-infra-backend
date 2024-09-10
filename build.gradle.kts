@@ -23,7 +23,6 @@ repositories {
 
 ext {
     set("springBootVersion", PluginVersions.SPRING_BOOT_VERSION)
-    set("grpcVersion", "1.62.2")
 }
 
 dependencies {
@@ -76,11 +75,6 @@ dependencies {
     // OpenTelemetry && gRPC
     implementation(platform("org.springframework.boot:spring-boot-dependencies:${project.ext["springBootVersion"]}"))
     implementation("io.opentelemetry.proto:opentelemetry-proto:1.3.2-alpha")
-    implementation("com.google.protobuf:protobuf-java-util:3.25.3")
-    implementation("io.grpc:grpc-netty-shaded:${project.ext["grpcVersion"]}")
-    implementation("io.grpc:grpc-protobuf:${project.ext["grpcVersion"]}")
-    implementation("io.grpc:grpc-stub:${project.ext["grpcVersion"]}")
-    implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
     implementation("io.micrometer:micrometer-core")
 
     implementation("org.mapstruct:mapstruct:1.5.3.Final")
