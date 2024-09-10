@@ -1,10 +1,7 @@
 package xquare.app.xquareinfra.application.trace.service
 
 import org.springframework.stereotype.Service
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetTraceDetailResponse
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.RootSpanResponse
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.SpanDetailResponse
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.*
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
@@ -55,14 +52,21 @@ class TraceService(
         val trace = findTracePort.findTraceById(traceId)
             ?: throw BusinessLogicException.TRACE_NOT_FOUND
 
-        val traceList = trace.sortedByAscendingDate().map {
+        val traceList = trace.sortedByAscendingDate().map { span ->
             SpanDetailResponse(
-                traceId = it.traceId,
-                spanId = it.spanId,
-                name = it.name,
-                startTimeUnixNano = it.startTimeUnixNano,
-                endTimeUnixNano = it.endTimeUnixNano,
-                attributes = it.attributes
+                traceId = span.traceId,
+                spanId = span.spanId,
+                name = span.name,
+                startTimeUnixNano = span.startTimeUnixNano,
+                endTimeUnixNano = span.endTimeUnixNano,
+                attributes = span.attributes,
+                events = span.events.map { event->
+                    SpanEventResponse(
+                        timeUnixNano = event.timeUnixNano,
+                        name = event.name,
+                        attributes = event.attributes
+                    )
+                }
             )
         }
 
