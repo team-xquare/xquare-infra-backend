@@ -6,5 +6,6 @@ data class SpanDetailResponse(
     val name: String,
     val startTimeUnixNano: Long,
     val endTimeUnixNano: Long,
-    val attributes: Map<String, Any?> = emptyMap()
+    val attributes: Map<String, Any?> = emptyMap(),
+    val events: List<SpanEventResponse> = emptyList(),
 )
