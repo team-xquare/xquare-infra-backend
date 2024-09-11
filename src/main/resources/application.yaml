@@ -51,6 +51,9 @@ jwt:
   header: ${JWT_HEADER:Authorization}
   prefix: ${JWT_PREFIX:Bearer }
 
+mongodb:
+  jks-password: ${JKS_PASSWORD}
+
 server:
   tomcat:
     threads:
@@ -90,3 +93,4 @@ cloudflare:
   zoneId: ${ZONE_ID}
   xAuthKey: ${X_AUTH_KEY}
   xAuthEmail: ${X_AUTH_EMAIL}
+
