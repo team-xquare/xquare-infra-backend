@@ -39,8 +39,8 @@ class TraceService(
                     date = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano),
                     resource = span.name,
                     durationMs = TimeUtil.unixNanoToMilliseconds(span.endTimeUnixNano - span.startTimeUnixNano),
-                    method = span.getAttributeValue("http.method"),
-                    statusCode = span.getAttributeValue("http.status_code")?.toLong()
+                    method = span.getStatusCode()?.toString(),
+                    statusCode = span.getStatusCode()?.toLong()
                 )
             }
         }.sortedByDescending { it.date }
