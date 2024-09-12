@@ -46,11 +46,11 @@ data class Span(
     }
 
     fun isHttpRequest(): Boolean {
-        return getAttributeValue("http.method") != null
+        return getAttributeValue("http_method") != null
     }
 
     fun getStatusCode(): Int? {
-        return getAttributeValue("http.status_code")?.toInt()
+        return getAttributeValue("http_status_code")?.toInt()
     }
 
     companion object {
