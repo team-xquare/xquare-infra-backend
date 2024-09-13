@@ -39,10 +39,15 @@ class TraceMongoEntityRepository(
         return mongoTemplate.findOne(query, TraceMongoEntity::class.java)
     }
 
-    fun findSpansWithNullParentId(serviceName: String): List<Span> {
+    fun findSpansWithNullParentIdAndDateNanoBetween(
+        serviceName: String,
+        startTimeUnix: Long,
+        endTimeUnix: Long
+    ): List<Span> {
         val aggregation = Aggregation.newAggregation(
+            Aggregation.match(Criteria.where("serviceName").`is`(serviceName).and("dateNano").gte(startTimeUnix).lte(endTimeUnix)),
             Aggregation.unwind("spans"),
-            Aggregation.match(Criteria.where("spans.parentSpanId").isNull.and("serviceName").`is`(serviceName)),
+            Aggregation.match(Criteria.where("spans.parentSpanId").isNull),
             Aggregation.project().and("spans").`as`("span").andExclude("_id")
         )
 

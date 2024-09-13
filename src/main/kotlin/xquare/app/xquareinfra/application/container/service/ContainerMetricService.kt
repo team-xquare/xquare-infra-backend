@@ -50,7 +50,9 @@ class ContainerMetricService(
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
         val rootSpans = findSpanPort.findRootSpansByServiceName(
-            serviceName = ContainerUtil.getContainerName(deploy, environment)
+            serviceName = ContainerUtil.getContainerName(deploy, environment),
+            startTimeNano = timeRangeInNanosMinutes.past,
+            endTimeNano = timeRangeInNanosMinutes.now
         )
 
         return mapOf("0" to traceAnalysisService.analyzeHttpStatusCodes(
@@ -74,7 +76,9 @@ class ContainerMetricService(
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
         val rootSpans = findSpanPort.findRootSpansByServiceName(
-            serviceName = ContainerUtil.getContainerName(deploy, environment)
+            serviceName = ContainerUtil.getContainerName(deploy, environment),
+            startTimeNano = timeRangeInNanosMinutes.past,
+            endTimeNano = timeRangeInNanosMinutes.now
         )
 
         return mapOf("0" to traceAnalysisService.analyzeHttpRequestsPerMinute(
@@ -102,7 +106,9 @@ class ContainerMetricService(
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
         val rootSpans = findSpanPort.findRootSpansByServiceName(
-            serviceName = ContainerUtil.getContainerName(deploy, environment)
+            serviceName = ContainerUtil.getContainerName(deploy, environment),
+            startTimeNano = timeRangeInNanosMinutes.past,
+            endTimeNano = timeRangeInNanosMinutes.now
         )
 
         return mapOf("0" to traceAnalysisService.analyzeLatency(rootSpans, percent, timeRangeInNanosMinutes.past, timeRangeInNanosMinutes.now))
