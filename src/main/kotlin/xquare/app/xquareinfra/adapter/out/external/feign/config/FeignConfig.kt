@@ -3,6 +3,7 @@ package xquare.app.xquareinfra.adapter.out.external.feign.config
 import feign.Feign
 import feign.Logger
 import feign.Request
+import feign.Retryer
 import feign.codec.ErrorDecoder
 import feign.httpclient.ApacheHttpClient
 import org.apache.http.impl.client.HttpClientBuilder
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import xquare.app.xquareinfra.adapter.out.external.feign.config.error.FeignClientErrorDecoder
+import xquare.app.xquareinfra.adapter.out.external.feign.config.retry.CustomRetryer
 import xquare.app.xquareinfra.infrastructure.config.http.HttpKeepAliveStrategyConfiguration
 
 @EnableFeignClients(basePackages = ["xquare.app.xquareinfra"])
@@ -20,6 +22,8 @@ import xquare.app.xquareinfra.infrastructure.config.http.HttpKeepAliveStrategyCo
 class FeignConfig(
     private val keepAliveStrategy: HttpKeepAliveStrategyConfiguration
 ) {
+    @Bean
+    fun retryer(): Retryer = CustomRetryer()
 
     @Bean
     fun feignLoggerLevel(): Logger.Level = Logger.Level.FULL
