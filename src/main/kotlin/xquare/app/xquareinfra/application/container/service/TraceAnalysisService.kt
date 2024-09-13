@@ -1,6 +1,7 @@
 package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
+import xquare.app.xquareinfra.domain.trace.model.Span
 import xquare.app.xquareinfra.domain.trace.model.Trace
 import xquare.app.xquareinfra.infrastructure.util.TimeUtil
 import java.time.Instant
@@ -9,15 +10,12 @@ import kotlin.math.ceil
 
 @Service
 class TraceAnalysisService {
-    fun analyzeHttpRequestsPerMinute(traces: List<Trace>, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
+    fun analyzeHttpRequestsPerMinute(rootSpanList: List<Span>, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
         val requestsPerMinute = mutableMapOf<String, Int>()
 
-        traces.forEach { trace ->
-            val rootSpan = trace.getRootSpan() ?: return@forEach
+        rootSpanList.forEach { rootSpan ->
             if (!rootSpan.isHttpRequest()) return@forEach
-
-            val minuteKey = getMinuteKey(trace.dateNano)
-
+            val minuteKey = getMinuteKey(rootSpan.startTimeUnixNano)
             requestsPerMinute[minuteKey] = requestsPerMinute.getOrDefault(minuteKey, 0) + 1
         }
 
@@ -26,15 +24,14 @@ class TraceAnalysisService {
         }
     }
 
-    fun analyzeHttpStatusCodes(traces: List<Trace>, statusCode: Int, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
+    fun analyzeHttpStatusCodes(rootSpanList: List<Span>, statusCode: Int, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
         val statusCodeCountsPerMinute = mutableMapOf<String, Int>()
 
-        traces.forEach { trace ->
-            val rootSpan = trace.getRootSpan() ?: return@forEach
+        rootSpanList.forEach { rootSpan ->
             if (!rootSpan.isHttpRequest()) return@forEach
 
             if (rootSpan.getStatusCode() == statusCode) {
-                val minuteKey = getMinuteKey(trace.dateNano)
+                val minuteKey = getMinuteKey(rootSpan.startTimeUnixNano)
 
                 statusCodeCountsPerMinute[minuteKey] = statusCodeCountsPerMinute.getOrDefault(minuteKey, 0) + 1
             }
@@ -45,16 +42,15 @@ class TraceAnalysisService {
         }
     }
 
-    fun analyzeLatency(traces: List<Trace>, percentile: Int, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
+    fun analyzeLatency(rootSpanList: List<Span>, percentile: Int, startTimeNano: Long, endTimeNano: Long): Map<String, String> {
         val latenciesPerMinute = mutableMapOf<String, MutableList<Long>>()
 
-        traces.forEach { trace ->
-            val rootSpan = trace.getRootSpan() ?: return@forEach
+        rootSpanList.forEach { rootSpan ->
             if (!rootSpan.isHttpRequest()) return@forEach
 
-            val minuteKey = getMinuteKey(trace.dateNano)
+            val minuteKey = getMinuteKey(rootSpan.startTimeUnixNano)
 
-            latenciesPerMinute.getOrPut(minuteKey) { mutableListOf() }.add(trace.durationNano)
+            latenciesPerMinute.getOrPut(minuteKey) { mutableListOf() }.add(rootSpan.endTimeUnixNano - rootSpan.startTimeUnixNano)
         }
 
         return generateMinuteKeys(startTimeNano, endTimeNano).associateWith { key ->
