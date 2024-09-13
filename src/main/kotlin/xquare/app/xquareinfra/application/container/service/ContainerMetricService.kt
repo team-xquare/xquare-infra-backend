@@ -5,7 +5,7 @@ import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUse
 import xquare.app.xquareinfra.application.container.port.out.CpuMemoryMetricsPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
-import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
+import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.domain.user.model.User
@@ -19,8 +19,8 @@ class ContainerMetricService(
     private val findDeployPort: FindDeployPort,
     private val existsUserTeamPort: ExistsUserTeamPort,
     private val cpuMemoryMetricsPort: CpuMemoryMetricsPort,
-    private val findTracePort: FindTracePort,
-    private val traceAnalysisService: TraceAnalysisService
+    private val traceAnalysisService: TraceAnalysisService,
+    private val findSpanPort: FindSpanPort
 ) : ContainerMetricUseCase {
     override fun getContainerCpuUsage(deployId: UUID, environment: ContainerEnvironment, user: User): Map<String, Map<String, String>> {
         val deploy = findDeployPort.findById(deployId)
@@ -49,14 +49,12 @@ class ContainerMetricService(
 
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
-        val traces = findTracePort.findTracesByServiceNameInTimeRange(
-            serviceName = ContainerUtil.getContainerName(deploy, environment),
-            startTimeNano = timeRangeInNanosMinutes.past,
-            endTimeNano = timeRangeInNanosMinutes.now
+        val rootSpans = findSpanPort.findRootSpansByServiceName(
+            serviceName = ContainerUtil.getContainerName(deploy, environment)
         )
 
         return mapOf("0" to traceAnalysisService.analyzeHttpStatusCodes(
-            traces, statusCode, timeRangeInNanosMinutes.past, timeRangeInNanosMinutes.now)
+            rootSpans, statusCode, timeRangeInNanosMinutes.past, timeRangeInNanosMinutes.now)
         )
     }
 
@@ -75,14 +73,12 @@ class ContainerMetricService(
 
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
-        val traces = findTracePort.findTracesByServiceNameInTimeRange(
-            serviceName = ContainerUtil.getContainerName(deploy, environment),
-            startTimeNano = timeRangeInNanosMinutes.past,
-            endTimeNano = timeRangeInNanosMinutes.now
+        val rootSpans = findSpanPort.findRootSpansByServiceName(
+            serviceName = ContainerUtil.getContainerName(deploy, environment)
         )
 
         return mapOf("0" to traceAnalysisService.analyzeHttpRequestsPerMinute(
-                traces = traces,
+                rootSpanList = rootSpans,
                 timeRangeInNanosMinutes.past,
                 timeRangeInNanosMinutes.now
             )
@@ -105,13 +101,11 @@ class ContainerMetricService(
 
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
-        val traces = findTracePort.findTracesByServiceNameInTimeRange(
-            serviceName = ContainerUtil.getContainerName(deploy, environment),
-            startTimeNano = timeRangeInNanosMinutes.past,
-            endTimeNano = timeRangeInNanosMinutes.now
+        val rootSpans = findSpanPort.findRootSpansByServiceName(
+            serviceName = ContainerUtil.getContainerName(deploy, environment)
         )
 
-        return mapOf("0" to traceAnalysisService.analyzeLatency(traces, percent, timeRangeInNanosMinutes.past, timeRangeInNanosMinutes.now))
+        return mapOf("0" to traceAnalysisService.analyzeLatency(rootSpans, percent, timeRangeInNanosMinutes.past, timeRangeInNanosMinutes.now))
     }
 
     override fun getContainerMemoryUsageUseCase(deployId: UUID, environment: ContainerEnvironment, user: User): Map<String, Map<String, String>> {

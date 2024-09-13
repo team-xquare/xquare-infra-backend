@@ -1,15 +1,14 @@
 package xquare.app.xquareinfra.adapter.out.persistence.trace.repository
 
-import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.aggregation.*
+import org.springframework.data.mongodb.core.aggregation.Aggregation
+import org.springframework.data.mongodb.core.aggregation.AggregationResults
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
+import xquare.app.xquareinfra.adapter.out.persistence.trace.repository.dto.SpanResult
+import xquare.app.xquareinfra.domain.trace.model.Span
 import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-
 
 
 @Repository
@@ -38,5 +37,16 @@ class TraceMongoEntityRepository(
         val query = Query()
         query.addCriteria(Criteria.where("traceId").`is`(id))
         return mongoTemplate.findOne(query, TraceMongoEntity::class.java)
+    }
+
+    fun findSpansWithNullParentId(serviceName: String): List<Span> {
+        val aggregation = Aggregation.newAggregation(
+            Aggregation.unwind("spans"),
+            Aggregation.match(Criteria.where("spans.parentSpanId").isNull.and("serviceName").`is`(serviceName)),
+            Aggregation.project().and("spans").`as`("span").andExclude("_id")
+        )
+
+        val results: AggregationResults<SpanResult> = mongoTemplate.aggregate(aggregation, "traces", SpanResult::class.java)
+        return results.mappedResults.map { it.span }
     }
 }
