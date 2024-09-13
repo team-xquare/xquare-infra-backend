@@ -2,6 +2,7 @@ package xquare.app.xquareinfra.adapter.out.persistence.trace.repository
 
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions
 import org.springframework.data.mongodb.core.aggregation.AggregationResults
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -49,7 +50,7 @@ class TraceMongoEntityRepository(
             Aggregation.unwind("spans"),
             Aggregation.match(Criteria.where("spans.parentSpanId").isNull),
             Aggregation.project().and("spans").`as`("span").andExclude("_id")
-        )
+        ).withOptions(AggregationOptions.builder().cursorBatchSize(100).build())
 
         val results: AggregationResults<SpanResult> = mongoTemplate.aggregate(aggregation, "traces", SpanResult::class.java)
         return results.mappedResults.map { it.span }

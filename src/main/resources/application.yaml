@@ -53,11 +53,8 @@ jwt:
 
 server:
   tomcat:
-    threads:
-      max: 200
-      min-spare: 10
-    max-connections: 8192
-    accept-count: 10000
+    max-connections: 200
+    accept-count: 100
     connection-timeout: 20000
   domain:
     front-domain: ${FRONT_LOCAL:http://localhost:3000}
