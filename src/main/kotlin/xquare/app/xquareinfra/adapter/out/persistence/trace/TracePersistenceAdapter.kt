@@ -33,7 +33,11 @@ class TracePersistenceAdapter(
         return traceMongoEntityRepository.findById(traceId)?.let { traceMapper.toModel(it) }
     }
 
-    override fun findRootSpansByServiceName(serviceName: String): List<Span> {
-        return traceMongoEntityRepository.findSpansWithNullParentId(serviceName)
+    override fun findRootSpansByServiceName(
+        serviceName: String,
+        startTimeNano: Long,
+        endTimeNano: Long
+    ): List<Span> {
+        return traceMongoEntityRepository.findSpansWithNullParentIdAndDateNanoBetween(serviceName, startTimeNano, endTimeNano)
     }
 }
