@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.*
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
+import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
@@ -14,7 +15,8 @@ import java.util.*
 @Service
 class TraceService(
     private val findDeployPort: FindDeployPort,
-    private val findTracePort: FindTracePort
+    private val findTracePort: FindTracePort,
+    private val findSpanPort: FindSpanPort
 ) : TraceUseCase {
     override fun getRootSpanByDeployIdAndEnvironment(
         deployId: UUID,
@@ -26,26 +28,24 @@ class TraceService(
 
         val timeRangeInNanos = TimeUtil.getTimeRangeInNanosSeconds(timeRangeSeconds)
 
-        val traceList = findTracePort.findTracesByServiceNameInTimeRange(
+        val rootSpanList = findSpanPort.findRootSpansByServiceName(
             serviceName = serviceName,
             startTimeNano = timeRangeInNanos.past,
             endTimeNano = timeRangeInNanos.now
         )
 
-        val rootSpanList = traceList.mapNotNull {
-            it.getRootSpan()?.let { span ->
-                RootSpanResponse(
-                    traceId = span.traceId,
-                    date = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano),
-                    resource = span.name,
-                    durationMs = TimeUtil.unixNanoToMilliseconds(span.endTimeUnixNano - span.startTimeUnixNano),
-                    method = span.getStatusCode()?.toString(),
-                    statusCode = span.getStatusCode()?.toLong()
-                )
-            }
+        val rootSpanResponse = rootSpanList.map { span ->
+            RootSpanResponse(
+                traceId = span.traceId,
+                date = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano),
+                resource = span.name,
+                durationMs = TimeUtil.unixNanoToMilliseconds(span.endTimeUnixNano - span.startTimeUnixNano),
+                method = span.getStatusCode()?.toString(),
+                statusCode = span.getStatusCode()?.toLong()
+            )
         }.sortedByDescending { it.date }
 
-        return GetRootSpanListResponse(rootSpanList)
+        return GetRootSpanListResponse(rootSpanResponse)
     }
 
     override fun getTraceDetail(traceId: String): GetTraceDetailResponse {
