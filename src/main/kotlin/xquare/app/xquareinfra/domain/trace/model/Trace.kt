@@ -17,8 +17,7 @@ data class Trace(
 
     fun getErrorSpan(): Span? {
         return spans.find { span ->
-            val statusCode = span.getStatusCode()
-            statusCode != null && statusCode >= 500
+            span.events.isNotEmpty()
         }
     }
 
