@@ -19,7 +19,6 @@ class TraceEventListener(
 ) {
     @EventListener
     fun handleTraceEvent(event: TraceEvent) {
-        println("이벤트 받았다잉")
         val trace = event.trace
 
         if (trace.isError()) {

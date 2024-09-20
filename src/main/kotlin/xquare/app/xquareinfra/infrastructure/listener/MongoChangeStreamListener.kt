@@ -32,10 +32,8 @@ class MongoChangeStreamListener(
         val listener = MessageListener<ChangeStreamDocument<Document>, TraceMongoEntity> { message ->
             val changEvent = message.body
             val trace = changEvent?.let { traceMapper.toModel(it) }
-            println("왔다잉 " + trace.toString())
             trace?.let {
                 eventPublisher.publishEvent(TraceEvent(this, it))
-                println("이벤트 보냈다잉")
             }
         }
 
