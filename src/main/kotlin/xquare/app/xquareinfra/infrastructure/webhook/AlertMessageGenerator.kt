@@ -13,11 +13,6 @@ object AlertMessageGenerator {
         **Trace ID:** ${span.traceId}
         **Span ID:** ${span.spanId}
         
-        **Error Message:**
-        ```
-        ${span.events[0].attributes["exception_message"]}
-        ```
-        
         **추가 정보:**
         - Duration: ${TimeUtil.calculateDurationMs(span.startTimeUnixNano, span.endTimeUnixNano)}ms
         - Parent Span ID: ${span.parentSpanId ?: "N/A"}
