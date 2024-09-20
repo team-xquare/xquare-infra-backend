@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.messaging.MessageListener
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.trace.TraceMapper
 import xquare.app.xquareinfra.application.trace.event.TraceEvent
-import xquare.app.xquareinfra.domain.trace.model.Trace
 import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
 
 @Component
@@ -34,9 +33,7 @@ class MongoChangeStreamListener(
             val changEvent = message.body
             val trace = changEvent?.let { traceMapper.toModel(it) }
             trace?.let {
-                if(trace.isError()) {
-                    eventPublisher.publishEvent(TraceEvent(this, trace))
-                }
+                eventPublisher.publishEvent(TraceEvent(this, it))
             }
         }
 
