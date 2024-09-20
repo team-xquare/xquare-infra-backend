@@ -40,7 +40,7 @@ data class Span(
 
     @Field("status")
     val status: SpanStatus
-){
+) {
     fun getAttributeValue(attribute: String): String? {
         return attributes[attribute]?.toString()
     }
@@ -50,23 +50,6 @@ data class Span(
     }
 
     fun getStatusCode(): Int? {
-        return getAttributeValue("http_status_code")?.toInt()
-    }
-
-    companion object {
-        private fun AnyValue.toAttributeValue(): AttributeValue {
-            return when {
-                hasStringValue() -> AttributeValue(stringValue = stringValue)
-                hasIntValue() -> AttributeValue(intValue = intValue)
-                hasBoolValue() -> AttributeValue(boolValue = boolValue)
-                hasDoubleValue() -> AttributeValue(doubleValue = doubleValue)
-                hasArrayValue() -> AttributeValue(arrayValue = arrayValue.valuesList.map { it.toAttributeValue() })
-                else -> AttributeValue(stringValue = "")
-            }
-        }
-
-        fun ByteString.toHexString(): String {
-            return this.toByteArray().joinToString("") { "%02x".format(it) }
-        }
+        return getAttributeValue("http_status_code")?.toIntOrNull()
     }
 }

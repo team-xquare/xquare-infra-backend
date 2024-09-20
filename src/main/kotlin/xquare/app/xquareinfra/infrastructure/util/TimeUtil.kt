@@ -4,6 +4,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import kotlin.math.abs
 
 object TimeUtil {
     fun unixNanoToKoreanTime(nanoTime: Long): String {
@@ -37,5 +38,18 @@ object TimeUtil {
             past = past.toEpochMilli() * 1_000_000,
             now = now.toEpochMilli() * 1_000_000
         )
+    }
+
+    fun unixToKoreanTime(unixTimestamp: Long): String {
+        val instant = Instant.ofEpochMilli(unixTimestamp)
+        val koreanZoneId = ZoneId.of("Asia/Seoul")
+        val koreanTime = instant.atZone(koreanZoneId)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return koreanTime.format(formatter)
+    }
+
+    fun calculateDurationMs(startTimeNano: Long, endTimeNano: Long): Long {
+        return abs(endTimeNano - startTimeNano) / 1_000_000
     }
 }

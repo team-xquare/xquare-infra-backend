@@ -34,4 +34,24 @@ object ContainerUtil {
     fun getNamespaceName(team: Team, containerEnvironment: ContainerEnvironment): String {
         return "${team.teamNameEn}-$containerEnvironment"
     }
+
+    fun getContainerInfoByFullName(fullName: String): ContainerInfo {
+        var serviceName = fullName
+        val containerEnvironment = when {
+            serviceName.contains("-prod") -> {
+                serviceName = serviceName.replace("-prod", "")
+                ContainerEnvironment.prod
+            }
+            serviceName.contains("-stag") -> {
+                serviceName = serviceName.replace("-stag", "")
+                ContainerEnvironment.stag
+            }
+            else -> throw IllegalArgumentException("Unknown environment in service name")
+        }
+
+        serviceName = serviceName.replace("-be", "").replace("-fe", "")
+
+        return ContainerInfo(serviceName = serviceName, containerEnvironment = containerEnvironment)
+    }
+
 }
