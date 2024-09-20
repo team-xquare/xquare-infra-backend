@@ -14,4 +14,18 @@ data class Trace(
     fun sortedByAscendingDate(): List<Span> {
         return spans.sortedBy { it.startTimeUnixNano }
     }
+
+    fun getErrorSpan(): Span? {
+        return spans.find { span ->
+            val statusCode = span.getStatusCode()
+            statusCode != null && statusCode >= 500
+        }
+    }
+
+    fun isError(): Boolean {
+        return spans.any { span ->
+            val statusCode = span.getStatusCode()
+            statusCode != null && statusCode >= 500
+        }
+    }
 }
