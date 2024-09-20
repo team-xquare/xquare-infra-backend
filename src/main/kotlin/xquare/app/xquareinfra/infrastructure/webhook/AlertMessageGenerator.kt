@@ -15,7 +15,7 @@ object AlertMessageGenerator {
         
         **Error Message:**
         ```
-        ${span.events}
+        ${span.events[0].attributes["exception_message"]}
         ```
         
         **추가 정보:**
