@@ -54,6 +54,7 @@ class TraceService(
 
         val traceList = trace.sortedByAscendingDate().map { span ->
             SpanDetailResponse(
+                parentSpanId = span.parentSpanId,
                 traceId = span.traceId,
                 spanId = span.spanId,
                 name = span.name,

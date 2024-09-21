@@ -8,4 +8,5 @@ data class SpanDetailResponse(
     val endTimeUnixNano: Long,
     val attributes: Map<String, Any?> = emptyMap(),
     val events: List<SpanEventResponse> = emptyList(),
+    val parentSpanId: String? = null
 )
