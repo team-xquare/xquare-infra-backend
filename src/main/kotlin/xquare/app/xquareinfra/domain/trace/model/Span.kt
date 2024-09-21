@@ -52,4 +52,8 @@ data class Span(
     fun getStatusCode(): Int? {
         return getAttributeValue("http_status_code")?.toIntOrNull()
     }
+
+    fun isErrorSpan(): Boolean {
+        return events.any{ it.name == "exception" }
+    }
 }
