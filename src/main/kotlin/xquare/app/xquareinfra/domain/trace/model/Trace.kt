@@ -16,9 +16,7 @@ data class Trace(
     }
 
     fun getErrorSpan(): Span? {
-        return spans.find { span ->
-            span.events.isNotEmpty()
-        }
+        return spans.find { span -> span.isErrorSpan() }
     }
 
     fun isError(): Boolean {
