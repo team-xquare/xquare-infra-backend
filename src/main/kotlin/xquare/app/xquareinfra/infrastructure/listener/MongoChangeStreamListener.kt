@@ -45,14 +45,7 @@ class MongoChangeStreamListener(
             try {
                 val changeEvent = message.body
                 val trace = changeEvent?.let { traceMapper.toModel(it) } ?: throw IllegalArgumentException("Trace Not Found")
-                val traceId = trace.traceId
-
-                if (!findTraceEventCachePort.existsById(traceId)) {
-                    eventPublisher.publishEvent(TraceEvent(this, trace))
-                    saveTraceEventCachePort.save(TraceEventCache(traceId = traceId, ttl = 5))
-                } else {
-                    logger.info("이미 처리된 이벤트: {}", traceId)
-                }
+                eventPublisher.publishEvent(TraceEvent(this, trace))
             } catch (ex: Exception) {
                 logger.error("Change Stream 이벤트 처리 중 오류 발생", ex)
             }
