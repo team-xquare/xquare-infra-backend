@@ -60,7 +60,7 @@ dependencies {
 
     // redis
     implementation(Dependencies.REDIS)
-    implementation("org.redisson:redisson-spring-boot-starter:3.17.0")
+    implementation("org.redisson:redisson-spring-boot-starter:3.17.3")
     implementation(Dependencies.ANNOTATION_PROCESSOR)
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
