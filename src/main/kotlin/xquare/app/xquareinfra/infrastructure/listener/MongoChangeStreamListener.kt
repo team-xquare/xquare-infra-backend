@@ -3,6 +3,8 @@ package xquare.app.xquareinfra.infrastructure.listener
 import com.mongodb.client.model.changestream.ChangeStreamDocument
 import com.mongodb.client.model.changestream.FullDocument
 import org.bson.Document
+import org.redisson.api.RLock
+import org.redisson.api.RedissonClient
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.mongodb.core.ChangeStreamOptions
@@ -13,13 +15,21 @@ import org.springframework.data.mongodb.core.messaging.MessageListener
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.trace.TraceMapper
 import xquare.app.xquareinfra.application.trace.event.TraceEvent
+import xquare.app.xquareinfra.application.trace.port.out.FindTraceEventCachePort
+import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
+import xquare.app.xquareinfra.application.trace.port.out.SaveTraceEventCachePort
+import xquare.app.xquareinfra.application.trace.port.out.SaveTracePort
 import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
+import java.util.concurrent.TimeUnit
 
 @Component
 class MongoChangeStreamListener(
     private val eventPublisher: ApplicationEventPublisher,
     private val mongoTemplate: MongoTemplate,
-    private val traceMapper: TraceMapper
+    private val traceMapper: TraceMapper,
+    private val findTraceEventCachePort: FindTraceEventCachePort,
+    private val saveTraceEventCachePort: SaveTraceEventCachePort,
+    private val redissonClient: RedissonClient
 ) {
     private val logger = LoggerFactory.getLogger(MongoChangeStreamListener::class.java)
     private val listenerContainer: DefaultMessageListenerContainer = DefaultMessageListenerContainer(mongoTemplate)
@@ -34,11 +44,29 @@ class MongoChangeStreamListener(
         val listener = MessageListener<ChangeStreamDocument<Document>, TraceMongoEntity> { message ->
             try {
                 val changeEvent = message.body
-                val trace = changeEvent?.let { traceMapper.toModel(it) }
-                trace?.let {
-                    eventPublisher.publishEvent(TraceEvent(this, it))
+                val trace = changeEvent?.let { traceMapper.toModel(it) } ?: throw IllegalArgumentException("Trace Not Found")
+                val traceId = trace.traceId
+
+                val lock: RLock = redissonClient.getLock("lock:trace-event:$traceId")
+                val lockAcquired = lock.tryLock(0, 10, TimeUnit.SECONDS)
+
+                if (lockAcquired) {
+                    try {
+                        // 중복 처리 방지를 위한 캐시 확인
+                        if (!findTraceEventCachePort.existsById(traceId)) {
+                            eventPublisher.publishEvent(TraceEvent(this, trace))
+                            saveTraceEventCachePort.save(TraceEventCache(traceId = traceId, ttl = 5))
+                            logger.info("Change Stream 이벤트 처리 완료: {}", trace)
+                        } else {
+                            logger.info("이미 처리된 이벤트: {}", traceId)
+                        }
+                    } finally {
+                        lock.unlock()
+                    }
+                } else {
+                    logger.info("락 획득 실패, 이벤트 처리 건너뜀: {}", traceId)
                 }
-                logger.info("Change Stream 이벤트 처리 완료: {}", trace)
+
             } catch (ex: Exception) {
                 logger.error("Change Stream 이벤트 처리 중 오류 발생", ex)
             }
