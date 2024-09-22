@@ -41,6 +41,7 @@ dependencies {
     implementation(Dependencies.REDIS)
     implementation(Dependencies.LOGGER)
     implementation(Dependencies.SPRING_VALIDATION)
+    implementation(Dependencies.STARTER)
 
     // web
     implementation(Dependencies.SPRING_WEB)
