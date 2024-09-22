@@ -47,25 +47,12 @@ class MongoChangeStreamListener(
                 val trace = changeEvent?.let { traceMapper.toModel(it) } ?: throw IllegalArgumentException("Trace Not Found")
                 val traceId = trace.traceId
 
-                val lock: RLock = redissonClient.getLock("lock:trace-event:$traceId")
-                val lockAcquired = lock.tryLock(0, 10, TimeUnit.SECONDS)
-
-                if (lockAcquired) {
-                    try {
-                        // 중복 처리 방지를 위한 캐시 확인
-                        if (!findTraceEventCachePort.existsById(traceId)) {
-                            eventPublisher.publishEvent(TraceEvent(this, trace))
-                            saveTraceEventCachePort.save(TraceEventCache(traceId = traceId, ttl = 5))
-                        } else {
-                            logger.info("이미 처리된 이벤트: {}", traceId)
-                        }
-                    } finally {
-                        lock.unlock()
-                    }
+                if (!findTraceEventCachePort.existsById(traceId)) {
+                    eventPublisher.publishEvent(TraceEvent(this, trace))
+                    saveTraceEventCachePort.save(TraceEventCache(traceId = traceId, ttl = 5))
                 } else {
-                    logger.info("락 획득 실패, 이벤트 처리 건너뜀: {}", traceId)
+                    logger.info("이미 처리된 이벤트: {}", traceId)
                 }
-
             } catch (ex: Exception) {
                 logger.error("Change Stream 이벤트 처리 중 오류 발생", ex)
             }
