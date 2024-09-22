@@ -56,7 +56,6 @@ class MongoChangeStreamListener(
                         if (!findTraceEventCachePort.existsById(traceId)) {
                             eventPublisher.publishEvent(TraceEvent(this, trace))
                             saveTraceEventCachePort.save(TraceEventCache(traceId = traceId, ttl = 5))
-                            logger.info("Change Stream 이벤트 처리 완료: {}", trace)
                         } else {
                             logger.info("이미 처리된 이벤트: {}", traceId)
                         }
