@@ -3,7 +3,6 @@ package xquare.app.xquareinfra.infrastructure.listener
 import com.mongodb.client.model.changestream.ChangeStreamDocument
 import com.mongodb.client.model.changestream.FullDocument
 import org.bson.Document
-import org.redisson.api.RLock
 import org.redisson.api.RedissonClient
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
@@ -16,11 +15,8 @@ import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.out.persistence.trace.TraceMapper
 import xquare.app.xquareinfra.application.trace.event.TraceEvent
 import xquare.app.xquareinfra.application.trace.port.out.FindTraceEventCachePort
-import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.application.trace.port.out.SaveTraceEventCachePort
-import xquare.app.xquareinfra.application.trace.port.out.SaveTracePort
 import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
-import java.util.concurrent.TimeUnit
 
 @Component
 class MongoChangeStreamListener(
