@@ -38,6 +38,6 @@ class TracePersistenceAdapter(
         startTimeNano: Long,
         endTimeNano: Long
     ): List<Span> {
-        return traceMongoEntityRepository.findSpansWithNullParentIdAndDateNanoBetween(serviceName, startTimeNano, endTimeNano)
+        return traceMongoEntityRepository.findSpansByServiceNameAndDateNanoBetween(serviceName, startTimeNano, endTimeNano)
     }
 }

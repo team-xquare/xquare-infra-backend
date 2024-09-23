@@ -40,7 +40,7 @@ class TraceMongoEntityRepository(
         return mongoTemplate.findOne(query, TraceMongoEntity::class.java)
     }
 
-    fun findSpansWithNullParentIdAndDateNanoBetween(
+    fun findSpansByServiceNameAndDateNanoBetween(
         serviceName: String,
         startTimeUnix: Long,
         endTimeUnix: Long
