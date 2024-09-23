@@ -30,6 +30,11 @@ object TimeUtil {
         )
     }
 
+    fun nowInNano(): Long {
+        val now = Instant.now()
+        return now.toEpochMilli() * 1_000_000
+    }
+
     fun getTimeRangeInNanosSeconds(secondsAgo: Long): TimePair {
         val now = Instant.now()
         val past = now.minus(secondsAgo, ChronoUnit.SECONDS)

@@ -1,6 +1,7 @@
 package xquare.app.xquareinfra.application.trace.service
 
 import org.springframework.stereotype.Service
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.request.QueryOption
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.*
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
@@ -8,6 +9,7 @@ import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
+import xquare.app.xquareinfra.domain.trace.model.Span
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.util.TimeUtil
 import java.util.*
@@ -18,23 +20,74 @@ class TraceService(
     private val findTracePort: FindTracePort,
     private val findSpanPort: FindSpanPort
 ) : TraceUseCase {
-    override fun getRootSpanByDeployIdAndEnvironment(
+    override fun getSpansByDeployIdAndEnvironment(
         deployId: UUID,
         environment: ContainerEnvironment,
-        timeRangeSeconds: Long
+        queryOption: QueryOption
     ): GetRootSpanListResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val serviceName = ContainerUtil.getContainerName(deploy, environment)
 
-        val timeRangeInNanos = TimeUtil.getTimeRangeInNanosSeconds(timeRangeSeconds)
+        var nextCursorBeforeSpanId: String? = null
+        var nextCursorAfterSpanId: String? = null
+        var hasMoreBefore: Boolean = false
+        var hasMoreAfter: Boolean = false
 
-        val rootSpanList = findSpanPort.findRootSpansByServiceName(
-            serviceName = serviceName,
-            startTimeNano = timeRangeInNanos.past,
-            endTimeNano = timeRangeInNanos.now
-        )
+        val spanList: List<Span> = when {
+            queryOption.beforeSpanId != null && queryOption.afterSpanId != null -> {
+                throw IllegalArgumentException("유효하지 않은 Query Option 입니다.")
+            }
+            queryOption.beforeSpanId != null -> {
+                val span = findSpanPort.findSpanById(queryOption.beforeSpanId) ?: throw BusinessLogicException.TRACE_NOT_FOUND
+                val spanResponse =
+                    findSpanPort.findSpansByServiceNameAndDateNanoBeforeWithLimit(
+                        serviceName = serviceName,
+                        dateTimeUnix = span.startTimeUnixNano,
+                        limit = queryOption.limit
+                    )
 
-        val rootSpanResponse = rootSpanList.map { span ->
+                val spans = spanResponse.spans.sortedByDescending { it.startTimeUnixNano }
+
+                hasMoreBefore = spanResponse.hasMore
+                nextCursorBeforeSpanId = spans.lastOrNull()?.id
+
+                spans
+            }
+            queryOption.afterSpanId != null -> {
+                val span = findSpanPort.findSpanById(queryOption.afterSpanId) ?: throw BusinessLogicException.TRACE_NOT_FOUND
+                val spanResponse =
+                    findSpanPort.findSpansByServiceNameAndDateNanoAfterWithLimit(
+                        serviceName = serviceName,
+                        dateTimeUnix = span.startTimeUnixNano,
+                        limit = queryOption.limit
+                    )
+
+                val spans = spanResponse.spans.sortedByDescending { it.startTimeUnixNano }
+
+                hasMoreAfter = spanResponse.hasMore
+                nextCursorAfterSpanId = spans.firstOrNull()?.id
+
+                spans
+            }
+            else -> {
+                val spanResponse =
+                    findSpanPort.findSpansByServiceNameAndDateNanoBeforeWithLimit(
+                        serviceName = serviceName,
+                        dateTimeUnix = TimeUtil.nowInNano(),
+                        limit = queryOption.limit
+                    )
+
+                val spans = spanResponse.spans.sortedByDescending { it.startTimeUnixNano}
+
+                nextCursorAfterSpanId = spans.firstOrNull()?.id
+                nextCursorBeforeSpanId = spans.lastOrNull()?.id
+                hasMoreBefore = spanResponse.hasMore
+
+                spans
+            }
+        }
+
+        val rootSpanResponse = spanList.map { span ->
             RootSpanResponse(
                 traceId = span.traceId,
                 date = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano),
@@ -45,7 +98,13 @@ class TraceService(
             )
         }.sortedByDescending { it.date }
 
-        return GetRootSpanListResponse(rootSpanResponse)
+        return GetRootSpanListResponse(
+            spans = rootSpanResponse,
+            nextCursorAfterSpanId = nextCursorAfterSpanId,
+            nextCursorBeforeSpanId = nextCursorBeforeSpanId,
+            hasMoreAfter = hasMoreAfter,
+            hasMoreBefore = hasMoreBefore
+        )
     }
 
     override fun getTraceDetail(traceId: String): GetTraceDetailResponse {
