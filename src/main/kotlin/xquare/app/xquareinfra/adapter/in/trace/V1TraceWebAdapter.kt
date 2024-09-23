@@ -2,9 +2,11 @@ package xquare.app.xquareinfra.adapter.`in`.trace
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.request.QueryOption
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetTraceDetailResponse
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
@@ -20,12 +22,12 @@ class V1TraceWebAdapter(
     fun getRootSpan(
         @RequestParam("deployId") deployId: UUID,
         @RequestParam("environment") environment: ContainerEnvironment,
-        @RequestParam("timeRange") timeRangeSecond: Long
+        @RequestBody queryOption: QueryOption
     ): GetRootSpanListResponse {
-        return traceUseCase.getRootSpanByDeployIdAndEnvironment(
+        return traceUseCase.getSpansByDeployIdAndEnvironment(
             deployId = deployId,
             environment = environment,
-            timeRangeSeconds = timeRangeSecond
+            queryOption = queryOption
         )
     }
 
