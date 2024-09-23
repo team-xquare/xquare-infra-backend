@@ -71,7 +71,7 @@ class TraceMongoEntityRepository(
                     .and("dateNano").lte(dateTimeUnix)
             ),
             Aggregation.unwind("spans"),
-            Aggregation.sort(Sort.by(Sort.Direction.DESC, "spans.dateNano")),
+            Aggregation.sort(Sort.by(Sort.Direction.DESC, "spans.startTimeUnixNano")),
             Aggregation.project()
                 .and("spans").`as`("span")
                 .andExclude("_id"),
@@ -108,7 +108,7 @@ class TraceMongoEntityRepository(
                     .and("dateNano").gte(dateTimeUnix)
             ),
             Aggregation.unwind("spans"),
-            Aggregation.sort(Sort.by(Sort.Direction.DESC, "spans.dateNano")),
+            Aggregation.sort(Sort.by(Sort.Direction.DESC, "spans.startTimeUnixNano")),
             Aggregation.project()
                 .and("spans").`as`("span")
                 .andExclude("_id"),
