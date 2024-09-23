@@ -48,7 +48,6 @@ class TraceMongoEntityRepository(
         val aggregation = Aggregation.newAggregation(
             Aggregation.match(Criteria.where("serviceName").`is`(serviceName).and("dateNano").gte(startTimeUnix).lte(endTimeUnix)),
             Aggregation.unwind("spans"),
-            Aggregation.match(Criteria.where("spans.parentSpanId").isNull),
             Aggregation.project().and("spans").`as`("span").andExclude("_id")
         ).withOptions(AggregationOptions.builder().cursorBatchSize(100).build())
 
