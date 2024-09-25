@@ -22,7 +22,7 @@ class TraceEventListener(
         val span = event.span
 
         if (span.isErrorSpan()) {
-            val fullName = span.getServiceNameInAttribute() ?: throw IllegalArgumentException("Service Name is null")
+            val fullName = span.getServiceNameInScope() ?: throw IllegalArgumentException("Service Name is null")
             val containerInfo = ContainerUtil.getContainerInfoByFullName(fullName)
 
             val deploy = findDeployPort.findByDeployName(containerInfo.serviceName)

@@ -5,8 +5,15 @@ data class Trace(
     val spans: List<Span>,
     val serviceName: String?,
     val dateNano: Long,
-    val durationNano: Long
+    var durationNano: Long,
+    val startTimeUnixNano: Long,
+    val endTimeUnixNano: Long
 ) {
+
+    init {
+        durationNano = endTimeUnixNano - startTimeUnixNano
+    }
+
     fun getRootSpan(): Span? {
         return spans.find { it.parentSpanId == null }
     }
