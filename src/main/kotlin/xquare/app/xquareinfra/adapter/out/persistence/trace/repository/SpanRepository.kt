@@ -46,14 +46,16 @@ class SpanRepository(
             Aggregation.group("traceId")
                 .push("\$\$ROOT").`as`("spans")
                 .first("serviceName").`as`("serviceName")
-                .min("dateNano").`as`("dateNano")
-                .sum("durationNano").`as`("durationNano"),
+                .min("dateNano").`as`("startTimeUnixNano")
+                .min("endTimeUnixNano").`as`("startTimeUnixNano")
+                .max("endTimeUnixNano").`as`("endTimeUnixNano"),
             Aggregation.project()
                 .and("_id").`as`("traceId")
                 .and("spans").`as`("spans")
                 .and("serviceName").`as`("serviceName")
                 .and("dateNano").`as`("dateNano")
-                .and("durationNano").`as`("durationNano")
+                .and("startTimeUnixNano").`as`("startTimeUnixNano")
+                .and("endTimeUnixNano").`as`("endTimeUnixNano")
         ).withOptions(AggregationOptions.builder().cursorBatchSize(100).build())
 
         val results: AggregationResults<TraceAggregationResult> = mongoTemplate.aggregate(
@@ -68,7 +70,9 @@ class SpanRepository(
                 spans = aggregationResult.spans.map { spanMapper.toModel(it) },
                 serviceName = aggregationResult.serviceName,
                 dateNano = aggregationResult.dateNano,
-                durationNano = aggregationResult.durationNano
+                durationNano = aggregationResult.durationNano,
+                startTimeUnixNano = aggregationResult.startTimeUnixNano,
+                endTimeUnixNano = aggregationResult.endTimeUnixNano
             )
         }
     }
@@ -79,7 +83,7 @@ class SpanRepository(
                 Criteria.where("traceId").`is`(traceId)
             ),
             Aggregation.group("traceId")
-                .push("\$ROOT").`as`("spans")
+                .push("\$\$ROOT").`as`("spans")
                 .first("serviceName").`as`("serviceName")
                 .min("dateNano").`as`("dateNano")
                 .sum("durationNano").`as`("durationNano"),
@@ -104,7 +108,9 @@ class SpanRepository(
             spans = aggregationResult.spans.map { spanMapper.toModel(it) },
             serviceName = aggregationResult.serviceName,
             dateNano = aggregationResult.dateNano,
-            durationNano = aggregationResult.durationNano
+            durationNano = aggregationResult.durationNano,
+            startTimeUnixNano = aggregationResult.startTimeUnixNano,
+            endTimeUnixNano = aggregationResult.endTimeUnixNano
         )
     }
 
@@ -113,6 +119,8 @@ class SpanRepository(
         val spans: List<SpanMongoEntity>,
         val serviceName: String?,
         val dateNano: Long,
-        val durationNano: Long
+        val durationNano: Long,
+        val startTimeUnixNano: Long,
+        val endTimeUnixNano: Long,
     )
 }
