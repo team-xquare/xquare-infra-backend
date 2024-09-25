@@ -58,6 +58,6 @@ data class Span(
     }
 
     fun getServiceName(): String? {
-        return getAttributeValue("service.name")
+        return getAttributeValue("service_name")
     }
 }
