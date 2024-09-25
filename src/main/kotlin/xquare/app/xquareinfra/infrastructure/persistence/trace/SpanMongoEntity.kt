@@ -1,17 +1,28 @@
-package xquare.app.xquareinfra.domain.trace.model
+package xquare.app.xquareinfra.infrastructure.persistence.trace
 
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
+import xquare.app.xquareinfra.domain.trace.model.SpanEvent
+import xquare.app.xquareinfra.domain.trace.model.SpanLink
+import xquare.app.xquareinfra.domain.trace.model.SpanStatus
+import javax.persistence.Id
 
-data class Span(
+@Document(collection = "spans")
+data class SpanMongoEntity(
+    @Id
     @Field("id")
     val id: String,
 
+    @Indexed
     @Field("traceId")
     val traceId: String,
 
+    @Indexed
     @Field("spanId")
     val spanId: String,
 
+    @Indexed
     @Field("parentSpanId")
     val parentSpanId: String?,
 
@@ -41,24 +52,4 @@ data class Span(
 
     @Field("serviceName")
     val serviceName: String?
-) {
-    private fun getAttributeValue(attribute: String): String? {
-        return attributes[attribute]?.toString()
-    }
-
-    fun isHttpRequest(): Boolean {
-        return getAttributeValue("http_method") != null
-    }
-
-    fun getStatusCode(): Int? {
-        return getAttributeValue("http_status_code")?.toIntOrNull()
-    }
-
-    fun isErrorSpan(): Boolean {
-        return events.any{ it.name == "exception" }
-    }
-
-    fun getServiceNameInAttribute(): String? {
-        return getAttributeValue("service_name")
-    }
-}
+)
