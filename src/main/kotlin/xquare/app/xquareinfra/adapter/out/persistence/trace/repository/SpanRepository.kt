@@ -70,7 +70,6 @@ class SpanRepository(
                 spans = aggregationResult.spans.map { spanMapper.toModel(it) },
                 serviceName = aggregationResult.serviceName,
                 dateNano = aggregationResult.dateNano,
-                durationNano = aggregationResult.durationNano,
                 startTimeUnixNano = aggregationResult.startTimeUnixNano,
                 endTimeUnixNano = aggregationResult.endTimeUnixNano
             )
@@ -85,8 +84,8 @@ class SpanRepository(
             Aggregation.group("traceId")
                 .push("\$\$ROOT").`as`("spans")
                 .first("serviceName").`as`("serviceName")
-                .min("dateNano").`as`("dateNano")
-                .min("endTimeUnixNano").`as`("startTimeUnixNano")
+                .min("dateNano").`as`("startTimeUnixNano")
+                .min("startTimeUnixNano").`as`("startTimeUnixNano")
                 .max("endTimeUnixNano").`as`("endTimeUnixNano"),
             Aggregation.project()
                 .and("_id").`as`("traceId")
@@ -110,7 +109,6 @@ class SpanRepository(
             spans = aggregationResult.spans.map { spanMapper.toModel(it) },
             serviceName = aggregationResult.serviceName,
             dateNano = aggregationResult.dateNano,
-            durationNano = aggregationResult.durationNano,
             startTimeUnixNano = aggregationResult.startTimeUnixNano,
             endTimeUnixNano = aggregationResult.endTimeUnixNano
         )
@@ -121,7 +119,6 @@ class SpanRepository(
         val spans: List<SpanMongoEntity>,
         val serviceName: String?,
         val dateNano: Long,
-        val durationNano: Long,
         val startTimeUnixNano: Long,
         val endTimeUnixNano: Long,
     )
