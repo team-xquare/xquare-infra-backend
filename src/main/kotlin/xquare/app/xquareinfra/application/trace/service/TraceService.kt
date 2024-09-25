@@ -67,7 +67,8 @@ class TraceService(
                         name = event.name,
                         attributes = event.attributes
                     )
-                }
+                },
+                serviceName = span.getServiceName()
             )
         }
 
