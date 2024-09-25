@@ -1,7 +1,5 @@
 package xquare.app.xquareinfra.domain.trace.model
 
-import com.google.protobuf.ByteString
-import io.opentelemetry.proto.common.v1.AnyValue
 import org.springframework.data.mongodb.core.mapping.Field
 
 data class Span(
@@ -39,7 +37,10 @@ data class Span(
     val links: List<SpanLink> = emptyList(),
 
     @Field("status")
-    val status: SpanStatus
+    val status: SpanStatus,
+
+    @Field("serviceName")
+    val serviceName: String?
 ) {
     private fun getAttributeValue(attribute: String): String? {
         return attributes[attribute]?.toString()
@@ -57,7 +58,7 @@ data class Span(
         return events.any{ it.name == "exception" }
     }
 
-    fun getServiceName(): String? {
+    fun getServiceNameInAttribute(): String? {
         return getAttributeValue("service_name")
     }
 }
