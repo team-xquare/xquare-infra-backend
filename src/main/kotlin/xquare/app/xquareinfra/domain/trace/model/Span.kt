@@ -41,7 +41,7 @@ data class Span(
     @Field("status")
     val status: SpanStatus
 ) {
-    fun getAttributeValue(attribute: String): String? {
+    private fun getAttributeValue(attribute: String): String? {
         return attributes[attribute]?.toString()
     }
 
@@ -55,5 +55,9 @@ data class Span(
 
     fun isErrorSpan(): Boolean {
         return events.any{ it.name == "exception" }
+    }
+
+    fun getServiceName(): String? {
+        return getAttributeValue("service.name")
     }
 }
