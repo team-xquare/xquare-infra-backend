@@ -1,5 +1,5 @@
 package xquare.app.xquareinfra.application.trace.event
 
-import xquare.app.xquareinfra.domain.trace.model.Trace
+import xquare.app.xquareinfra.domain.trace.model.Span
 
-data class TraceEvent(val source: Any, val trace: Trace)
+data class SpanEvent(val source: Any, val span: Span)
