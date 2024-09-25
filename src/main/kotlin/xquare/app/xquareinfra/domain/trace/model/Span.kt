@@ -58,7 +58,7 @@ data class Span(
         return events.any{ it.name == "exception" }
     }
 
-    fun getServiceNameInAttribute(): String? {
-        return getAttributeValue("service_name")
+    fun getServiceNameInScope(): String? {
+        return this.serviceName
     }
 }
