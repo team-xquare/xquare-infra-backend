@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.AggregationOptions
 import org.springframework.data.mongodb.core.aggregation.AggregationResults
+import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.stereotype.Repository
 import xquare.app.xquareinfra.adapter.out.persistence.trace.SpanMapper
@@ -109,10 +110,10 @@ class SpanRepository(
     }
 
     data class TraceAggregationResult(
-        val traceId: String,
-        val spans: List<SpanMongoEntity>,
-        val serviceName: String?,
-        val startTimeUnixNano: Long,
-        val endTimeUnixNano: Long,
+        @Field("traceId") val traceId: String,
+        @Field("spans") val spans: List<SpanMongoEntity>,
+        @Field("serviceName") val serviceName: String?,
+        @Field("startTimeUnixNano") val startTimeUnixNano: Long,
+        @Field("endTimeUnixNano") val endTimeUnixNano: Long,
     )
 }
