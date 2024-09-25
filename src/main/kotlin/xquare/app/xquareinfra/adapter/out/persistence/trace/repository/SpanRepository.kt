@@ -43,9 +43,8 @@ class SpanRepository(
                 Criteria.where("serviceName").`is`(serviceName)
                     .and("dateNano").gte(startTimeUnix).lte(endTimeUnix)
             ),
-            Aggregation.match(Criteria.where("parentSpanId").`is`(null)),
             Aggregation.group("traceId")
-                .push("\$ROOT").`as`("spans")
+                .push("\$\$ROOT").`as`("spans")
                 .first("serviceName").`as`("serviceName")
                 .min("dateNano").`as`("dateNano")
                 .sum("durationNano").`as`("durationNano"),
