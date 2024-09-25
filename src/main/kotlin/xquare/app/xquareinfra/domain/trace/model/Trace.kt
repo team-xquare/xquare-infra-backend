@@ -5,7 +5,7 @@ data class Trace(
     val spans: List<Span>,
     val serviceName: String?,
     val dateNano: Long,
-    var durationNano: Long,
+    var durationNano: Long? = null,
     val startTimeUnixNano: Long,
     val endTimeUnixNano: Long
 ) {
