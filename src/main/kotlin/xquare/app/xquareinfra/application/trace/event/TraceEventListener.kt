@@ -18,11 +18,11 @@ class TraceEventListener(
     private val discordMessageSender: DiscordMessageSender
 ) {
     @EventListener
-    fun handleTraceEvent(event: TraceEvent) {
-        val trace = event.trace
+    fun handleTraceEvent(event: SpanEvent) {
+        val span = event.span
 
-        if (trace.isError()) {
-            val fullName = trace.serviceName ?: throw IllegalArgumentException("Service Name is null")
+        if (span.isErrorSpan()) {
+            val fullName = span.getServiceNameInAttribute() ?: throw IllegalArgumentException("Service Name is null")
             val containerInfo = ContainerUtil.getContainerInfoByFullName(fullName)
 
             val deploy = findDeployPort.findByDeployName(containerInfo.serviceName)
@@ -31,8 +31,7 @@ class TraceEventListener(
             val container = findContainerPort.findByDeployAndEnvironment(deploy, containerInfo.containerEnvironment)
                 ?: throw IllegalArgumentException("Container Not Found Exception")
 
-            val errorSpan = trace.getErrorSpan() ?: throw IllegalArgumentException("Error Span is null")
-            val errorMessage = AlertMessageGenerator.makeErrorMessage(errorSpan)
+            val errorMessage = AlertMessageGenerator.makeErrorMessage(span)
 
             val webhookInfo = container.webhookInfo ?: throw IllegalArgumentException("Webhook Info is null")
 

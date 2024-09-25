@@ -3,7 +3,6 @@ package xquare.app.xquareinfra.infrastructure.listener
 import com.mongodb.client.model.changestream.ChangeStreamDocument
 import com.mongodb.client.model.changestream.FullDocument
 import org.bson.Document
-import org.redisson.api.RedissonClient
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.mongodb.core.ChangeStreamOptions
@@ -12,20 +11,17 @@ import org.springframework.data.mongodb.core.messaging.ChangeStreamRequest
 import org.springframework.data.mongodb.core.messaging.DefaultMessageListenerContainer
 import org.springframework.data.mongodb.core.messaging.MessageListener
 import org.springframework.stereotype.Component
+import xquare.app.xquareinfra.adapter.out.persistence.trace.SpanMapper
 import xquare.app.xquareinfra.adapter.out.persistence.trace.TraceMapper
-import xquare.app.xquareinfra.application.trace.event.TraceEvent
-import xquare.app.xquareinfra.application.trace.port.out.FindTraceEventCachePort
-import xquare.app.xquareinfra.application.trace.port.out.SaveTraceEventCachePort
+import xquare.app.xquareinfra.application.trace.event.SpanEvent
+import xquare.app.xquareinfra.infrastructure.persistence.trace.SpanMongoEntity
 import xquare.app.xquareinfra.infrastructure.persistence.trace.TraceMongoEntity
 
 @Component
 class MongoChangeStreamListener(
     private val eventPublisher: ApplicationEventPublisher,
     private val mongoTemplate: MongoTemplate,
-    private val traceMapper: TraceMapper,
-    private val findTraceEventCachePort: FindTraceEventCachePort,
-    private val saveTraceEventCachePort: SaveTraceEventCachePort,
-    private val redissonClient: RedissonClient
+    private val spanMapper: SpanMapper
 ) {
     private val logger = LoggerFactory.getLogger(MongoChangeStreamListener::class.java)
     private val listenerContainer: DefaultMessageListenerContainer = DefaultMessageListenerContainer(mongoTemplate)
@@ -37,11 +33,10 @@ class MongoChangeStreamListener(
     private fun startListening() {
         listenerContainer.start()
 
-        val listener = MessageListener<ChangeStreamDocument<Document>, TraceMongoEntity> { message ->
+        val listener = MessageListener<ChangeStreamDocument<Document>, SpanMongoEntity> { message ->
             try {
-                val changeEvent = message.body
-                val trace = changeEvent?.let { traceMapper.toModel(it) } ?: throw IllegalArgumentException("Trace Not Found")
-                eventPublisher.publishEvent(TraceEvent(this, trace))
+                val span = message.body?.let { spanMapper.toModel(it) } ?: throw IllegalArgumentException("올바르지 않은 Span 입니다")
+                eventPublisher.publishEvent(SpanEvent(this, span))
             } catch (ex: Exception) {
                 logger.error("Change Stream 이벤트 처리 중 오류 발생", ex)
             }
@@ -53,12 +48,12 @@ class MongoChangeStreamListener(
 
         val options = ChangeStreamRequest.ChangeStreamRequestOptions(
             "tracing",
-            "traces",
+            "spans",
             changeStreamOptions
         )
 
         val request = ChangeStreamRequest(listener, options)
 
-        listenerContainer.register(request, TraceMongoEntity::class.java)
+        listenerContainer.register(request, SpanMongoEntity::class.java)
     }
 }
