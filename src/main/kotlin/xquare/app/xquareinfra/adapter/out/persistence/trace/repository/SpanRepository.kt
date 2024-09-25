@@ -86,13 +86,15 @@ class SpanRepository(
                 .push("\$\$ROOT").`as`("spans")
                 .first("serviceName").`as`("serviceName")
                 .min("dateNano").`as`("dateNano")
-                .sum("durationNano").`as`("durationNano"),
+                .min("endTimeUnixNano").`as`("startTimeUnixNano")
+                .max("endTimeUnixNano").`as`("endTimeUnixNano"),
             Aggregation.project()
                 .and("_id").`as`("traceId")
                 .and("spans").`as`("spans")
                 .and("serviceName").`as`("serviceName")
                 .and("dateNano").`as`("dateNano")
-                .and("durationNano").`as`("durationNano")
+                .and("startTimeUnixNano").`as`("startTimeUnixNano")
+                .and("endTimeUnixNano").`as`("endTimeUnixNano")
         ).withOptions(AggregationOptions.builder().cursorBatchSize(100).build())
 
         val results: AggregationResults<TraceAggregationResult> = mongoTemplate.aggregate(
