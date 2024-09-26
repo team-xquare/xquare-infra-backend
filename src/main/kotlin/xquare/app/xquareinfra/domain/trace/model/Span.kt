@@ -55,7 +55,7 @@ data class Span(
     }
 
     fun isErrorSpan(): Boolean {
-        return events.any{ it.name == "exception" }
+        return getStatusCode()?.let { it >= 500 } ?: false
     }
 
     fun getServiceNameInScope(): String? {
