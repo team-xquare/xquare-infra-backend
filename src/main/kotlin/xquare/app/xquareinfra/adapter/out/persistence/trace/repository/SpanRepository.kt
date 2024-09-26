@@ -34,6 +34,21 @@ class SpanRepository(
         return results.map { spanMapper.toModel(it) }
     }
 
+    fun findSpansByServiceNameWithDateNanoBetween(
+        serviceName: String,
+        startTimeUnix: Long,
+        endTimeUnix: Long,
+    ): List<Span> {
+        val aggregation = Aggregation.newAggregation(
+            Aggregation.match(Criteria.where("serviceName").`is`(serviceName)
+                .and("startTimeUnixNano").gte(startTimeUnix).lte(endTimeUnix)
+            ),
+        ).withOptions(AggregationOptions.builder().cursorBatchSize(100).build())
+
+        val results: AggregationResults<SpanMongoEntity> = mongoTemplate.aggregate(aggregation, "spans", SpanMongoEntity::class.java)
+        return results.map { spanMapper.toModel(it) }
+    }
+
     fun findTracesByServiceNameWithDateNanoBetween(
         serviceName: String,
         startTimeUnix: Long,

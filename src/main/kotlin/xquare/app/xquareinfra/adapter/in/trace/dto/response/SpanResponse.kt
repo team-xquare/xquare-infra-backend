@@ -1,6 +1,6 @@
 package xquare.app.xquareinfra.adapter.`in`.trace.dto.response
 
-data class RootSpanResponse(
+data class SpanResponse(
     val traceId: String,
     val date: String,
     val resource: String,

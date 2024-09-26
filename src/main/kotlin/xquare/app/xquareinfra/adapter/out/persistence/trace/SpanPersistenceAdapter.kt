@@ -11,12 +11,11 @@ import xquare.app.xquareinfra.domain.trace.model.Trace
 class SpanPersistenceAdapter(
     private val spanRepository: SpanRepository
 ): FindSpanPort, FindTracePort {
-    override fun findRootSpansByServiceName(serviceName: String, startTimeNano: Long, endTimeNano: Long): List<Span> {
-        return spanRepository.findSpansServiceNameWithParentIdAndDateNanoBetween(
+    override fun findAllSpansByServiceName(serviceName: String, startTimeNano: Long, endTimeNano: Long): List<Span> {
+        return spanRepository.findSpansByServiceNameWithDateNanoBetween(
             serviceName = serviceName,
             startTimeUnix = startTimeNano,
-            endTimeUnix = endTimeNano,
-            parentSpanId = null
+            endTimeUnix = endTimeNano
         )
     }
 
