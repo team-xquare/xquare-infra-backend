@@ -25,7 +25,7 @@ class SpanRepository(
     ): List<Span> {
         val aggregation = Aggregation.newAggregation(
             Aggregation.match(Criteria.where("serviceName").`is`(serviceName)
-                .and("dateNano").gte(startTimeUnix).lte(endTimeUnix)
+                .and("startTimeUnixNano").gte(startTimeUnix).lte(endTimeUnix)
                 .and("parentSpanId").`is`(parentSpanId)
             ),
         ).withOptions(AggregationOptions.builder().cursorBatchSize(100).build())
