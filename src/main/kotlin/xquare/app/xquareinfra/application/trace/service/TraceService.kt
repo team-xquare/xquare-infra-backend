@@ -18,24 +18,24 @@ class TraceService(
     private val findTracePort: FindTracePort,
     private val findSpanPort: FindSpanPort
 ) : TraceUseCase {
-    override fun getRootSpanByDeployIdAndEnvironment(
+    override fun getAllSpansByDeployIdAndEnvironment(
         deployId: UUID,
         environment: ContainerEnvironment,
         timeRangeSeconds: Long
-    ): GetRootSpanListResponse {
+    ): GetSpanListResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val serviceName = ContainerUtil.getContainerName(deploy, environment)
 
         val timeRangeInNanos = TimeUtil.getTimeRangeInNanosSeconds(timeRangeSeconds)
 
-        val rootSpanList = findSpanPort.findRootSpansByServiceName(
+        val spanList = findSpanPort.findAllSpansByServiceName(
             serviceName = serviceName,
             startTimeNano = timeRangeInNanos.past,
             endTimeNano = timeRangeInNanos.now
         )
 
-        val rootSpanResponse = rootSpanList.map { span ->
-            RootSpanResponse(
+        val spanResponse = spanList.map { span ->
+            SpanResponse(
                 traceId = span.traceId,
                 date = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano),
                 resource = span.name,
@@ -45,7 +45,7 @@ class TraceService(
             )
         }.sortedByDescending { it.date }
 
-        return GetRootSpanListResponse(rootSpanResponse)
+        return GetSpanListResponse(spanResponse)
     }
 
     override fun getTraceDetail(traceId: String): GetTraceDetailResponse {

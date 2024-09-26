@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetRootSpanListResponse
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetSpanListResponse
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetTraceDetailResponse
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
@@ -21,8 +21,8 @@ class V1TraceWebAdapter(
         @RequestParam("deployId") deployId: UUID,
         @RequestParam("environment") environment: ContainerEnvironment,
         @RequestParam("timeRange") timeRangeSecond: Long
-    ): GetRootSpanListResponse {
-        return traceUseCase.getRootSpanByDeployIdAndEnvironment(
+    ): GetSpanListResponse {
+        return traceUseCase.getAllSpansByDeployIdAndEnvironment(
             deployId = deployId,
             environment = environment,
             timeRangeSeconds = timeRangeSecond
