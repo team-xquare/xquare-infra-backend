@@ -11,4 +11,6 @@ interface ContainerPipelineUseCase {
     ): GetContainerDeployHistoryResponse
 
     fun getStageLog(pipelineCounter: Int, stageName: String, pipelineName: String): String
+
+    fun schedulePipeline(deployId: UUID, containerEnvironment: ContainerEnvironment)
 }
