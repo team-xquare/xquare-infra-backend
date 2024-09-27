@@ -6,7 +6,7 @@ import xquare.app.xquareinfra.domain.trace.model.Span
 
 class HttpInteractionHandler : InteractionHandler {
     override fun canHandle(span: Span): Boolean {
-        return span.attributes.containsKey("http_method") && span.attributes.containsKey("net_peer_name")
+        return span.attributes.containsKey("http_method")
     }
 
     override fun extractInteractionType(span: Span): InteractionType {
