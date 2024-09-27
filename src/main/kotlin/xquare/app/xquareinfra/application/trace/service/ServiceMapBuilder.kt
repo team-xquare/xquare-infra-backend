@@ -11,18 +11,19 @@ import java.time.Instant
 class ServiceMapBuilder(
     private val handlerFactory: InteractionHandlerFactory
 ) {
-    private val nodesMap: MutableMap<String, Node> = mutableMapOf()
-    private val edgesMap: MutableMap<Pair<String, String>, Edge> = mutableMapOf()
 
     fun buildServiceMap(spans: List<Span>): ServiceMap {
+        val nodesMap: MutableMap<String, Node> = mutableMapOf()
+        val edgesMap: MutableMap<Pair<String, String>, Edge> = mutableMapOf()
+
         val traceMap = groupSpansByTrace(spans)
 
         traceMap.forEach { (_, traceSpans) ->
             val spanDict = traceSpans.associateBy { it.spanId }
-            traceSpans.forEach { span->
+            traceSpans.forEach { span ->
                 span.parentSpanId?.let { parentId ->
                     spanDict[parentId]?.let { parentSpan ->
-                        if(parentSpan.serviceName != span.serviceName) {
+                        if (parentSpan.serviceName != span.serviceName) {
                             val handler = handlerFactory.getHandler(span)
                             val interactionType = handler.extractInteractionType(span)
                             val status = handler.extractStatus(span)
@@ -35,7 +36,7 @@ class ServiceMapBuilder(
                             ))
 
                             edge.calls += 1
-                            when(status) {
+                            when (status) {
                                 CallStatus.UNKNOWN -> {}
                                 CallStatus.FAILURE -> edge.failures += 1
                                 CallStatus.SUCCESS -> edge.successes += 1
@@ -76,7 +77,7 @@ class ServiceMapBuilder(
                 CallStatus.SUCCESS -> node.successes += 1
             }
             val latencyMs = TimeUtil.unixNanoToMilliseconds(span.endTimeUnixNano - span.startTimeUnixNano).toDouble()
-            node.latencySumMs = latencyMs
+            node.latencySumMs += latencyMs
 
             nodesMap[span.serviceName] = node
         }
