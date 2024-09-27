@@ -142,9 +142,7 @@ class ServiceMapBuilder(
         )
 
         return ServiceMapResponse(
-            status = "success",
             data = ServiceMapData(
-                interval = 60,
                 metrics = listOf(metric)
             )
         )
