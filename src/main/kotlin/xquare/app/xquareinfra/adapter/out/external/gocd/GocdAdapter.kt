@@ -5,17 +5,23 @@ import xquare.app.xquareinfra.adapter.`in`.container.dto.response.DeployHistoryR
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.StageStatus
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.adapter.out.external.gocd.client.GocdClient
+import xquare.app.xquareinfra.application.container.port.out.ContainerPipelinePort
 
 @Component
 class GocdAdapter(
     private val gocdClient: GocdClient
-): xquare.app.xquareinfra.application.container.port.out.ContainerDeployHistoryPort {
-    override fun getContainerDeployHistory(
+): ContainerPipelinePort {
+
+    companion object {
+        const val GOCD_ACCEPT = "application/vnd.go.cd.v1+json"
+    }
+
+    override fun getContainerPipelineHistory(
         deployName: String,
         containerEnvironment: ContainerEnvironment
     ): List<DeployHistoryResponse> {
         val pipelineName = "build-$deployName-${containerEnvironment.name}"
-        val histories = gocdClient.getPipelinesHistory(pipelineName, "application/vnd.go.cd.v1+json")
+        val histories = gocdClient.getPipelinesHistory(pipelineName, GOCD_ACCEPT)
 
         if (histories.statusCode.is4xxClientError) {
             return emptyList()
@@ -42,5 +48,10 @@ class GocdAdapter(
                 )
             }
         }?.sortedByDescending { it.scheduledDate } ?: emptyList()
+    }
+
+    override fun schedulePipeline(deployName: String, containerEnvironment: ContainerEnvironment) {
+        val pipelineName = "build-$deployName-${containerEnvironment.name}"
+        gocdClient.schedulePipeline(pipelineName = pipelineName, accept = GOCD_ACCEPT)
     }
 }
