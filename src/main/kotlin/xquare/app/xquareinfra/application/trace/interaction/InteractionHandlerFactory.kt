@@ -13,6 +13,6 @@ class InteractionHandlerFactory {
     )
 
     fun getHandler(span: Span): InteractionHandler {
-        return handlers.firstOrNull() { it.canHandle(span) } ?: UnknownInteractionHandler()
+        return handlers.firstOrNull { it.canHandle(span) } ?: UnknownInteractionHandler()
     }
 }
