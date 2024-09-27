@@ -4,12 +4,10 @@ import xquare.app.xquareinfra.domain.trace.model.InteractionType
 import xquare.app.xquareinfra.domain.trace.model.NodeType
 
 data class ServiceMapResponse(
-    val status: String,
     val data: ServiceMapData
 )
 
 data class ServiceMapData(
-    val interval: Int,
     val metrics: List<Metric>
 )
 
