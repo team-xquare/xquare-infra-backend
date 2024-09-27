@@ -148,4 +148,12 @@ class V2ContainerWebAdapter(
         @RequestBody
         updateContainerWebhookRequest: UpdateContainerWebhookRequest
     ) = containerUseCase.updateContainerWebhook(updateContainerWebhookRequest, deployId, environment)
+
+    @PostMapping("/pipelines/schedule")
+    fun schedulePipeline(
+        @RequestParam("deployId", required = true)
+        deployId: UUID,
+        @RequestParam("environment", required = true)
+        environment: ContainerEnvironment
+    ) = containerPipelineUseCase.schedulePipeline(deployId, environment)
 }
