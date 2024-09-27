@@ -78,11 +78,16 @@ data class Span(
         return this.attributes["messaging_system"] == "kafka"
     }
 
+    private fun isMongoSpan(): Boolean {
+        return this.attributes["db_system"] == "mongodb"
+    }
+
     private fun determineServiceName(): String? {
         return when {
             isMysqlSpan() -> "mysql-service"
             isRedisSpan() -> "redis-service"
             isKafkaSpan() -> "kafka-service"
+            isMongoSpan() -> "mongodb-service"
             else -> null
         }
     }
