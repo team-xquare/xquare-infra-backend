@@ -23,38 +23,40 @@ class ServiceMapBuilder(
             traceSpans.forEach { span ->
                 span.parentSpanId?.let { parentId ->
                     spanDict[parentId]?.let { parentSpan ->
-                        val handler = handlerFactory.getHandler(span)
-                        val interactionType = handler.extractInteractionType(span)
-                        val status = handler.extractStatus(span)
+                        if (parentSpan.serviceName != span.serviceName) {
+                            val handler = handlerFactory.getHandler(span)
+                            val interactionType = handler.extractInteractionType(span)
+                            val status = handler.extractStatus(span)
 
-                        val edgeKey = parentSpan.serviceName to span.serviceName
-                        val edge = edgesMap.getOrDefault(edgeKey, Edge(
-                            source = parentSpan.serviceName,
-                            target = span.serviceName,
-                            interactionType = interactionType
-                        ))
+                            val edgeKey = parentSpan.serviceName to span.serviceName
+                            val edge = edgesMap.getOrDefault(edgeKey, Edge(
+                                source = parentSpan.serviceName,
+                                target = span.serviceName,
+                                interactionType = interactionType
+                            ))
 
-                        edge.calls += 1
-                        when (status) {
-                            CallStatus.UNKNOWN -> {}
-                            CallStatus.FAILURE -> edge.failures += 1
-                            CallStatus.SUCCESS -> edge.successes += 1
+                            edge.calls += 1
+                            when (status) {
+                                CallStatus.UNKNOWN -> {}
+                                CallStatus.FAILURE -> edge.failures += 1
+                                CallStatus.SUCCESS -> edge.successes += 1
+                            }
+
+                            val latencyMs = TimeUtil.unixNanoToMilliseconds(span.endTimeUnixNano - span.startTimeUnixNano).toDouble()
+                            edge.latencySumMs += latencyMs
+
+                            val callId = "${span.traceId}_${span.spanId}"
+                            val timestamp = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano)
+                            val callDetail = CallDetail(
+                                callId = callId,
+                                timestamp = timestamp,
+                                status = status,
+                                latencyMs = latencyMs
+                            )
+                            edge.details.add(callDetail)
+
+                            edgesMap[edgeKey] = edge
                         }
-
-                        val latencyMs = TimeUtil.unixNanoToMilliseconds(span.endTimeUnixNano - span.startTimeUnixNano).toDouble()
-                        edge.latencySumMs += latencyMs
-
-                        val callId = "${span.traceId}_${span.spanId}"
-                        val timestamp = TimeUtil.unixNanoToKoreanTime(span.startTimeUnixNano)
-                        val callDetail = CallDetail(
-                            callId = callId,
-                            timestamp = timestamp,
-                            status = status,
-                            latencyMs = latencyMs
-                        )
-                        edge.details.add(callDetail)
-
-                        edgesMap[edgeKey] = edge
                     }
                 }
             }

@@ -40,8 +40,12 @@ data class Span(
     val status: SpanStatus,
 
     @Field("serviceName")
-    val serviceName: String = "Unknown"
+    var serviceName: String = "Unknown"
 ) {
+    init {
+        serviceName = determineServiceName() ?: serviceName
+    }
+
     private fun getAttributeValue(attribute: String): String? {
         return attributes[attribute]?.toString()
     }
@@ -60,5 +64,26 @@ data class Span(
 
     fun getServiceNameInScope(): String? {
         return this.serviceName
+    }
+
+    private fun isMysqlSpan(): Boolean {
+        return this.attributes["db_system"] == "mysql"
+    }
+
+    private fun isRedisSpan(): Boolean {
+        return this.attributes["db_system"] == "redis"
+    }
+
+    private fun isKafkaSpan(): Boolean {
+        return this.attributes["messaging_system"] == "kafka"
+    }
+
+    private fun determineServiceName(): String? {
+        return when {
+            isMysqlSpan() -> "mysql-service"
+            isRedisSpan() -> "redis-service"
+            isKafkaSpan() -> "kafka-service"
+            else -> null
+        }
     }
 }
