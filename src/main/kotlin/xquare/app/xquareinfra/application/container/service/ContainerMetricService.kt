@@ -49,7 +49,7 @@ class ContainerMetricService(
 
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
-        val rootSpans = findSpanPort.findAllSpansByServiceName(
+        val rootSpans = findSpanPort.findSpansByServiceNameInTimeRange(
             serviceName = ContainerUtil.getContainerName(deploy, environment),
             startTimeNano = timeRangeInNanosMinutes.past,
             endTimeNano = timeRangeInNanosMinutes.now
@@ -75,7 +75,7 @@ class ContainerMetricService(
 
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
-        val rootSpans = findSpanPort.findAllSpansByServiceName(
+        val rootSpans = findSpanPort.findSpansByServiceNameInTimeRange(
             serviceName = ContainerUtil.getContainerName(deploy, environment),
             startTimeNano = timeRangeInNanosMinutes.past,
             endTimeNano = timeRangeInNanosMinutes.now
@@ -105,7 +105,7 @@ class ContainerMetricService(
 
         val timeRangeInNanosMinutes = TimeUtil.getTimeRangeInNanosMinutes(timeRange)
 
-        val rootSpans = findSpanPort.findAllSpansByServiceName(
+        val rootSpans = findSpanPort.findSpansByServiceNameInTimeRange(
             serviceName = ContainerUtil.getContainerName(deploy, environment),
             startTimeNano = timeRangeInNanosMinutes.past,
             endTimeNano = timeRangeInNanosMinutes.now

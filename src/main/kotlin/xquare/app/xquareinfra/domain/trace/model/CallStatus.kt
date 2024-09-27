@@ -1,3 +1,7 @@
 package xquare.app.xquareinfra.domain.trace.model
 
-data class CallStatus()
+enum class CallStatus {
+    SUCCESS,
+    FAILURE,
+    UNKNOWN
+}

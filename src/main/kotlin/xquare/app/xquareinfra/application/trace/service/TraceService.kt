@@ -2,12 +2,15 @@ package xquare.app.xquareinfra.application.trace.service
 
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.*
+import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
+import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
+import xquare.app.xquareinfra.domain.trace.model.Span
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
 import xquare.app.xquareinfra.infrastructure.util.TimeUtil
 import java.util.*
@@ -16,7 +19,10 @@ import java.util.*
 class TraceService(
     private val findDeployPort: FindDeployPort,
     private val findTracePort: FindTracePort,
-    private val findSpanPort: FindSpanPort
+    private val findSpanPort: FindSpanPort,
+    private val serviceMapBuilder: ServiceMapBuilder,
+    private val findTeamPort: FindTeamPort,
+    private val findContainerPort: FindContainerPort
 ) : TraceUseCase {
     override fun getAllSpansByDeployIdAndEnvironment(
         deployId: UUID,
@@ -28,7 +34,7 @@ class TraceService(
 
         val timeRangeInNanos = TimeUtil.getTimeRangeInNanosSeconds(timeRangeSeconds)
 
-        val spanList = findSpanPort.findAllSpansByServiceName(
+        val spanList = findSpanPort.findSpansByServiceNameInTimeRange(
             serviceName = serviceName,
             startTimeNano = timeRangeInNanos.past,
             endTimeNano = timeRangeInNanos.now
@@ -73,5 +79,27 @@ class TraceService(
         }
 
         return GetTraceDetailResponse(traceList)
+    }
+
+    override fun getServiceMap(teamId: UUID, startTimeNano: Long, endTimeNano: Long): ServiceMapResponse {
+        val team = findTeamPort.findById(teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+        val deploys = findDeployPort.findAllByTeam(team)
+
+        val teamSpans: MutableList<Span> = mutableListOf()
+
+        deploys.map { deploy ->
+            val containers = findContainerPort.findAllByDeploy(deploy)
+            containers.map { container ->
+                val serviceName = ContainerUtil.getContainerName(deploy, container)
+                val spans = findSpanPort.findSpansByServiceNameInTimeRange(
+                    serviceName = serviceName,
+                    startTimeNano = startTimeNano,
+                    endTimeNano = endTimeNano
+                )
+                teamSpans.addAll(spans)
+            }
+        }
+
+        return serviceMapBuilder.toServiceMapResponse(teamSpans)
     }
 }
