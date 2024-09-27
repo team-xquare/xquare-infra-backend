@@ -11,7 +11,7 @@ import xquare.app.xquareinfra.domain.trace.model.Trace
 class SpanPersistenceAdapter(
     private val spanRepository: SpanRepository
 ): FindSpanPort, FindTracePort {
-    override fun findAllSpansByServiceName(serviceName: String, startTimeNano: Long, endTimeNano: Long): List<Span> {
+    override fun findSpansByServiceNameInTimeRange(serviceName: String, startTimeNano: Long, endTimeNano: Long): List<Span> {
         return spanRepository.findSpansByServiceNameWithDateNanoBetween(
             serviceName = serviceName,
             startTimeUnix = startTimeNano,
