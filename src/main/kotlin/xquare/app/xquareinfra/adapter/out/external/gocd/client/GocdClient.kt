@@ -39,4 +39,10 @@ interface GocdClient {
         @RequestHeader("Accept") accept: String,
         @RequestBody runSelectedJobRequest: RunSelectedJobRequest
     )
+
+    @PostMapping("/api/pipelines/{pipelineName}/schedule")
+    fun schedulePipeline(
+        @PathVariable("pipelineName") pipelineName: String,
+        @RequestHeader("Accept") accept: String
+    )
 }
