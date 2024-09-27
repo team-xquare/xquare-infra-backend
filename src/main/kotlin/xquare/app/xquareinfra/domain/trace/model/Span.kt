@@ -40,7 +40,7 @@ data class Span(
     val status: SpanStatus,
 
     @Field("serviceName")
-    val serviceName: String?
+    val serviceName: String = "Unknown"
 ) {
     private fun getAttributeValue(attribute: String): String? {
         return attributes[attribute]?.toString()

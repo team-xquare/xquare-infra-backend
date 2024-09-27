@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetSpanListResponse
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.GetTraceDetailResponse
+import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.ServiceMapResponse
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.UUID
@@ -33,4 +34,11 @@ class V1TraceWebAdapter(
     fun getTraceDetail(@PathVariable traceId: String): GetTraceDetailResponse {
         return traceUseCase.getTraceDetail(traceId)
     }
+
+    @GetMapping("/service-map")
+    fun getServiceMap(
+        @RequestParam("teamId") teamId: UUID,
+        @RequestParam("startTimeNano") startTimeNano: Long,
+        @RequestParam("endTimeNano") endTimeNano: Long,
+    ): ServiceMapResponse = traceUseCase.getServiceMap(teamId, startTimeNano, endTimeNano)
 }
