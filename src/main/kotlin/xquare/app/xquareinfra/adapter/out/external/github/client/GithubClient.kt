@@ -10,7 +10,14 @@ import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.Dis
 @FeignClient(name = "github", url = "\${github.url}")
 interface GithubClient {
     @PostMapping("/repos/team-xquare/xquare-gitops-repo-v2/dispatches")
-    fun dispatchWorkflow(
+    fun dispatchWorkflowGitops(
+        @RequestHeader("Authorization") authorization: String?,
+        @RequestHeader("Accept") accept: String?,
+        @RequestBody request: DispatchEventRequest?
+    )
+
+    @PostMapping("/repos/team-xquare/k8s-resource/dispatches")
+    fun dispatchWorkflowK8sResources(
         @RequestHeader("Authorization") authorization: String?,
         @RequestHeader("Accept") accept: String?,
         @RequestBody request: DispatchEventRequest?
