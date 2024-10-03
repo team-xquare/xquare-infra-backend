@@ -32,7 +32,8 @@ class TeamService(
     private val saveUserTeamPort: SaveUserTeamPort,
     private val findUserTeamPort: FindUserTeamPort,
     private val deleteUserTeamPort: DeleteUserTeamPort,
-    private val findDeployPort: FindDeployPort
+    private val findDeployPort: FindDeployPort,
+    private val syncTeamPort: SyncTeamPort
 ) : TeamUseCase {
     override fun create(req: CreateTeamRequest, user: User) {
         if (existsTeamPort.existsByTeamNameEn(req.teamNameEn)) {
@@ -70,6 +71,7 @@ class TeamService(
         }
 
         saveTeamPort.saveTeamWithMembers(team, userTeams)
+        syncTeamPort.syncTeam(team.teamNameEn)
     }
 
     override fun addTeamMember(req: AddTeamMemberRequest, teamId: UUID, user: User) {
