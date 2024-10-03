@@ -6,6 +6,7 @@ data class CreateNodeWithNginxDockerfileRequest(
     val nodeVersion: Int,
     val buildCommands: List<String> = emptyList(),
     override val builder: String = "node_with_nginx",
+    override var buildDir: String = "/",
     val outputDir: String,
     var port: Int?
 ): DockerfileRequest

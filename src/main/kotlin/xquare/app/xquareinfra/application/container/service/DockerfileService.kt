@@ -27,6 +27,8 @@ class DockerfileService(
         val container = findContainerPort.findByDeployAndEnvironment(deploy, containerEnvironment)
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
+        createGradleDockerfileRequest.buildDir = deploy.projectRootDir
+
         createDockerfilePort.createDockerfile(
             deployName = deploy.deployName,
             environment = containerEnvironment,
@@ -44,6 +46,7 @@ class DockerfileService(
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         createNodeDockerfileRequest.port = container.containerPort
+        createNodeDockerfileRequest.buildDir = deploy.projectRootDir
 
         createDockerfilePort.createDockerfile(
             deployName = deploy.deployName,
@@ -62,6 +65,7 @@ class DockerfileService(
             ?: throw BusinessLogicException.CONTAINER_NOT_FOUND
 
         createNodeDockerfileRequest.port = container.containerPort
+        createNodeDockerfileRequest.buildDir = deploy.projectRootDir
 
         createDockerfilePort.createDockerfile(
             deployName = deploy.deployName,
