@@ -30,7 +30,8 @@ class GithubAdapter(
                     "name" to deployName,
                     "environment" to environment.name,
                     "template_json" to objectMapper.writeValueAsString(dockerfileRequest),
-                    "builder" to dockerfileRequest.builder
+                    "builder" to dockerfileRequest.builder,
+                    "build_dir" to dockerfileRequest.buildDir
                 )
             )
         )
