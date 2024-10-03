@@ -219,7 +219,7 @@ class ContainerService(
             )
         )
 
-        githubClient.dispatchWorkflow(
+        githubClient.dispatchWorkflowGitops(
             authorization = "Bearer ${githubProperties.token}",
             accept = "application/vnd.github.v3+json",
             request = DispatchEventRequest(
