@@ -6,5 +6,6 @@ data class CreateGradleDockerfileRequest(
     val jdkVersion: Int,
     val outputDir: String,
     override val builder: String = "gradle",
-    val buildCommands: List<String> = listOf(),
+    override var buildDir: String = "/",
+    val buildCommands: List<String> = listOf()
 ) : DockerfileRequest
