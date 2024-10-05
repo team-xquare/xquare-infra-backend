@@ -43,6 +43,7 @@ interface GocdClient {
     @PostMapping("/api/pipelines/{pipelineName}/schedule")
     fun schedulePipeline(
         @PathVariable("pipelineName") pipelineName: String,
-        @RequestHeader("Accept") accept: String
+        @RequestHeader("Accept") accept: String,
+        @RequestHeader("X-GoCD-Confirm") xGocdConfirm: Boolean = true,
     )
 }
