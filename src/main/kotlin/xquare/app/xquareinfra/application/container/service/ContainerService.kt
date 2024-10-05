@@ -161,28 +161,6 @@ class ContainerService(
 
         val namespace = "${team.teamNameEn}-${container.containerEnvironment.name}"
         kubernetesOperationService.deleteSecret(namespace, path)
-
-        if(deploy.v2) {
-            val pipelineName = "build-${deploy.deployName}-${container.containerEnvironment.name}"
-            val pipelinesHistory = gocdClient.getPipelinesHistory(
-                pipelineName,
-                "application/vnd.go.cd.v1+json"
-            )
-
-            if(pipelinesHistory.statusCode.is4xxClientError) {
-                return
-            }
-
-            pipelinesHistory.body?.pipelines?.get(0)?.let {
-                gocdClient.runSelectedJob(
-                    pipelineName,
-                    it.counter,
-                    "deploy",
-                    "application/vnd.go.cd.v3+json",
-                    RunSelectedJobRequest(jobs = listOf("deploy"))
-                )
-            }
-        }
     }
 
     override fun setContainerConfig(deployId: UUID, setContainerConfigRequest: SetContainerConfigRequest) {
