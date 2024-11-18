@@ -88,3 +88,6 @@ cloudflare:
   xAuthKey: ${X_AUTH_KEY}
   xAuthEmail: ${X_AUTH_EMAIL}
 
+gocd:
+  username: ${GOCD_USERNAME}
+  password: ${GOCD_PASSWORD}
