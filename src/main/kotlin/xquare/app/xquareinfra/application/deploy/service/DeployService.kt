@@ -5,10 +5,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.ApproveDeployRequest
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.CreateDeployRequest
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.CreateDeployResponse
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.DeployDetailsResponse
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployListResponse
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployResponse
+import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.DeleteContainerRequest
+import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.*
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
@@ -183,5 +181,20 @@ class DeployService(
                 )
             )
         }
+    }
+
+    override fun deleteDeploy(deployId: UUID, user: User, deleteContainerRequest: DeleteContainerRequest): DeleteContainerResponse {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+
+        if(!existsUserTeamPort. existsByTeamIdAndUser(deploy.teamId, user)) {
+            throw XquareException.FORBIDDEN
+        }
+
+        saveDeployPort.deleteDeploy(deploy)
+
+        return DeleteContainerResponse(
+            deployId = deployId,
+            deployName = deploy.deployName
+        )
     }
 }
