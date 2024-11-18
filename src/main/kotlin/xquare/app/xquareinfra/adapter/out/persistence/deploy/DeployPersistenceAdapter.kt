@@ -20,6 +20,9 @@ class DeployPersistenceAdapter(
     override fun saveDeploy(deploy: Deploy): Deploy {
         return deployMapper.toModel(deployRepository.save(deployMapper.toEntity(deploy)))
     }
+    override fun deleteDeploy(deploy: Deploy) {
+        return deployRepository.delete(deployMapper.toEntity(deploy))
+    }
     override fun existByDeployName(deployName: String): Boolean {
         return deployRepository.existsByDeployName(deployName)
     }
