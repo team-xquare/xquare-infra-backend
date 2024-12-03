@@ -197,6 +197,8 @@ class ContainerService(
             )
         )
 
+        println("토큰: " + githubProperties.token)
+
         githubClient.dispatchWorkflowGitops(
             authorization = "Bearer ${githubProperties.token}",
             accept = "application/vnd.github.v3+json",
