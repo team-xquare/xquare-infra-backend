@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestHeader
 import xquare.app.xquareinfra.infrastructure.external.gocd.client.dto.response.GetPipelinesHistoryResponse
 import xquare.app.xquareinfra.adapter.out.external.gocd.client.dto.request.RunSelectedJobRequest
 import xquare.app.xquareinfra.adapter.out.external.feign.config.FeignConfig
-import xquare.app.xquareinfra.infrastructure.external.gocd.config.GocdAuthConfig
+import xquare.app.xquareinfra.adapter.out.external.gocd.config.GocdAuthConfig
 
 @FeignClient(
     name = "gocd-client",
     url = "\${url.gocd}",
-    configuration = [FeignConfig::class,GocdAuthConfig::class],
+    configuration = [FeignConfig::class, GocdAuthConfig::class],
 )
 interface GocdClient {
     @GetMapping("/api/pipelines/{pipeline_name}/history")

@@ -1,11 +1,10 @@
-package xquare.app.xquareinfra.infrastructure.external.gocd.config
+package xquare.app.xquareinfra.adapter.out.external.gocd.config
 
 import feign.auth.BasicAuthRequestInterceptor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import xquare.app.xquareinfra.infrastructure.env.gocd.GocdProperties
 
-@Configuration
 class GocdAuthConfig(
     private val gocdProperties: GocdProperties
 ) {
