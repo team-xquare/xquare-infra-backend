@@ -19,7 +19,7 @@ class KubernetesOperationServiceImpl(
                 "secrets.hashicorp.com",
                 "v1beta1",
                 namespace,
-                "vaultdynamicsecrets",
+                "vaultstaticsecrets",
                 "$crName-secret",
                 null,
                 null,
