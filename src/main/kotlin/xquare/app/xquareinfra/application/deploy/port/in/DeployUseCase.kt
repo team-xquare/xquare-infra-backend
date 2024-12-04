@@ -23,5 +23,5 @@ interface DeployUseCase {
 
     fun migrationDeploy(user: User)
 
-    fun deleteDeploy(deployId: UUID, user: User, deleteContainerRequest: DeleteContainerRequest): DeleteContainerResponse
+    fun deleteDeploy(user: User, deleteContainerRequest: DeleteContainerRequest): DeleteContainerResponse
 }
