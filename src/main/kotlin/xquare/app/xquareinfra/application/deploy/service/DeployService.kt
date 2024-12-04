@@ -188,13 +188,13 @@ class DeployService(
         }
     }
 
-    override fun deleteDeploy(deployId: UUID, user: User, deleteContainerRequest: DeleteContainerRequest): DeleteContainerResponse {
+    override fun deleteDeploy(user: User, deleteContainerRequest: DeleteContainerRequest): DeleteContainerResponse {
+        val deployId = deleteContainerRequest.deployId
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
-        if (!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
+        if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
-
         val authorization = "Bearer ${githubProperties.token}"
         val accept = "application/vnd.github.v3+json"
         val request = DispatchEventRequest(
