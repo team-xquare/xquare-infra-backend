@@ -188,8 +188,7 @@ class DeployService(
         }
     }
 
-    override fun deleteDeploy(user: User, deleteContainerRequest: DeleteContainerRequest): DeleteContainerResponse {
-        val deployId = deleteContainerRequest.deployId
+    override fun deleteDeploy(user: User, deployId: UUID): DeleteContainerResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
 
         if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
