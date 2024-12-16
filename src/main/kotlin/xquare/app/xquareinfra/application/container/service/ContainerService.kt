@@ -158,9 +158,6 @@ class ContainerService(
 
         val path = vaultService.getPath(deploy, container)
         vaultService.addSecret(environmentVariable, path)
-
-        val namespace = "${team.teamNameEn}-${container.containerEnvironment.name}"
-        kubernetesOperationService.deleteSecret(namespace, path)
     }
 
     override fun setContainerConfig(deployId: UUID, setContainerConfigRequest: SetContainerConfigRequest) {
