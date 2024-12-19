@@ -5,12 +5,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.ApproveDeployRequest
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.CreateDeployRequest
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.CreateDeployResponse
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.DeployDetailsResponse
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployListResponse
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.SimpleDeployResponse
+import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.DeleteContainerRequest
+import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.*
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
+import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
+import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
+import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.`in`.DeployUseCase
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
@@ -39,7 +40,9 @@ class DeployService(
     private val findTeamPort: FindTeamPort,
     private val existDeployPort: ExistDeployPort,
     private val findContainerPort: FindContainerPort,
-    private val existsUserTeamPort: ExistsUserTeamPort
+    private val existsUserTeamPort: ExistsUserTeamPort,
+    private val githubProperties: GithubProperties,
+    private val githubClient: GithubClient
 ): DeployUseCase {
 
     override fun approveDeploy(deployNameEn: String, req: ApproveDeployRequest) {
@@ -184,4 +187,34 @@ class DeployService(
             )
         }
     }
+
+    override fun deleteDeploy(user: User, deployId: UUID): DeleteContainerResponse {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+
+        if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
+            throw XquareException.FORBIDDEN
+        }
+        val authorization = "Bearer ${githubProperties.token}"
+        val accept = "application/vnd.github.v3+json"
+        val request = DispatchEventRequest(
+            event_type = "delete-service",
+            client_payload = mapOf(
+                "deployId" to deployId.toString(),
+                "deployName" to deploy.deployName,
+                "teamId" to deploy.teamId.toString(),
+                "organization" to deploy.organization,
+                "repository" to deploy.repository
+            )
+        )
+
+        githubClient.dispatchWorkflowGitops(authorization, accept, request)
+
+        saveDeployPort.deleteDeploy(deploy)
+
+        return DeleteContainerResponse(
+            deployId = deployId,
+            deployName = deploy.deployName
+        )
+    }
+
 }

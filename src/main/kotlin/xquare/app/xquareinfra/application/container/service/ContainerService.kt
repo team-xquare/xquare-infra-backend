@@ -219,6 +219,8 @@ class ContainerService(
         saveDeployPort.saveDeploy(deploy.migrationToV2())
     }
 
+
+
     override fun getContainerDetails(deployId: UUID, environment: ContainerEnvironment): GetContainerDetailsResponse {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
         val container = findContainerPort.findByDeployAndEnvironment(deploy, environment)
