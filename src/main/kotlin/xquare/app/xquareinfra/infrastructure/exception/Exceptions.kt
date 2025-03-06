@@ -43,7 +43,7 @@ class BusinessLogicException(
         val USER_TEAM_BAD_REQUEST = BusinessLogicException(ErrorCodePrefixSuffix.XXX_BAD_REQUEST, DomainNames.USER_TEAM)
         val ALREADY_EXISTS_DEPLOY = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.DEPLOY)
         val DEPLOY_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.DEPLOY)
-        val DASHBOARD_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames)
+        val DASHBOARD_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.DASHBOARD)
         val CREATE_DEPLOY_BAD_REQUEST = BusinessLogicException(ErrorCodePrefixSuffix.XXX_BAD_REQUEST, DomainNames.DEPLOY)
         val USER_ALREADY_EXISTS = BusinessLogicException(ErrorCodePrefixSuffix.ALREADY_EXISTS_XXX, DomainNames.USER)
         val CONTAINER_NOT_FOUND = BusinessLogicException(ErrorCodePrefixSuffix.XXX_NOT_FOUND, DomainNames.CONTAINER)
