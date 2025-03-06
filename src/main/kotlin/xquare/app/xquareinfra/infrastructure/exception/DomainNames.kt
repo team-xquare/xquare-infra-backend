@@ -9,5 +9,6 @@ enum class DomainNames(
     USER_TEAM("User_Team", "user_team"),
     DEPLOY("Deploy", "deploy"),
     CONTAINER("Container", "container"),
-    TRACE("Trace", "trace")
+    TRACE("Trace", "trace"),
+    DASHBOARD("Dashboard", "dashboard")
 }

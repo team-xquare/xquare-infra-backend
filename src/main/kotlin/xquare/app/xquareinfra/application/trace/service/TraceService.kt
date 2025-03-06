@@ -1,17 +1,21 @@
 package xquare.app.xquareinfra.application.trace.service
 
+import okhttp3.internal.notifyAll
 import org.springframework.stereotype.Service
 import xquare.app.xquareinfra.adapter.`in`.trace.dto.response.*
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
 import xquare.app.xquareinfra.application.trace.port.`in`.TraceUseCase
+import xquare.app.xquareinfra.application.trace.port.out.DatadogPort
 import xquare.app.xquareinfra.application.trace.port.out.FindSpanPort
 import xquare.app.xquareinfra.application.trace.port.out.FindTracePort
+import xquare.app.xquareinfra.application.trace.port.out.Status
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.domain.container.util.ContainerUtil
 import xquare.app.xquareinfra.domain.trace.model.Span
 import xquare.app.xquareinfra.infrastructure.exception.BusinessLogicException
+import xquare.app.xquareinfra.infrastructure.exception.XquareException
 import xquare.app.xquareinfra.infrastructure.util.TimeUtil
 import java.util.*
 
@@ -22,7 +26,8 @@ class TraceService(
     private val findSpanPort: FindSpanPort,
     private val serviceMapBuilder: ServiceMapBuilder,
     private val findTeamPort: FindTeamPort,
-    private val findContainerPort: FindContainerPort
+    private val findContainerPort: FindContainerPort,
+    private val datadogPort: DatadogPort
 ) : TraceUseCase {
     override fun getAllSpansByDeployIdAndEnvironment(
         deployId: UUID,
@@ -101,5 +106,29 @@ class TraceService(
         }
 
         return serviceMapBuilder.toServiceMapResponse(teamSpans)
+    }
+
+    override fun getServiceEmbedDashboard(deployId: UUID, environment: ContainerEnvironment): String {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+        val serviceName = "${deploy.notifyAll()}-${environment.name}"
+        val dashboardList = datadogPort.getAllDashboard()
+
+        val dashboard = dashboardList.dashboards.find {
+            it.title.startsWith(serviceName)
+        } ?: throw BusinessLogicException.DASHBOARD_NOT_FOUND
+
+        val sharedDashboard = datadogPort.createSharedDashboard(dashboard)
+
+        when (sharedDashboard.status) {
+            Status.OK -> {
+                return sharedDashboard.sharedDashboardResponse.publicUrl
+            }
+            Status.ERROR -> {
+                throw XquareException.INTERNAL_SERVER_ERROR
+            }
+            Status.CONFLICT -> {
+                throw XquareException.CONFLICT
+            }
+        }
     }
 }
