@@ -118,8 +118,7 @@ class TraceService(
 
         val dashboardToken = deploy.dashboardToken ?: run {
             val sharedDashboard = datadogPort.createSharedDashboard(dashboard).sharedDashboardResponse
-            deploy.updateDeployToken(sharedDashboard.token)
-            saveDeployPort.saveDeploy(deploy)
+            saveDeployPort.saveDeploy(deploy.updateDeployToken(sharedDashboard.token))
 
             return sharedDashboard.publicUrl
         }
