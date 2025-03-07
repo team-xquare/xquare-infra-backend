@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.*
 
 @FeignClient(
     name = "datadog-client",
@@ -25,6 +22,13 @@ interface DatadogClient {
         @RequestHeader("DD-API-KEY") apiKey: String,
         @RequestHeader("DD-APPLICATION-KEY") ddApplicationKey: String,
         @RequestBody createSharedDashboard: CreateSharedDashboard
+    ): ResponseEntity<SharedDashboardResponse>
+
+    @GetMapping("/api/v1/dashboard/public/{token}")
+    fun getSharedDashboard(
+        @RequestHeader("DD-API-KEY") apiKey: String,
+        @RequestHeader("DD-APPLICATION-KEY") ddApplicationKey: String,
+        @PathVariable("token") token: String
     ): ResponseEntity<SharedDashboardResponse>
 }
 

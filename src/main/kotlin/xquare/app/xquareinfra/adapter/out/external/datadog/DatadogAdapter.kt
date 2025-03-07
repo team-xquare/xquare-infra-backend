@@ -52,6 +52,33 @@ class DatadogAdapter(
             )
         )
 
+
+        return if (responseEntity.statusCode.is2xxSuccessful) {
+            SharedDashboard(
+                status = Status.OK,
+                sharedDashboardResponse = responseEntity.body!!
+            )
+
+        } else if (responseEntity.statusCode.is4xxClientError){
+            SharedDashboard(
+                status = Status.CONFLICT,
+                sharedDashboardResponse = responseEntity.body!!
+            )
+        } else {
+            SharedDashboard(
+                status = Status.ERROR,
+                sharedDashboardResponse = responseEntity.body!!
+            )
+        }
+    }
+
+    override fun getSharedDashboard(token: String): SharedDashboard {
+        val responseEntity = datadogClient.getSharedDashboard(
+            apiKey = datadogProperties.apiKey,
+            ddApplicationKey = datadogProperties.appKey,
+            token
+        )
+
         return if (responseEntity.statusCode.is2xxSuccessful) {
             SharedDashboard(
                 status = Status.OK,

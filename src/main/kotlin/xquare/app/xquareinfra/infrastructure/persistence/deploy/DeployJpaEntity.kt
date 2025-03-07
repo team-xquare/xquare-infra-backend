@@ -21,6 +21,7 @@ class DeployJpaEntity(
     useMysql: Boolean,
     v2: Boolean,
     useRedis: Boolean,
+    dashboardToken: String? = null
 ) : BaseUUIDEntity(id) {
     @Column(name = "deploy_name", nullable = false, unique = true)
     var deployName: String = deployName
@@ -70,5 +71,9 @@ class DeployJpaEntity(
 
     @Column(name = "use_mysql", nullable = false)
     var useMysql = useMysql
+        protected set
+
+    @Column(name = "dashboard_token", nullable = false)
+    var dashboardToken = dashboardToken
         protected set
 }

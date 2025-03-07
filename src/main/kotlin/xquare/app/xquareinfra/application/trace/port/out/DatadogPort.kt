@@ -7,6 +7,7 @@ import xquare.app.xquareinfra.adapter.out.external.datadog.client.SharedDashboar
 interface DatadogPort {
     fun getAllDashboard(): DashboardList
     fun createSharedDashboard(dashboard: Dashboard): SharedDashboard
+    fun getSharedDashboard(token: String): SharedDashboard
 }
 
 data class SharedDashboard(
