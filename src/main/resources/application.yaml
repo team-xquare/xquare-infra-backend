@@ -91,3 +91,7 @@ cloudflare:
 gocd:
   username: ${GOCD_USERNAME}
   password: ${GOCD_PASSWORD}
+
+datadog:
+  api-key: ${DATADOG_API_KEY}
+  app-key: ${DATADOG_APP_KEY}
