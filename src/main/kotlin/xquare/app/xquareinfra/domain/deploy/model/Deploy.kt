@@ -16,11 +16,14 @@ data class Deploy(
     val deployType: DeployType,
     val useMysql: Boolean,
     val useRedis: Boolean,
-    val v2: Boolean
+    val v2: Boolean,
+    val dashboardToken: String? = null
 ) {
     fun updateSecret(secretKey: String) = copy(secretKey = secretKey)
 
     fun approveDeploy() = copy(deployStatus = DeployStatus.AVAILABLE)
 
     fun migrationToV2() = copy(v2 = true)
+
+    fun updateDeployToken(token: String) = copy(dashboardToken = token)
 }
