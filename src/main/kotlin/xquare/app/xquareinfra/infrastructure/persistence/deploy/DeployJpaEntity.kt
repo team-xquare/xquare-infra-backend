@@ -73,7 +73,7 @@ class DeployJpaEntity(
     var useMysql = useMysql
         protected set
 
-    @Column(name = "dashboard_token", nullable = false)
+    @Column(name = "dashboard_token", nullable = true)
     var dashboardToken = dashboardToken
         protected set
 }
