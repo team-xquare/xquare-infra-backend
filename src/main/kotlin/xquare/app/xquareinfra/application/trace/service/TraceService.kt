@@ -110,7 +110,7 @@ class TraceService(
 
     override fun getServiceEmbedDashboard(deployId: UUID, environment: ContainerEnvironment): String {
         val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-        val serviceName = "${deploy.notifyAll()}-${environment.name}"
+        val serviceName = "${deploy.deployName}-${environment.name}"
         val dashboardList = datadogPort.getAllDashboard()
 
         val dashboard = dashboardList.dashboards.find {
