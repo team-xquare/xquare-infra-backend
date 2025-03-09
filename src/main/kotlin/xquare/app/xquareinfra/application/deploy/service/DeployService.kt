@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.ApproveDeployRequest
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.CreateDeployRequest
-import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.DeleteContainerRequest
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.*
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
@@ -14,6 +13,7 @@ import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.Dis
 import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.`in`.DeployUseCase
+import xquare.app.xquareinfra.application.deploy.port.out.DeleteDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.ExistDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.SaveDeployPort
@@ -42,7 +42,8 @@ class DeployService(
     private val findContainerPort: FindContainerPort,
     private val existsUserTeamPort: ExistsUserTeamPort,
     private val githubProperties: GithubProperties,
-    private val githubClient: GithubClient
+    private val githubClient: GithubClient,
+    private val deleteDeployPort: DeleteDeployPort
 ): DeployUseCase {
 
     override fun approveDeploy(deployNameEn: String, req: ApproveDeployRequest) {
@@ -194,20 +195,13 @@ class DeployService(
         if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
             throw XquareException.FORBIDDEN
         }
-        val authorization = "Bearer ${githubProperties.token}"
-        val accept = "application/vnd.github.v3+json"
-        val request = DispatchEventRequest(
-            event_type = "delete-service",
-            client_payload = mapOf(
-                "deployId" to deployId.toString(),
-                "deployName" to deploy.deployName,
-                "teamId" to deploy.teamId.toString(),
-                "organization" to deploy.organization,
-                "repository" to deploy.repository
-            )
-        )
 
-        githubClient.dispatchWorkflowGitops(authorization, accept, request)
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+
+        deleteDeployPort.deleteDeploy(
+            club = team.teamNameEn.lowercase(Locale.getDefault()),
+            serviceName = deploy.deployName
+        )
 
         saveDeployPort.deleteDeploy(deploy)
 

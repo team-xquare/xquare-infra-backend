@@ -17,6 +17,7 @@ import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.application.container.port.out.ContainerDnsPort
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.container.port.out.SaveContainerPort
+import xquare.app.xquareinfra.application.container.port.out.WriteValuesPort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.deploy.port.out.SaveDeployPort
 import xquare.app.xquareinfra.application.team.port.out.ExistsUserTeamPort
@@ -43,6 +44,7 @@ class ContainerService(
     private val existsUserTeamPort: ExistsUserTeamPort,
     private val containerDnsPort: ContainerDnsPort,
     private val saveContainerPort: SaveContainerPort,
+    private val writeValuesPort: WriteValuesPort,
     private val vaultService: VaultService,
     private val kubernetesOperationService: KubernetesOperationService,
     private val gocdClient: GocdClient,
@@ -194,26 +196,17 @@ class ContainerService(
             )
         )
 
-        println("토큰: " + githubProperties.token)
-
-        githubClient.dispatchWorkflowGitops(
-            authorization = "Bearer ${githubProperties.token}",
-            accept = "application/vnd.github.v3+json",
-            request = DispatchEventRequest(
-                event_type = "write-values",
-                client_payload = mapOf(
-                    "club" to team.teamNameEn.lowercase(Locale.getDefault()),
-                    "name" to deploy.deployName,
-                    "organization" to deploy.organization,
-                    "repository" to deploy.repository,
-                    "branch" to container.githubBranch!!,
-                    "environment" to container.containerEnvironment.name,
-                    "containerPort" to container.containerPort!!,
-                    "domain" to container.subDomain!!,
-                    "language" to language,
-                    "critical_service" to criticalService
-                )
-            )
+        writeValuesPort.writeValues(
+            club = team.teamNameEn.lowercase(Locale.getDefault()),
+            name = deploy.deployName,
+            organization = deploy.organization,
+            repository = deploy.repository,
+            branch = container.githubBranch!!,
+            environment = container.containerEnvironment.name,
+            containerPort = container.containerPort!!,
+            domain = container.subDomain!!,
+            language = language,
+            criticalService = criticalService
         )
 
         saveDeployPort.saveDeploy(deploy.migrationToV2())

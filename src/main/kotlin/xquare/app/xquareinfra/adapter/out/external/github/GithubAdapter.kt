@@ -8,15 +8,17 @@ import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DockerfileRequest
 import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import xquare.app.xquareinfra.application.container.port.out.CreateDockerfilePort
+import xquare.app.xquareinfra.application.container.port.out.WriteValuesPort
+import xquare.app.xquareinfra.application.deploy.port.out.DeleteDeployPort
 import xquare.app.xquareinfra.application.team.port.out.SyncTeamPort
-import java.util.*
+import xquare.app.xquareinfra.domain.container.model.Language
 
 @Component
 class GithubAdapter(
     private val githubProperties: GithubProperties,
     private val githubClient: GithubClient,
     private val objectMapper: ObjectMapper,
-): CreateDockerfilePort, SyncTeamPort {
+): CreateDockerfilePort, SyncTeamPort, WriteValuesPort, DeleteDeployPort {
     override fun <T : DockerfileRequest> createDockerfile(
         deployName: String,
         environment: ContainerEnvironment,
@@ -45,6 +47,56 @@ class GithubAdapter(
                 event_type = "add_club",
                 client_payload = mapOf(
                     "club_name" to teamName
+                )
+            )
+        )
+    }
+
+    override fun writeValues(
+        club: String,
+        name: String,
+        organization: String,
+        repository: String,
+        branch: String,
+        environment: String,
+        containerPort: Int,
+        domain: String,
+        language: Language,
+        criticalService: Boolean
+    ) {
+        githubClient.dispatchWorkflowGitops(
+            authorization = "Bearer ${githubProperties.token}",
+            accept = "application/vnd.github.v3+json",
+            request = DispatchEventRequest(
+                event_type = "write-values",
+                client_payload = mapOf(
+                    "club" to club,
+                    "name" to name,
+                    "organization" to organization,
+                    "repository" to repository,
+                    "branch" to branch,
+                    "environment" to environment,
+                    "containerPort" to containerPort,
+                    "domain" to domain,
+                    "language" to language,
+                    "critical_service" to criticalService
+                )
+            )
+        )
+    }
+
+    override fun deleteDeploy(
+        club: String,
+        serviceName: String
+    ) {
+        githubClient.dispatchWorkflowGitops(
+            authorization = "Bearer ${githubProperties.token}",
+            accept = "application/vnd.github.v3+json",
+            request = DispatchEventRequest(
+                event_type = "delete-service",
+                client_payload = mapOf(
+                    "club" to club,
+                    "service_name" to serviceName
                 )
             )
         )
