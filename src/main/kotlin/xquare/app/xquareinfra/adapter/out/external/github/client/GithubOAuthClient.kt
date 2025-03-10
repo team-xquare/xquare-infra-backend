@@ -11,7 +11,7 @@ import xquare.app.xquareinfra.adapter.out.external.github.client.dto.response.Lo
     url = "https://github.com/"
 )
 interface GithubOAuthClient {
-    @PostMapping("/login/oauth/access_token")
+    @PostMapping("/login/oauth/access_token", consumes = ["application/json"], produces = ["application/json"])
     fun loginAccessToken(
         @RequestBody
         loginAccessTokenRequest: LoginAccessTokenRequest
