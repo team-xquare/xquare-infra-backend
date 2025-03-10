@@ -2,14 +2,18 @@ package xquare.app.xquareinfra.adapter.out.external.github
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
+import xquare.app.xquareinfra.adapter.`in`.github.dto.response.TokenExchangeResponse
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
 import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
+import xquare.app.xquareinfra.adapter.out.external.github.client.GithubOAuthClient
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DockerfileRequest
+import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.LoginAccessTokenRequest
 import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import xquare.app.xquareinfra.application.container.port.out.CreateDockerfilePort
 import xquare.app.xquareinfra.application.container.port.out.WriteValuesPort
 import xquare.app.xquareinfra.application.deploy.port.out.DeleteDeployPort
+import xquare.app.xquareinfra.application.github.port.out.GithubOAuthPort
 import xquare.app.xquareinfra.application.team.port.out.SyncTeamPort
 import xquare.app.xquareinfra.domain.container.model.Language
 
@@ -18,7 +22,8 @@ class GithubAdapter(
     private val githubProperties: GithubProperties,
     private val githubClient: GithubClient,
     private val objectMapper: ObjectMapper,
-): CreateDockerfilePort, SyncTeamPort, WriteValuesPort, DeleteDeployPort {
+    private val githubOAuthClient: GithubOAuthClient
+): CreateDockerfilePort, SyncTeamPort, WriteValuesPort, DeleteDeployPort, GithubOAuthPort {
     override fun <T : DockerfileRequest> createDockerfile(
         deployName: String,
         environment: ContainerEnvironment,
@@ -100,5 +105,22 @@ class GithubAdapter(
                 )
             )
         )
+    }
+
+    override fun exchangeToken(code: String): TokenExchangeResponse {
+        return githubOAuthClient.loginAccessToken(
+            LoginAccessTokenRequest(
+                code = code,
+                client_secret = githubProperties.clientSecret,
+                client_id = githubProperties.clientId,
+                redirect_uri = githubProperties.redirectUri
+            )
+        ).run {
+            TokenExchangeResponse(
+                accessToken = access_token,
+                tokenType = token_type,
+                scope = scope
+            )
+        }
     }
 }
