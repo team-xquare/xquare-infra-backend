@@ -117,8 +117,8 @@ class GithubAdapter(
             )
         ).run {
             TokenExchangeResponse(
-                accessToken = access_token,
-                tokenType = token_type,
+                accessToken = accessToken,
+                tokenType = tokenType,
                 scope = scope
             )
         }
