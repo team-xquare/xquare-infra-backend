@@ -152,7 +152,8 @@ class DeployService(
             deployStatus = deploy.deployStatus,
             deployName = deploy.deployName,
             githubFullUrl = "https://github.com/${deploy.organization}/${deploy.repository}",
-            isV2 = deploy.v2
+            isV2 = deploy.v2,
+            organization = deploy.organization,
         )
     }
 
