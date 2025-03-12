@@ -76,13 +76,10 @@ dependencies {
 
     // OpenTelemetry && gRPC
     implementation(platform("org.springframework.boot:spring-boot-dependencies:${project.ext["springBootVersion"]}"))
-    implementation("io.opentelemetry.proto:opentelemetry-proto:1.3.2-alpha")
     implementation("io.micrometer:micrometer-core")
 
     implementation("org.mapstruct:mapstruct:1.5.3.Final")
     kapt("org.mapstruct:mapstruct-processor:1.5.3.Final")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
@@ -104,4 +101,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 tasks.jar {
     enabled = false
+}
+
+allprojects {
+    tasks.matching { it.name.contains("kapt") }.configureEach {
+        enabled = false
+    }
 }
