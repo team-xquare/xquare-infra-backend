@@ -68,7 +68,8 @@ class ContainerService(
                 containerStatus = ContainerStatus.RUNNING, // TODO:: 실제 상태 조회 로직 작성
                 repository = "${deploy.organization}/${deploy.repository}",
                 domain = ContainerUtil.generateDomain(it, deploy),
-                lastDeploy = it.lastDeploy
+                lastDeploy = it.lastDeploy,
+                serviceFullName = ContainerUtil.getContainerName(deploy, it.containerEnvironment)
             )
         }
     }

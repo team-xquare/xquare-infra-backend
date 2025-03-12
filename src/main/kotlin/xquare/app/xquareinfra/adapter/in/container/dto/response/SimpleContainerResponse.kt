@@ -10,5 +10,6 @@ data class SimpleContainerResponse(
     val containerStatus: ContainerStatus,
     val repository: String,
     val domain: String,
-    val lastDeploy: LocalDateTime
+    val lastDeploy: LocalDateTime,
+    val serviceFullName: String
 )
