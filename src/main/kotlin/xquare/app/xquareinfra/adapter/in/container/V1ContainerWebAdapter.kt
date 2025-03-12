@@ -5,7 +5,6 @@ import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRe
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
 import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
-import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.*
@@ -14,8 +13,7 @@ import java.util.*
 @RestController
 class V1ContainerWebAdapter(
     private val securityPort: SecurityPort,
-    private val containerUseCase: ContainerUseCase,
-    private val containerMetricUseCase: ContainerMetricUseCase
+    private val containerUseCase: ContainerUseCase
 ) {
     @PostMapping("/sync")
     fun syncContainer(
@@ -54,24 +52,6 @@ class V1ContainerWebAdapter(
         @RequestParam("deployId")
         deployId: UUID
     ): List<SimpleContainerResponse> = containerUseCase.getContainerByDeploy(deployId, securityPort.getCurrentUser())
-
-    @GetMapping("/cpu")
-    fun getContainerCpuUsage(
-        @RequestParam("deployId", required = true)
-        deployId: UUID,
-        @RequestParam("environment", required = true)
-        environment: ContainerEnvironment
-    ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerCpuUsage(deployId, environment, securityPort.getCurrentUser())
-
-    @GetMapping("/memory")
-    fun getContainerMemoryUsage(
-        @RequestParam("deployId", required = true)
-        deployId: UUID,
-        @RequestParam("environment", required = true)
-        environment: ContainerEnvironment
-    ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerMemoryUsageUseCase(deployId, environment, securityPort.getCurrentUser())
 
     @GetMapping("/details")
     fun getContainerDetails(

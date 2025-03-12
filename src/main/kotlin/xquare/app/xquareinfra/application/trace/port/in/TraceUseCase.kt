@@ -8,15 +8,5 @@ import xquare.app.xquareinfra.domain.container.model.ContainerEnvironment
 import java.util.*
 
 interface TraceUseCase {
-    fun getAllSpansByDeployIdAndEnvironment(
-        deployId: UUID,
-        environment: ContainerEnvironment,
-        timeRangeSeconds: Long
-    ): GetSpanListResponse
-
-    fun getTraceDetail(traceId: String): GetTraceDetailResponse
-
-    fun getServiceMap(teamId: UUID, startTimeNano: Long, endTimeNano: Long): ServiceMapResponse
-
     fun getServiceEmbedDashboard(deployId: UUID, environment: ContainerEnvironment): String
 }

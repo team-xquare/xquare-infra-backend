@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDeployHistoryResponse
 import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
-import xquare.app.xquareinfra.application.container.port.`in`.ContainerMetricUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerPipelineUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.DockerfileUseCase
@@ -17,8 +16,7 @@ class V2ContainerWebAdapter(
     private val securityPort: SecurityPort,
     private val dockerfileUseCase: DockerfileUseCase,
     private val containerPipelineUseCase: ContainerPipelineUseCase,
-    private val containerUseCase: ContainerUseCase,
-    private val containerMetricUseCase: ContainerMetricUseCase
+    private val containerUseCase: ContainerUseCase
 ) {
     @PostMapping("/config")
     fun setContainerConfig(
@@ -87,57 +85,6 @@ class V2ContainerWebAdapter(
         @PathVariable("pipelineName") pipelineName: String,
     ): String = containerPipelineUseCase.getStageLog(pipelineCounter, stageName, pipelineName)
 
-    @GetMapping("/metrics/requests/rate")
-    fun getHttpRequestPerMinute(
-        @RequestParam("deployId", required = true)
-        deployId: UUID,
-        @RequestParam("environment", required = true)
-        environment: ContainerEnvironment,
-        @RequestParam("timeRange", required = true)
-        timeRange: Long
-    ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerHttpRequestPerMinute(
-            deployId,
-            environment,
-            timeRange,
-            securityPort.getCurrentUser()
-        )
-
-    @GetMapping("/metrics/http-errors/{statusCode}/rate")
-    fun getHttpErrorRequestPerMinute(
-        @RequestParam("deployId", required = true)
-        deployId: UUID,
-        @RequestParam("environment", required = true)
-        environment: ContainerEnvironment,
-        @RequestParam("timeRange", required = true)
-        timeRange: Long,
-        @PathVariable("statusCode", required = true) statusCode: Int
-    ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerHttpStatusRequestPerMinute(
-            deployId,
-            environment,
-            timeRange,
-            statusCode,
-            securityPort.getCurrentUser()
-        )
-
-    @GetMapping("/metrics/latency/{percent}")
-    fun getLatency(
-        @RequestParam("deployId", required = true)
-        deployId: UUID,
-        @RequestParam("environment", required = true)
-        environment: ContainerEnvironment,
-        @PathVariable("percent", required = true) percent: Int,
-        @RequestParam("timeRange", required = true)
-        timeRange: Long
-    ): Map<String, Map<String, String>> =
-        containerMetricUseCase.getContainerLatency(
-            deployId,
-            environment,
-            percent,
-            timeRange,
-            securityPort.getCurrentUser()
-        )
 
     @PostMapping("/webhook")
     fun updateWebhook(
