@@ -76,6 +76,7 @@ dependencies {
 
     // OpenTelemetry && gRPC
     implementation(platform("org.springframework.boot:spring-boot-dependencies:${project.ext["springBootVersion"]}"))
+    implementation("io.opentelemetry.proto:opentelemetry-proto:1.3.2-alpha")
     implementation("io.micrometer:micrometer-core")
 
     implementation("org.mapstruct:mapstruct:1.5.3.Final")
@@ -101,10 +102,4 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 tasks.jar {
     enabled = false
-}
-
-allprojects {
-    tasks.matching { it.name.contains("kapt") }.configureEach {
-        enabled = false
-    }
 }
