@@ -10,7 +10,4 @@ import xquare.app.xquareinfra.infrastructure.persistence.user.UserJpaEntity
 interface UserMapper {
     fun toModel(entity: UserJpaEntity): User
     fun toEntity(model: User): UserJpaEntity
-
-    fun toUserTeamModel(entity: UserTeamJpaEntity): UserTeam
-    fun toUserTeamEntity(model: UserTeam): UserTeamJpaEntity
 }
