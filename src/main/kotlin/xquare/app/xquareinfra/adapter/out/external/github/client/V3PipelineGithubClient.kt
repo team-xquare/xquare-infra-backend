@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
 
 
-@FeignClient(name = "github", url = "\${github.url}")
+@FeignClient(name = "v3-github", url = "\${github.url}")
 interface V3PipelineGithubClient {
     @PostMapping("/repos/team-xquare/xquare-gitops-repo-v3/dispatches")
     fun dispatchWorkflowGitops(
