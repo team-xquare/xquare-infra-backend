@@ -212,4 +212,14 @@ class DeployService(
         )
     }
 
+    override fun updateAppInstallId(deployId: UUID, appInstallId: String, user: User) {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+
+        if(!existsUserTeamPort.existsByTeamIdAndUser(deploy.teamId, user)) {
+            throw XquareException.FORBIDDEN
+        }
+
+        saveDeployPort.saveDeploy(deploy.updateAppInstallId(appInstallId))
+    }
+
 }
