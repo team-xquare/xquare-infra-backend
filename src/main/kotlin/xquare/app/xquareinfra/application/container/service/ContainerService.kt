@@ -232,7 +232,8 @@ class ContainerService(
             teamNameKo = team.teamNameKo,
             containerName = ContainerUtil.getContainerName(deploy, container),
             isV2 = deploy.v2,
-            deployType = deploy.deployType
+            serviceFullName = ContainerUtil.getContainerName(deploy, container),
+            deployType = deploy.deployType,
         )
     }
 }

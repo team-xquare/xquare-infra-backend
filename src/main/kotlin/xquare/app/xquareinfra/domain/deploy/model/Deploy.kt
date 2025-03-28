@@ -17,7 +17,8 @@ data class Deploy(
     val useMysql: Boolean,
     val useRedis: Boolean,
     val v2: Boolean,
-    val dashboardToken: String? = null
+    val dashboardToken: String? = null,
+    val appInstallId: String? = null,
 ) {
     fun updateSecret(secretKey: String) = copy(secretKey = secretKey)
 
@@ -26,4 +27,6 @@ data class Deploy(
     fun migrationToV2() = copy(v2 = true)
 
     fun updateDeployToken(token: String) = copy(dashboardToken = token)
+
+    fun updateAppInstallId(appInstallId: String) = copy(appInstallId = appInstallId)
 }

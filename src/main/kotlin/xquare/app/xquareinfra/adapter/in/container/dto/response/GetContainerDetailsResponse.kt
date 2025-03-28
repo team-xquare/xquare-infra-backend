@@ -14,5 +14,6 @@ data class GetContainerDetailsResponse(
     val containerStatus: ContainerStatus,
     val containerName: String,
     val isV2: Boolean,
-    val deployType: DeployType
+    val deployType: DeployType,
+    val serviceFullName: String
 )
