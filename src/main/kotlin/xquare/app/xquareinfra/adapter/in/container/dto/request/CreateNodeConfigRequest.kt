@@ -2,7 +2,7 @@ package xquare.app.xquareinfra.adapter.`in`.container.dto.request
 
 import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DockerfileRequest
 
-data class CreateNodeDockerfileRequest(
+data class CreateNodeConfigRequest(
     val nodeVersion: String,
     val buildCommands: List<String> = emptyList(),
     override val builder: String = "node",

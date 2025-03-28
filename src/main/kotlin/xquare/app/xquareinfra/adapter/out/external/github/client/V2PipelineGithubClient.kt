@@ -8,7 +8,7 @@ import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.Dis
 
 
 @FeignClient(name = "github", url = "\${github.url}")
-interface GithubClient {
+interface V2PipelineGithubClient {
     @PostMapping("/repos/team-xquare/xquare-gitops-repo-v2/dispatches")
     fun dispatchWorkflowGitops(
         @RequestHeader("Authorization") authorization: String?,

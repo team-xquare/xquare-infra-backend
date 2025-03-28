@@ -1,5 +1,6 @@
 package xquare.app.xquareinfra.application.container.port.`in`
 
+import xquare.app.xquareinfra.adapter.`in`.container.dto.request.CreateV3ApplicationRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SetContainerConfigRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.UpdateContainerWebhookRequest
@@ -38,4 +39,9 @@ interface ContainerUseCase {
 
     fun syncContainerDomain(deployName: String, containerEnvironment: ContainerEnvironment, domain: String)
 
+    fun createV3Container(
+        deployId: UUID,
+        containerEnvironment: ContainerEnvironment,
+        createV3ApplicationRequest: CreateV3ApplicationRequest
+    )
 }

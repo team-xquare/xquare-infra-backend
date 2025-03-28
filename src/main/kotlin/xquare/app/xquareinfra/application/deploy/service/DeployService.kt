@@ -8,8 +8,7 @@ import xquare.app.xquareinfra.adapter.`in`.deploy.dto.request.CreateDeployReques
 import xquare.app.xquareinfra.adapter.`in`.deploy.dto.response.*
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.DeployClient
 import xquare.app.xquareinfra.adapter.out.external.deploy.client.dto.request.FeignCreateDeployRequest
-import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
-import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
+import xquare.app.xquareinfra.adapter.out.external.github.client.V2PipelineGithubClient
 import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
 import xquare.app.xquareinfra.application.deploy.port.`in`.DeployUseCase
@@ -42,7 +41,7 @@ class DeployService(
     private val findContainerPort: FindContainerPort,
     private val existsUserTeamPort: ExistsUserTeamPort,
     private val githubProperties: GithubProperties,
-    private val githubClient: GithubClient,
+    private val v2PipelineGithubClient: V2PipelineGithubClient,
     private val deleteDeployPort: DeleteDeployPort
 ): DeployUseCase {
 
