@@ -3,7 +3,6 @@ package xquare.app.xquareinfra.adapter.`in`.container
 import org.springframework.web.bind.annotation.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.request.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDeployHistoryResponse
-import xquare.app.xquareinfra.application.auth.port.out.SecurityPort
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerPipelineUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.application.container.port.`in`.DockerfileUseCase
@@ -13,7 +12,6 @@ import java.util.*
 @RequestMapping("/v2/container")
 @RestController
 class V2ContainerWebAdapter(
-    private val securityPort: SecurityPort,
     private val dockerfileUseCase: DockerfileUseCase,
     private val containerPipelineUseCase: ContainerPipelineUseCase,
     private val containerUseCase: ContainerUseCase
@@ -33,8 +31,8 @@ class V2ContainerWebAdapter(
         @RequestParam(name = "environment", required = true)
         containerEnvironment: ContainerEnvironment,
         @RequestBody
-        createGradleDockerfileRequest: CreateGradleDockerfileRequest
-    ) = dockerfileUseCase.createGradleDockerfile(deployId, containerEnvironment, createGradleDockerfileRequest)
+        createGradleConfigRequest: CreateGradleConfigRequest
+    ) = dockerfileUseCase.createGradleDockerfile(deployId, containerEnvironment, createGradleConfigRequest)
 
     @PostMapping("/node")
     fun createNodeDockerfile(
@@ -43,9 +41,9 @@ class V2ContainerWebAdapter(
         @RequestParam(name = "environment", required = true)
         containerEnvironment: ContainerEnvironment,
         @RequestBody
-        createNodeDockerfileRequest: CreateNodeDockerfileRequest
+        createNodeConfigRequest: CreateNodeConfigRequest
     ) =
-        dockerfileUseCase.createNodeDockerfile(deployId, containerEnvironment, createNodeDockerfileRequest)
+        dockerfileUseCase.createNodeDockerfile(deployId, containerEnvironment, createNodeConfigRequest)
 
     @PostMapping("/node-with-nginx")
     fun createNodeWithNginxDockerfile(
@@ -54,11 +52,11 @@ class V2ContainerWebAdapter(
         @RequestParam(name = "environment", required = true)
         containerEnvironment: ContainerEnvironment,
         @RequestBody
-        createNodeWithNginxDockerfileRequest: CreateNodeWithNginxDockerfileRequest
+        createNodeWithNginxConfigRequest: CreateNodeWithNginxConfigRequest
     ) = dockerfileUseCase.createNodeWithNginxDockerfile(
         deployId,
         containerEnvironment,
-        createNodeWithNginxDockerfileRequest
+        createNodeWithNginxConfigRequest
     )
 
     @GetMapping("/history")

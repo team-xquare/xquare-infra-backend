@@ -2,17 +2,12 @@ package xquare.app.xquareinfra.application.container.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import xquare.app.xquareinfra.adapter.`in`.container.dto.request.ContainerConfigDetails
-import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SetContainerConfigRequest
-import xquare.app.xquareinfra.adapter.`in`.container.dto.request.SyncContainerRequest
-import xquare.app.xquareinfra.adapter.`in`.container.dto.request.UpdateContainerWebhookRequest
+import xquare.app.xquareinfra.adapter.`in`.container.dto.request.*
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.GetContainerDetailsResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.SimpleContainerResponse
-import xquare.app.xquareinfra.adapter.out.external.github.client.GithubClient
-import xquare.app.xquareinfra.adapter.out.external.github.client.dto.request.DispatchEventRequest
+import xquare.app.xquareinfra.adapter.out.external.github.client.V2PipelineGithubClient
 import xquare.app.xquareinfra.adapter.out.external.github.env.GithubProperties
 import xquare.app.xquareinfra.adapter.out.external.gocd.client.GocdClient
-import xquare.app.xquareinfra.adapter.out.external.gocd.client.dto.request.RunSelectedJobRequest
 import xquare.app.xquareinfra.application.container.port.`in`.ContainerUseCase
 import xquare.app.xquareinfra.application.container.port.out.ContainerDnsPort
 import xquare.app.xquareinfra.application.container.port.out.FindContainerPort
@@ -48,7 +43,7 @@ class ContainerService(
     private val vaultService: VaultService,
     private val kubernetesOperationService: KubernetesOperationService,
     private val gocdClient: GocdClient,
-    private val githubClient: GithubClient,
+    private val v2PipelineGithubClient: V2PipelineGithubClient,
     private val githubProperties: GithubProperties,
     private val saveDeployPort: SaveDeployPort,
     private val findTeamPort: FindTeamPort
@@ -87,6 +82,49 @@ class ContainerService(
         if(!records.any { it.name == domain }) {
             containerDnsPort.createGatewayDnsRecords(name = domain)
         }
+    }
+
+    override fun createV3Container(
+        deployId: UUID,
+        containerEnvironment: ContainerEnvironment,
+        createV3ApplicationRequest: CreateV3ApplicationRequest,
+    ) {
+        val deploy = findDeployPort.findById(deployId) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
+        var container = findContainerPort.findByDeployAndEnvironment(deploy, containerEnvironment)
+        var containerId: UUID? = null
+        if (container != null) {
+            containerId = container.id
+        }
+
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+
+        saveContainerPort.save(
+            Container(
+                id = containerId,
+                deployId = deploy.id!!,
+                containerEnvironment = containerEnvironment,
+                lastDeploy = LocalDateTime.now(),
+                subDomain = createV3ApplicationRequest.domain,
+                environmentVariable = container?.environmentVariable ?: mapOf(),
+                githubBranch = createV3ApplicationRequest.branch,
+                containerPort = createV3ApplicationRequest.containerPort,
+            )
+        )
+
+        writeValuesPort.v2WriteValues(
+            club = team.teamNameEn,
+            name = deploy.deployName,
+            organization = deploy.organization,
+            repository = deploy.repository,
+            branch = createV3ApplicationRequest.branch,
+            containerPort = createV3ApplicationRequest.containerPort,
+            domain = createV3ApplicationRequest.domain,
+            language = createV3ApplicationRequest.language,
+            criticalService = createV3ApplicationRequest.criticalService,
+            buildConfig = createV3ApplicationRequest.buildConfig,
+            appInstallId = deploy.appInstallId ?: throw XquareException.BAD_REQUEST,
+            environment = containerEnvironment.toString()
+        )
     }
 
     override fun syncContainer(syncContainerRequest: SyncContainerRequest) {
@@ -197,7 +235,7 @@ class ContainerService(
             )
         )
 
-        writeValuesPort.writeValues(
+        writeValuesPort.v1WriteValues(
             club = team.teamNameEn.lowercase(Locale.getDefault()),
             name = deploy.deployName,
             organization = deploy.organization,
