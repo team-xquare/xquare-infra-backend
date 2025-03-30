@@ -104,7 +104,7 @@ class GithubAdapter(
         language: Language,
         criticalService: Boolean,
         buildConfig: String,
-        appInstallId: String,
+        appInstallId: Int,
     ) {
         v3PipelineGithubClient.dispatchWorkflowGitops(
             authorization = "Bearer ${githubProperties.token}",

@@ -122,7 +122,7 @@ class ContainerService(
             language = createV3ApplicationRequest.language,
             criticalService = createV3ApplicationRequest.criticalService,
             buildConfig = createV3ApplicationRequest.buildConfig,
-            appInstallId = deploy.appInstallId ?: throw XquareException.BAD_REQUEST,
+            appInstallId = deploy.appInstallId?.toInt() ?: throw XquareException.BAD_REQUEST,
             environment = containerEnvironment.toString()
         )
     }
