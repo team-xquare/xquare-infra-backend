@@ -28,6 +28,6 @@ interface WriteValuesPort {
         language: Language,
         criticalService: Boolean,
         buildConfig: String,
-        appInstallId: String
+        appInstallId: Int
     )
 }
