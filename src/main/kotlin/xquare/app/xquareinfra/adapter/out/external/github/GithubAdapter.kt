@@ -123,7 +123,8 @@ class GithubAdapter(
                         "language" to language,
                         "critical_service" to criticalService,
                         "githubInstallationID" to appInstallId,
-                        "buildConfig" to buildConfig
+                        "buildConfig" to buildConfig,
+                        "port" to containerPort
                     )
                 )
             )
