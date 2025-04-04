@@ -37,7 +37,9 @@ class LogService(
     fun sendInitialLogs(session: WebSocketSession, deployId: UUID, environment: String) {
         val response = getContainerLog(deployId, environment, 3 * 60 * 60 * 1000)
         val logMessages = response.logs.joinToString("\n") { "${(it as LogEntry).timestamp}: ${(it as LogEntry).body}" }
-        session.sendMessage(TextMessage(logMessages))
+        if (logMessages.isNotBlank()) {
+            session.sendMessage(TextMessage(logMessages))
+        }
     }
 
     fun schedulePeriodicLogUpdates(session: WebSocketSession, deployId: UUID, environment: String) {
@@ -46,7 +48,9 @@ class LogService(
                 if (session.isOpen) {
                     val response = getContainerLog(deployId, environment, 15 * 1000)
                     val logMessages = response.logs.joinToString("\n") { "${(it as LogEntry).timestamp}: ${(it as LogEntry).body}" }
-                    session.sendMessage(TextMessage(logMessages))
+                    if (logMessages.isNotBlank()) {
+                        session.sendMessage(TextMessage(logMessages))
+                    }
                 } else {
                     session.close(CloseStatus.SERVER_ERROR)
                 }
