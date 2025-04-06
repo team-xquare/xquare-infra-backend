@@ -99,7 +99,7 @@ class DeployService(
                     deployType = deployType,
                     useMysql = useMysql,
                     useRedis = useRedis,
-                    v2 = false
+                    v2 = true
                 )
             )
         }
