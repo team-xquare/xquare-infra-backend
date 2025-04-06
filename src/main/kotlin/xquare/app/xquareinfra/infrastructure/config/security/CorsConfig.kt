@@ -13,7 +13,7 @@ class CorsConfig(private val securityProperty: SecurityProperties) {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
-            allowedOrigins = listOf(securityProperty.frontDomain, securityProperty.backDomain, "http://localhost:3000")
+            allowedOrigins = listOf(securityProperty.frontDomain, securityProperty.backDomain, "http://localhost:3000", "https://infra.xquare.app")
             allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD")
             allowCredentials = true
             addAllowedHeader("*")
