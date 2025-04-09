@@ -86,7 +86,7 @@ class GithubAdapter(
                     "containerPort" to containerPort,
                     "domain" to domain,
                     "language" to language,
-                    "critical_service" to criticalService
+                    "criticalService" to criticalService
                 )
             )
         )
@@ -121,7 +121,7 @@ class GithubAdapter(
                         "containerPort" to containerPort,
                         "domain" to domain,
                         "language" to language,
-                        "critical_service" to criticalService,
+                        "criticalService" to criticalService,
                         "githubInstallationID" to appInstallId,
                         "buildConfig" to buildConfig,
                         "port" to containerPort
