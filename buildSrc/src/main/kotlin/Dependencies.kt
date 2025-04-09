@@ -7,7 +7,7 @@ object Dependencies {
     const val JACKSON_TYPE = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${DependencyVersions.JACKSON_VERSION}"
 
     // starter
-    private const val STARTER = "org.springframework.boot:spring-boot-starter"
+    const val STARTER = "org.springframework.boot:spring-boot-starter"
 
     // web
     const val SPRING_WEB = "$STARTER-web"
