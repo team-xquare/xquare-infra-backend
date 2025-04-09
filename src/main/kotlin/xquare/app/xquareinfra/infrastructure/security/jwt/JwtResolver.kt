@@ -1,7 +1,7 @@
 package xquare.app.xquareinfra.infrastructure.security.jwt
 
 import xquare.app.xquareinfra.infrastructure.exception.AuthenticationException
-import xquare.app.xquareinfra.infrastructure.security.jwt.env.JwtProperties
+import xquare.app.xquareinfra.infrastructure.env.jwt.JwtProperties
 import xquare.app.xquareinfra.infrastructure.security.jwt.repository.AccessTokenRepository
 import org.springframework.stereotype.Component
 import javax.servlet.http.HttpServletRequest

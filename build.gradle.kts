@@ -5,6 +5,7 @@ plugins {
     kotlin("plugin.jpa") version PluginVersions.JPA_PLUGIN_VERSION
     kotlin("jvm") version PluginVersions.JVM_VERSION
     kotlin("plugin.serialization") version "1.9.22"
+    kotlin("kapt") version PluginVersions.KAPT_VERSION
 }
 
 val snippetsDir by extra { file("build/generated-snippets")}
@@ -18,6 +19,10 @@ java {
 
 repositories {
     mavenCentral()
+}
+
+ext {
+    set("springBootVersion", PluginVersions.SPRING_BOOT_VERSION)
 }
 
 dependencies {
@@ -36,6 +41,7 @@ dependencies {
     implementation(Dependencies.REDIS)
     implementation(Dependencies.LOGGER)
     implementation(Dependencies.SPRING_VALIDATION)
+    implementation(Dependencies.STARTER)
 
     // web
     implementation(Dependencies.SPRING_WEB)
@@ -54,6 +60,7 @@ dependencies {
 
     // redis
     implementation(Dependencies.REDIS)
+    implementation("org.redisson:redisson-spring-boot-starter:3.17.3")
     implementation(Dependencies.ANNOTATION_PROCESSOR)
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
@@ -66,6 +73,18 @@ dependencies {
     implementation("software.amazon.awssdk:sts:2.17.64")
 
     implementation("org.springframework.boot:spring-boot-starter-websocket:2.7.18")
+
+    // OpenTelemetry && gRPC
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:${project.ext["springBootVersion"]}"))
+    implementation("io.opentelemetry.proto:opentelemetry-proto:1.3.2-alpha")
+    implementation("io.micrometer:micrometer-core")
+
+    implementation("org.mapstruct:mapstruct:1.5.3.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
 }
 
 dependencyManagement {

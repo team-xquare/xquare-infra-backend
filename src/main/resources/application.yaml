@@ -10,12 +10,21 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         legacy_limit_handler: true
     open-in-view: true
+  data:
+    mongodb:
+      uri: ${MONGO_URL:mongodb://localhost:27017/xquare_infra}
+      field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+      auto-index-creation: true
 
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/xquareinfra}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 400
+      minimum-idle: 100
+      connection-timeout: 2000
   jackson:
     property-naming-strategy: SNAKE_CASE
 
@@ -28,6 +37,12 @@ redis:
   host: ${REDIS_HOST:localhost}
   port: ${REDIS_PORT:6379}
 
+github:
+  token: ${GITHUB_TOKEN}
+  url: https://api.github.com
+  client-id: ${GITHUB_CLIENT_ID}
+  client-secret: ${GITHUB_CLIENT_SECRET}
+  redirect-uri: ${GITHUB_OAUTH_REDIRECT_URI}
 logging:
   level:
     root: info
@@ -41,22 +56,20 @@ jwt:
 
 server:
   tomcat:
-    threads:
-      max: 200
-      min-spare: 10
-    max-connections: 8192
-    accept-count: 10000
+    max-connections: 200
+    accept-count: 100
     connection-timeout: 20000
   domain:
     front-domain: ${FRONT_LOCAL:http://localhost:3000}
     back-domain: ${BACK_LOCAL:http://localhost:8080}
   port: ${SERVER_PORT:8080}
-  servlet:
-    context-path: /xquare-infra
 
 url:
   deploy: ${DEPLOY_URL}
   log: ${LOG_URL}
+  gocd: ${GOCD_URL}
+  cloudflare: ${CLOUDFLARE_URL}
+  prometheus: ${PROMETHEUS_URL}
 
 secret:
   projectSecret: ${PROJECT_SECRET}
@@ -68,6 +81,20 @@ vault:
 xquare:
   accessKey: ${XQUARE_ACCESS}
   secretKey: ${XQUARE_SECRET}
+  gatewayDns: ${GATEWAY_DNS}
 
 kubernetes:
   kubeConfig: ${KUBE_CONFIG}
+
+cloudflare:
+  zoneId: ${ZONE_ID}
+  xAuthKey: ${X_AUTH_KEY}
+  xAuthEmail: ${X_AUTH_EMAIL}
+
+gocd:
+  username: ${GOCD_USERNAME}
+  password: ${GOCD_PASSWORD}
+
+datadog:
+  api-key: ${DATADOG_API_KEY}
+  app-key: ${DATADOG_APP_KEY}
