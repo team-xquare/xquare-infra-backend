@@ -37,7 +37,8 @@ class ArgoAdapter(
     ): List<DeployHistoryResponse> {
         // 배포 정보를 통해 팀 정보 가져오기
         val deploy = findDeployPort.findByDeployName(deployName) ?: throw BusinessLogicException.DEPLOY_NOT_FOUND
-        val namespace = ContainerUtil.getContainerName(deploy, containerEnvironment)
+        val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
+        val namespace = ContainerUtil.getNamespaceName(team, containerEnvironment)
         
         val response = argoClient.getWorkflows(
             namespace = namespace,
