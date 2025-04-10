@@ -104,3 +104,4 @@ argo:
     auth-token: ${ARGO_AUTH_TOKEN}
   server:
     url: ${ARGO_SERVER_URL}
+
