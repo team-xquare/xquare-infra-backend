@@ -1,22 +1,23 @@
 package xquare.app.xquareinfra.adapter.out.external.argo.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class ArgoWorkflowListResponse(
     val items: List<ArgoWorkflow> = emptyList()
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class ArgoWorkflow(
     val metadata: WorkflowMetadata,
     val spec: WorkflowSpec,
     val status: WorkflowStatus
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowMetadata(
     val name: String,
     val namespace: String,
@@ -26,37 +27,37 @@ data class WorkflowMetadata(
     val creationTimestamp: String
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowSpec(
     val arguments: WorkflowArguments? = null,
     val templates: List<WorkflowTemplate> = emptyList()
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowArguments(
     val parameters: List<WorkflowParameter> = emptyList()
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowParameter(
     val name: String,
     val value: String? = null
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowTemplate(
     val name: String,
     val steps: List<List<WorkflowStep>>? = null
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowStep(
     val name: String,
     val template: String,
     val arguments: WorkflowArguments? = null
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowStatus(
     val phase: String,
     @JsonProperty("startedAt")
@@ -66,11 +67,10 @@ data class WorkflowStatus(
     val nodes: Map<String, WorkflowNode> = emptyMap()
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowNode(
     val id: String,
     val name: String,
-    @JsonProperty("display_name")
     val displayName: String,
     val type: String,
     val phase: String,
@@ -93,18 +93,18 @@ data class WorkflowNode(
     val inputs: WorkflowNodeInputs? = null
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowNodeInputs(
     val parameters: List<WorkflowParameter>? = null
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class ScheduleWorkflowRequest(
     val workflow: WorkflowTemplate,
     val workflowTemplateRef: WorkflowTemplateRef? = null
 )
 
-@JsonNaming(SnakeCaseStrategy::class)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy::class)
 data class WorkflowTemplateRef(
     val name: String
 )
