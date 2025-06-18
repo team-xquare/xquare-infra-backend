@@ -102,6 +102,8 @@ datadog:
 argo:
   auth:
     auth-token: ${ARGO_AUTH_TOKEN}
+    username: ${ARGO_USERNAME}
+    password: ${ARGO_PASSWORD}
   server:
     url: ${ARGO_SERVER_URL}
 
