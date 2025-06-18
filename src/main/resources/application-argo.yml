@@ -4,3 +4,5 @@ argo:
   namespace: argo  # 실제 Argo Workflows가 설치된 네임스페이스
   auth:
     token: ${ARGO_AUTH_TOKEN}  # 환경 변수로 설정하거나 Kubernetes Secret에서 가져옵니다
+    username: ${ARGO_USERNAME}
+    password: ${ARGO_PASSWORD}
