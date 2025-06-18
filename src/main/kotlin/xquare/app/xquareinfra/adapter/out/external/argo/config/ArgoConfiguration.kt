@@ -25,5 +25,7 @@ class ArgoProperties {
     
     class Auth {
         var token: String = ""
+        var username: String = ""
+        var password: String = ""
     }
 }

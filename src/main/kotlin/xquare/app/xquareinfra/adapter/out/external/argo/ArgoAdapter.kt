@@ -1,6 +1,5 @@
 package xquare.app.xquareinfra.adapter.out.external.argo
 
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.DeployHistoryResponse
 import xquare.app.xquareinfra.adapter.`in`.container.dto.response.StageStatus
@@ -8,6 +7,7 @@ import xquare.app.xquareinfra.adapter.out.external.argo.client.ArgoClient
 import xquare.app.xquareinfra.adapter.out.external.argo.dto.ScheduleWorkflowRequest
 import xquare.app.xquareinfra.adapter.out.external.argo.dto.WorkflowTemplate
 import xquare.app.xquareinfra.adapter.out.external.argo.dto.WorkflowTemplateRef
+import xquare.app.xquareinfra.adapter.out.external.argo.ArgoTokenService
 import xquare.app.xquareinfra.application.container.port.out.ContainerPipelinePort
 import xquare.app.xquareinfra.application.deploy.port.out.FindDeployPort
 import xquare.app.xquareinfra.application.team.port.out.FindTeamPort
@@ -21,8 +21,7 @@ class ArgoAdapter(
     private val argoClient: ArgoClient,
     private val findDeployPort: FindDeployPort,
     private val findTeamPort: FindTeamPort,
-    @Value("\${argo.auth.token}")
-    private val authToken: String
+    private val argoTokenService: ArgoTokenService
 ) : ContainerPipelinePort {
 
     companion object {
@@ -40,10 +39,18 @@ class ArgoAdapter(
         val team = findTeamPort.findById(deploy.teamId) ?: throw BusinessLogicException.TEAM_NOT_FOUND
         val namespace = ContainerUtil.getNamespaceName(team, containerEnvironment)
         
-        val response = argoClient.getWorkflows(
+        var response = argoClient.getWorkflows(
             namespace = namespace,
-            token = AUTH_HEADER_PREFIX + authToken
+            token = AUTH_HEADER_PREFIX + argoTokenService.getToken()
         )
+
+        if (response.statusCode.value() == 401) {
+            argoTokenService.refreshToken()
+            response = argoClient.getWorkflows(
+                namespace = namespace,
+                token = AUTH_HEADER_PREFIX + argoTokenService.getToken()
+            )
+        }
 
         if (response.statusCode.is4xxClientError) {
             return emptyList()
@@ -109,11 +116,20 @@ class ArgoAdapter(
             )
         )
 
-        argoClient.submitWorkflow(
+        var response = argoClient.submitWorkflow(
             namespace = namespace,
-            token = AUTH_HEADER_PREFIX + authToken,
+            token = AUTH_HEADER_PREFIX + argoTokenService.getToken(),
             request = request
         )
+
+        if (response.statusCode.value() == 401) {
+            argoTokenService.refreshToken()
+            response = argoClient.submitWorkflow(
+                namespace = namespace,
+                token = AUTH_HEADER_PREFIX + argoTokenService.getToken(),
+                request = request
+            )
+        }
     }
 
     /**
